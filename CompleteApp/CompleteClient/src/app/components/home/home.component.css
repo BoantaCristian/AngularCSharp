@@ -1,0 +1,33 @@
+mat-card{
+    margin-top: 50px;
+    margin-left: 100px;
+    width: 400px;
+    box-shadow: 15px, 15px, 15px !important;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.493);
+}
+
+.message{
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    right: 120px;
+}
+.button{
+    position: absolute;
+    right: 120px;
+}
+
+.flexBox{
+    display: flex;
+}
+.flexItem{
+    flex: 1;
+}
+
+.child{
+    flex: 1;
+    font-size: 18px;
+    position: relative;
+    margin: 5px;
+}

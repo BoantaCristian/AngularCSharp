@@ -1,0 +1,10 @@
+mat-form-field{
+    color: white;
+}
+.button{
+    text-align: center;
+}
+button:hover{
+    color: white;
+    background: rgb(43, 43, 255);
+}

@@ -1,0 +1,16 @@
+D:\AngularCSharp\testApi\testApi\bin\Debug\netcoreapp2.1\appsettings.Development.json
+D:\AngularCSharp\testApi\testApi\bin\Debug\netcoreapp2.1\appsettings.json
+D:\AngularCSharp\testApi\testApi\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
+D:\AngularCSharp\testApi\testApi\bin\Debug\netcoreapp2.1\testApi.deps.json
+D:\AngularCSharp\testApi\testApi\bin\Debug\netcoreapp2.1\testApi.runtimeconfig.json
+D:\AngularCSharp\testApi\testApi\bin\Debug\netcoreapp2.1\testApi.runtimeconfig.dev.json
+D:\AngularCSharp\testApi\testApi\bin\Debug\netcoreapp2.1\testApi.dll
+D:\AngularCSharp\testApi\testApi\obj\Debug\netcoreapp2.1\testApi.csprojAssemblyReference.cache
+D:\AngularCSharp\testApi\testApi\obj\Debug\netcoreapp2.1\testApi.RazorAssemblyInfo.cache
+D:\AngularCSharp\testApi\testApi\obj\Debug\netcoreapp2.1\testApi.RazorAssemblyInfo.cs
+D:\AngularCSharp\testApi\testApi\obj\Debug\netcoreapp2.1\testApi.AssemblyInfoInputs.cache
+D:\AngularCSharp\testApi\testApi\obj\Debug\netcoreapp2.1\testApi.AssemblyInfo.cs
+D:\AngularCSharp\testApi\testApi\obj\Debug\netcoreapp2.1\testApi.RazorTargetAssemblyInfo.cache
+D:\AngularCSharp\testApi\testApi\bin\Debug\netcoreapp2.1\testApi.pdb
+D:\AngularCSharp\testApi\testApi\obj\Debug\netcoreapp2.1\testApi.dll
+D:\AngularCSharp\testApi\testApi\obj\Debug\netcoreapp2.1\testApi.pdb

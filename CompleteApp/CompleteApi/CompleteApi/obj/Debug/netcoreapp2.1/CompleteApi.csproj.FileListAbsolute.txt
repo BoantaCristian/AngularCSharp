@@ -1,0 +1,16 @@
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\bin\Debug\netcoreapp2.1\appsettings.Development.json
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\bin\Debug\netcoreapp2.1\appsettings.json
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\bin\Debug\netcoreapp2.1\CompleteApi.deps.json
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\bin\Debug\netcoreapp2.1\CompleteApi.runtimeconfig.json
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\bin\Debug\netcoreapp2.1\CompleteApi.runtimeconfig.dev.json
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\bin\Debug\netcoreapp2.1\CompleteApi.dll
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\bin\Debug\netcoreapp2.1\CompleteApi.pdb
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\obj\Debug\netcoreapp2.1\CompleteApi.RazorAssemblyInfo.cache
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\obj\Debug\netcoreapp2.1\CompleteApi.RazorAssemblyInfo.cs
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\obj\Debug\netcoreapp2.1\CompleteApi.AssemblyInfoInputs.cache
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\obj\Debug\netcoreapp2.1\CompleteApi.AssemblyInfo.cs
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\obj\Debug\netcoreapp2.1\CompleteApi.RazorTargetAssemblyInfo.cache
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\obj\Debug\netcoreapp2.1\CompleteApi.dll
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\obj\Debug\netcoreapp2.1\CompleteApi.pdb
+D:\AngularCSharp\CompleteApp\CompleteApi\CompleteApi\obj\Debug\netcoreapp2.1\CompleteApi.csprojAssemblyReference.cache

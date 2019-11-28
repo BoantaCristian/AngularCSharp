@@ -1,0 +1,32 @@
+mat-card{
+    width: 450px;
+    margin: 0 auto;
+    border-radius: 60px;
+    box-shadow: none !important;
+    background: rgba(255, 255, 255, 0.301);
+}
+.wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .wrapped-div {
+    flex: 1;
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    padding: 0px;
+  }
+
+  /* Tabs */
+.tab-header{
+    text-align: center;
+    flex: 1;
+}
+ h2.active {
+    color: #fff;
+    border-bottom: 4px solid #fff;
+  }

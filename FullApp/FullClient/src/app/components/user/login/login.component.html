@@ -1,0 +1,13 @@
+<form autocomplete="off" (submit)="login()">
+    <mat-form-field class="col-md-8 offset-2">
+        <input matInput [(ngModel)]="formModel.UserName" name="UserName" placeholder="Username">
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2">
+        <input type="password" matInput [(ngModel)]="formModel.Password" name="Password" placeholder="Password">
+    </mat-form-field>
+    <div class="col-md-6 offset-3">
+        <div class="col-md-8 offset-2">
+            <button type="submit" mat-raised-button [disabled]="formModel.UserName == '' || formModel.Password==''"> Sign In </button>
+        </div>
+    </div>
+</form>

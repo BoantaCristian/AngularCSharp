@@ -1,0 +1,26 @@
+<form [formGroup]="formModel" autocomplete="off" (submit)="register()"><br>
+    <mat-form-field class="col-md-8 offset-2">
+        <input matInput formControlName="UserName" placeholder="Username">
+        <label class="text-danger" *ngIf="formModel.get('UserName').touched && formModel.get('UserName').errors?.required">This field is required</label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2">
+        <input matInput formControlName="Email" placeholder="Email">
+        <label class="text-danger" *ngIf="formModel.get('Email').touched && formModel.get('Email').errors?.email">Invalid email</label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2">
+        <input matInput formControlName="Password" (input)="comparePasswords()" placeholder="Password">
+        <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.required">This field is required</label>
+        <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.minlength">Minimum 4 characters</label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2">
+        <input matInput formControlName="ConfirmPassword" (input)="comparePasswords()" placeholder="Confirm Password">
+        <label class="text-danger2" *ngIf="formModel.get('ConfirmPassword').touched && !passwordsMatch">Password mismatch</label>
+        <label class="text-danger" *ngIf="formModel.get('ConfirmPassword').touched && formModel.get('ConfirmPassword').errors?.required">This field is required</label>
+    </mat-form-field><br><br>
+    <div class="col-md-12">
+        <div class="button">
+            <button type="submit" mat-raised-button [disabled]="!formModel.valid || !passwordsMatch ">Register</button>
+        </div><br>
+    </div>
+</form>
+

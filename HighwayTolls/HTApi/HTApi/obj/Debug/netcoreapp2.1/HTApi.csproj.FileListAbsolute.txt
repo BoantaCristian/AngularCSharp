@@ -1,0 +1,16 @@
+D:\AngularCSharp\HTApp\HTApi\HTApi\bin\Debug\netcoreapp2.1\appsettings.Development.json
+D:\AngularCSharp\HTApp\HTApi\HTApi\bin\Debug\netcoreapp2.1\appsettings.json
+D:\AngularCSharp\HTApp\HTApi\HTApi\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
+D:\AngularCSharp\HTApp\HTApi\HTApi\bin\Debug\netcoreapp2.1\HTApi.deps.json
+D:\AngularCSharp\HTApp\HTApi\HTApi\bin\Debug\netcoreapp2.1\HTApi.runtimeconfig.json
+D:\AngularCSharp\HTApp\HTApi\HTApi\bin\Debug\netcoreapp2.1\HTApi.runtimeconfig.dev.json
+D:\AngularCSharp\HTApp\HTApi\HTApi\bin\Debug\netcoreapp2.1\HTApi.dll
+D:\AngularCSharp\HTApp\HTApi\HTApi\bin\Debug\netcoreapp2.1\HTApi.pdb
+D:\AngularCSharp\HTApp\HTApi\HTApi\obj\Debug\netcoreapp2.1\HTApi.csprojAssemblyReference.cache
+D:\AngularCSharp\HTApp\HTApi\HTApi\obj\Debug\netcoreapp2.1\HTApi.RazorAssemblyInfo.cache
+D:\AngularCSharp\HTApp\HTApi\HTApi\obj\Debug\netcoreapp2.1\HTApi.RazorAssemblyInfo.cs
+D:\AngularCSharp\HTApp\HTApi\HTApi\obj\Debug\netcoreapp2.1\HTApi.AssemblyInfoInputs.cache
+D:\AngularCSharp\HTApp\HTApi\HTApi\obj\Debug\netcoreapp2.1\HTApi.AssemblyInfo.cs
+D:\AngularCSharp\HTApp\HTApi\HTApi\obj\Debug\netcoreapp2.1\HTApi.RazorTargetAssemblyInfo.cache
+D:\AngularCSharp\HTApp\HTApi\HTApi\obj\Debug\netcoreapp2.1\HTApi.dll
+D:\AngularCSharp\HTApp\HTApi\HTApi\obj\Debug\netcoreapp2.1\HTApi.pdb

@@ -1,0 +1,85 @@
+mat-toolbar{
+    color: white;
+    background: black;
+    box-shadow: 0px 5px 8px rgb(53, 53, 53);
+}
+mat-card{
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.315);
+    min-width: 350px;
+}
+.paymentConteiner{
+    width: 650px;
+    margin: 0 auto;
+}
+.userContainer{
+    width: 350px;
+    margin: 40px;
+    height: 144px;
+}
+.historyContainer{
+    width: 850px;
+    margin: 0 auto;
+}
+.incomeContainer{
+    width: 350px;
+    margin: 40px;
+    height: 126px;
+    max-height: 126px;
+    position: absolute;
+    top: 64px;
+    right: 0px;
+}
+.userItem{
+    margin: 10px;
+}
+.details{
+    margin-top: 20px;
+}
+.logout{
+    position: absolute;
+    right: 10px;
+    top: 15px;
+}
+.logout:hover{
+    color: red;
+    background: white;
+}
+.login{
+    position: absolute;
+    right: 110px;
+    top: 15px;
+}
+.register{
+    position: absolute;
+    right: 10px;
+    top: 15px;
+}
+.login:hover, .register:hover{
+    color: rgb(0, 47, 255);
+    background: white;
+}
+.title{
+    color: white;
+    text-align: center;
+}
+.noUser{
+    text-align: center;
+    position: relative;
+    top: 40px;
+}
+.monthText{
+    color: rgb(56, 56, 56);
+}
+.monthTitle{
+    text-align: center;
+}
+.flexBox{
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
+.flexContent{
+    flex: 1;
+    padding: 5px;
+}

@@ -1,0 +1,21 @@
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand text-white">
+        Full App
+    </a>
+    <button mat-raised-button color="warn" *ngIf="logged" (click)="logout()"> Logout </button>
+    <button mat-raised-button color="warn" *ngIf="!logged" routerLink="/user/login"> Sign In </button>
+    <button mat-raised-button color="warn" *ngIf="!logged" routerLink="/user/register" class="signin"> Sign Up </button>
+</nav>
+<div *ngIf="userDetails">Username: {{userDetails.userName}}</div><br>
+<p>Parents:</p>
+<label>Click on parent to show his children</label>
+<div *ngFor="let parent of parents">
+    <div (click)="getChildrenOfParent(parent.id)">Parent: {{parent.name}}</div>
+</div><br>
+<div *ngFor="let child of children">
+    Child: {{child.name}}
+</div><br>
+<p>Uncles:</p>
+<div *ngFor="let uncle of uncles">
+    <div>Uncle: {{uncle}}</div>
+</div>

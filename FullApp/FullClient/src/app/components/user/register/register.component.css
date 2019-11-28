@@ -1,0 +1,9 @@
+.validator{
+    position: absolute;
+    top: 35px;
+    left: 0px;
+}
+button:hover{
+    background: rgb(33, 83, 247);
+    color: aliceblue;
+}

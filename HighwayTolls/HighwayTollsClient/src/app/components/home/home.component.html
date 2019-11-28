@@ -1,0 +1,149 @@
+<mat-toolbar>Highway Tolls</mat-toolbar>
+<!-- display login/register/logout/manage sbuttons -->
+<button mat-raised-button color="warn" *ngIf="logged" class="logout" (click)="logout()"> Logout </button>
+<button mat-raised-button color="primary" routerLink='/user/login' *ngIf="!logged" class="login"> Login </button>
+<button mat-raised-button color="primary" routerLink='/user/register'*ngIf="!logged" class="register"> Register </button>
+<button mat-raised-button color="primary" routerLink='/admin'*ngIf="logged && userDetails.role == 'Admin'" class="login"> Manage </button>
+<!-- display user details -->
+<mat-card *ngIf="logged" class="userContainer">
+    <h4>User Details</h4>
+    <div class="details"> 
+        <div class="userItem"><b>Username: </b>{{userDetails.userName}} </div>
+        <div class="userItem"><b>Email: </b>{{userDetails.email}} </div>
+    </div>
+</mat-card>
+<mat-card *ngIf="!logged" class="userContainer">
+    <h4 class="noUser">No user is logged in</h4>
+</mat-card>
+<!-- display monthly income -->
+<div class="incomeContainer">
+        <mat-card>
+            <h4 class="monthTitle">Monthly income</h4>
+            <div class="flexBox">
+                <div class="flexContent">
+                    <mat-form-field>
+                        <mat-label>Select month</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let month of months" [value]="month.monthNumber" (click)="monthIncome(month.monthNumber)">
+                            {{month.monthName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flexContent">
+                    <div *ngIf="income != null" class="monthText">  <b>{{income}} RON</b></div>
+                    <div *ngIf="income == null" class="monthText">  <b>None selected</b></div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+<!-- display select location and tollbooth zone -->
+<div *ngIf="!confirmPlace" class="paymentConteiner">
+    <mat-card>
+        <h3 class="title">Select place for payment</h3>
+        <div class="flexBox">
+            <mat-form-field class="flexContent col-md-4 offset-1">
+                <mat-label>Location</mat-label>
+                <mat-select>
+                    <mat-option *ngFor="let location of locations" [value]="location.name" (click)="selectLocation(location.id, location.name)">
+                    {{location.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="flexContent col-md-4">
+                <mat-label>Tollbooth</mat-label>
+                <mat-select>
+                    <mat-option *ngFor="let tollBooth of tollBooths" [value]="tollBooth.name" (click)="selectTollBooth(tollBooth.id, tollBooth.name)">
+                    {{tollBooth.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="flexContent col-md-2">
+                <button mat-raised-button color="primary" (click)="confirmLocation()" [disabled]="!selectedLocationName || !selectedTollBoothName">Confirm</button>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- display select vehicle, get price and confirm payment zone -->
+<div *ngIf="confirmPlace" class="paymentConteiner">
+    <mat-card>
+        <h3 class="title">Select vehicle category</h3><br>
+        <div class="flexBox">
+            <div class="flexContent"> <b>Location:</b> {{selectedLocationName}} </div>
+            <div class="flexContent"> <b>Tollbooth:</b> {{selectedTollBoothName}} </div>
+        </div>
+        <div class="col-md-6 offset-3">
+            <mat-form-field class="col-md-12">
+                <mat-label>Category</mat-label>
+                <mat-select>
+                    <mat-option *ngFor="let category of categories" [value]="category.name" (click)="getPrice(category.id, category.name)">
+                    {{category.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <h4 *ngIf="price" class="title">Price: {{price}} RON</h4><br>
+        <h4 *ngIf="!price" class="title">Price: 0 RON</h4><br>
+        <div class="flexBox">
+            <div class="flexContent">
+                <button mat-raised-button color="primary" (click)="confirmPayment()" [disabled]="!price">Confirm payment</button><br><br>
+            </div>
+        </div>
+    </mat-card>
+</div><br><br>
+<!-- display history -->
+<div class="historyContainer">
+    <mat-card>
+        <h3 class="title">Payment history</h3><br>
+        <div class="flexBox">
+            <h5 class="flexContent">Amount</h5>
+            <h5 class="flexContent">Date</h5>
+            <h5 class="flexContent">Location</h5>
+            <h5 class="flexContent">User</h5>
+        </div>
+        <div class="divider"></div>
+        <div *ngFor="let hist of history" class="flexBox">
+            <div class="flexContent"> {{hist.amount}}</div>
+            <div class="flexContent"> {{hist.date | date}}</div>
+            <div class="flexContent"> {{hist.location.name}}</div>
+            <div class="flexContent"> {{hist.user.userName}}</div>
+        </div>
+    </mat-card><br><br>
+</div>
+<!-- Display select route and calculate a price from A -> B location-->
+<div class="paymentConteiner">
+    <mat-card>
+        <h3 class="title">Select route</h3>
+        <div class="flexBox">
+            <mat-form-field class="flexContent col-md-4 offset-1">
+                <mat-label>Start Location</mat-label>
+                <mat-select [(ngModel)]="startLocation" name="startLocation">
+                    <mat-option *ngFor="let location of locations" [value]="location.id">
+                    {{location.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="flexContent col-md-4 offset-1">
+                <mat-label>Finish Location</mat-label>
+                <mat-select [(ngModel)]="finishLocation" name="finishLocation">
+                    <mat-option *ngFor="let location of locations" [value]="location.id">
+                    {{location.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <mat-form-field class="col-md-6 offset-3">
+            <mat-label>Category</mat-label>
+            <mat-select [(ngModel)]="vehicleCategory">
+                <mat-option *ngFor="let category of categories" [value]="category.id" (click)="selectCategoryName(category.name)">
+                {{category.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="flexBox">
+            <div class="flexContent">
+                <button mat-raised-button color="primary" (click)="calculatePayment()" [disabled]="!startLocation || !finishLocation || !vehicleCategory">Confirm payment</button><br><br>
+            </div>
+        </div>
+    </mat-card>
+</div><br><br>

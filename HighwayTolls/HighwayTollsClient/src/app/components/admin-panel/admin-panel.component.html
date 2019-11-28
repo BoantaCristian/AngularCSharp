@@ -1,0 +1,52 @@
+<div class="col-md-8 offset-2">
+    <a routerLink=""> ➜ back</a><br><br>
+    <mat-card>
+        <h3 class="title">Manage users</h3>
+        <div class="flexBox">
+            <h4 class="flexContent">Username</h4>
+            <h4 class="flexContent">Email</h4>
+            <h4 class="flexContent">Role</h4>
+            <h4 class="flexContent">Delete</h4>
+        </div>
+        
+        <div class="flexBox" *ngFor="let user of users; let i=index">
+            <div class="flexContent">{{user.userName}}</div>
+            <div class="flexContent">{{user.email}}</div>
+            <div class="flexContent" *ngIf="roles[i].roleId == 1">Admin</div>
+            <div class="flexContent" *ngIf="roles[i].roleId == 2">Client</div>
+            <div class="flexContent">
+                <button class="button" (click)="deleteUser(user.userName)">Delete</button>
+            </div>
+        </div>
+    </mat-card>
+    <mat-card class="register">
+        <button class="reset" (click)="resetForm()">reset</button>
+        <h3 class="title">Create new user</h3>
+        <div class="register">
+            <form [formGroup]="formModel" class="col-md-8 offset-2" autocomplete="off" (submit)="register()">
+                <mat-form-field>
+                    <input matInput formControlName="UserName" placeholder="Username">
+                </mat-form-field><br>
+                <mat-form-field>
+                    <input matInput formControlName="Email" placeholder="Email">
+                </mat-form-field><br>
+                <mat-form-field>
+                    <input matInput formControlName="Password" placeholder="Password">
+                </mat-form-field><br>
+                <mat-form-field>
+                    <mat-label>Role</mat-label>
+                    <mat-select formControlName="Role">
+                        <mat-option *ngFor="let role of newRoles" [value]="role">
+                        {{role}}
+                        </mat-option>
+                    </mat-select><br>
+                </mat-form-field><br>
+                <div class="col-md-12 offset-2">
+                    <div>
+                        <button type="submit" mat-raised-button color="primary" [disabled]="!formModel.valid">Create</button>
+                    </div><br>
+                </div>
+            </form>
+        </div>
+    </mat-card>
+</div>

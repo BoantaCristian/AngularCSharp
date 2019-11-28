@@ -1,0 +1,33 @@
+<form [formGroup]="formModel" autocomplete="off" (submit)="register()">
+    <mat-form-field class="col-md-8 offset-2">
+        <input formControlName="UserName" matInput placeholder="Username">
+        <label *ngIf="formModel.get('UserName').touched && formModel.get('UserName').errors?.required" class="text-danger validator"> This field is required </label>
+    </mat-form-field> 
+    <mat-form-field class="col-md-8 offset-2">
+        <input formControlName="Email" matInput placeholder="Email">
+        <label *ngIf="formModel.get('Email').touched && formModel.get('Email').errors?.email" class="text-danger validator"> Invalid email </label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2">
+        <input type="password" formControlName="Password" matInput placeholder="Password">
+        <label *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.required" class="text-danger validator"> This field is required </label>
+        <label *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.minlength" class="text-danger validator"> Minim 4 chars </label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2">
+        <input type="password" formControlName="ConfirmPassword" matInput placeholder="Confirm Password">
+        <label *ngIf="formModel.get('ConfirmPassword').touched && formModel.get('ConfirmPassword').errors?.required" class="text-danger validator"> This field is required </label>
+        <label *ngIf=" formModel.get('ConfirmPassword').errors?.passwordMismatch" class="text-danger validator"> Mismatch </label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2">
+        <mat-label>User Role</mat-label>
+        <mat-select formControlName="Role">
+          <mat-option *ngFor="let role of roles" [value]="role">
+            {{role}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field><br><br>
+    <div class="col-md-6 offset-3">
+        <div class="col-md-8 offset-2">
+            <button type="submit" mat-raised-button [disabled]="!formModel.valid"> Sign Up </button><br><br>
+        </div>
+    </div>
+</form>
