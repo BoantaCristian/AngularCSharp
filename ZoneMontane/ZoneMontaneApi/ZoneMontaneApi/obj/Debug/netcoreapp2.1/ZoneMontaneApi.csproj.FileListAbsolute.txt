@@ -1,0 +1,16 @@
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\bin\Debug\netcoreapp2.1\appsettings.Development.json
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\bin\Debug\netcoreapp2.1\appsettings.json
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\bin\Debug\netcoreapp2.1\ZoneMontaneApi.deps.json
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\bin\Debug\netcoreapp2.1\ZoneMontaneApi.runtimeconfig.json
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\bin\Debug\netcoreapp2.1\ZoneMontaneApi.runtimeconfig.dev.json
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\bin\Debug\netcoreapp2.1\ZoneMontaneApi.dll
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\bin\Debug\netcoreapp2.1\ZoneMontaneApi.pdb
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\obj\Debug\netcoreapp2.1\ZoneMontaneApi.csprojAssemblyReference.cache
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\obj\Debug\netcoreapp2.1\ZoneMontaneApi.RazorAssemblyInfo.cache
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\obj\Debug\netcoreapp2.1\ZoneMontaneApi.RazorAssemblyInfo.cs
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\obj\Debug\netcoreapp2.1\ZoneMontaneApi.AssemblyInfoInputs.cache
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\obj\Debug\netcoreapp2.1\ZoneMontaneApi.AssemblyInfo.cs
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\obj\Debug\netcoreapp2.1\ZoneMontaneApi.RazorTargetAssemblyInfo.cache
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\obj\Debug\netcoreapp2.1\ZoneMontaneApi.dll
+D:\AngularCSharp\ZoneMontane\ZoneMontaneApi\ZoneMontaneApi\obj\Debug\netcoreapp2.1\ZoneMontaneApi.pdb

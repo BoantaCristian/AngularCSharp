@@ -1,0 +1,118 @@
+<mat-toolbar> Mountain Zone App </mat-toolbar><br><br><br>
+<button mat-raised-button color="warn" *ngIf="logged" class="button-right" (click)="logout()">Logout</button>
+<button mat-raised-button color="primary" *ngIf="!logged" class="button-left" routerLink="/user/login">Login</button>
+<button mat-raised-button color="primary" *ngIf="!logged" class="button-right" routerLink="/user/register">Register</button>
+<button mat-raised-button color="primary" *ngIf="admin" class="button-left" routerLink="/admin">Manage</button>
+<div class="userContainer">
+    <mat-card>
+        <div class="flexContainer">
+            <div class="flexContent"> <b>Username: </b></div>
+            <div class="flexContent">{{userDetails.userName}}</div>
+        </div>
+        <div class="flexContainer">
+            <div class="flexContent"><b>Email: </b></div>
+            <div class="flexContent">{{userDetails.email}}</div>
+        </div>
+        <div class="flexContainer">
+            <div class="flexContent"><b>Role: </b></div>
+            <div class="flexContent">{{userDetails.role}}</div>
+        </div>
+    </mat-card>
+</div>
+<div class="zoneContainer">
+    <a class="viewDetails" *ngIf="viewDetail" (click)="viewDetails()">Hide Details</a>
+    <a class="viewDetails" *ngIf="!viewDetail"(click)="viewDetails()">View Details</a>
+    <mat-card *ngIf="viewDetail">
+        <h3>All mountain objectives</h3><br>
+        <div class="flexContainer">
+            <h5 class="flexContent">Zone</h5>
+            <h5 class="flexContent">Accommodations</h5>
+        </div>
+
+        <div class="flexContainer">
+            <div class="flexContent">
+                <div *ngFor="let zone of zones">
+                   <div style="margin-top: 5px;">{{zone.name}}</div>
+                </div>
+            </div> 
+            <div class="flexContent">
+                <div *ngFor="let accommodation of accommodations">
+                    <div style="margin-top: 5px;"> {{accommodation.name}}</div>
+                </div>
+            </div>
+        </div>
+        <h5> Team members per zones</h5>
+        <div *ngFor="let mpz of membersPerZone">
+            <div style="margin-top: 5px;"> {{mpz.zone}}: {{mpz.membersNumber}}</div>
+        </div>
+    </mat-card>
+    <mat-card *ngIf="!selectZone">
+        <h3>Select mountain zone</h3>
+        <div class="flexContainer">
+            <div class="flexContent">
+                <mat-form-field class="col-md-8 offset-3">
+                    <mat-label> Select mountain zone </mat-label>
+                    <mat-select [(ngModel)]="selectedZone" name="selectedZone">
+                        <mat-option *ngFor="let zone of zones" [value]="zone.id">
+                            {{zone.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="flexContent">
+                <div class="offset-3 confirmPosition">
+                    <button mat-raised-button color="primary" (click)="confirmZone()" [disabled]="!selectedZone">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+    <mat-card *ngIf="selectZone">
+        <a class="cancelZone" (click)="cancelZone()"> Change zone</a>
+        <h3>Displnoble accommodations</h3><br>
+        <div class="flexContainer">
+            <h5 class="flexContent">Accommodations</h5>
+            <h5 class="flexContent">Routes</h5>
+        </div>
+        <div class="flexContainer">
+            <div class="flexContent">
+                <div *ngFor="let accommodation of accommodationPoint">
+                    <div style="margin-top: 5px;">{{accommodation.name}}</div>
+                </div>
+            </div> 
+            <div class="flexContent">
+                <div *ngFor="let route of routes">
+                    <div style="margin-top: 5px;" (click)="getObjectiveOnRoute(route.id)"> {{route.mark}}</div>
+                </div>
+            </div>
+        </div><br>
+        <div class="tip"> tip: click on a route to show its objectives</div>
+        <div *ngIf="selectedRoute">
+        <h5 style="text-align: center;">Displnoble objectives on selected route</h5>
+            <div *ngFor="let i of routeObjectives" style="text-align: center;margin-top: 5px;"> 
+                {{i.name}}
+            </div>
+        </div>
+    </mat-card>
+    <mat-card *ngIf="!selectedTeam">
+        <h3>Teams</h3>
+        <mat-form-field class="col-md-8 offset-2">
+            <mat-label> Select team </mat-label>
+            <mat-select>
+                <mat-option *ngFor="let team of teams" [value]="team.id" (click)="selectTeam(team.id)">
+                    {{team.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-card>
+    <mat-card *ngIf="selectedTeam">
+        <a class="cancelZone" (click)="cancelTeam()"> Change team</a>
+        <h3>Members</h3>
+        <div *ngFor="let member of members" style="text-align: center;margin-top: 5px;">
+            {{member.name}}
+        </div>
+        <h3>Team activity</h3>
+        <div *ngFor="let team of teamActivityZones" style="text-align: center;margin-top: 5px;">
+            {{team.name}}
+        </div>
+    </mat-card><br><br>
+</div>

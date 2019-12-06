@@ -1,0 +1,25 @@
+mat-form-field{
+    color: rgb(28, 59, 160);
+    margin-top: 10px;
+}
+.button{
+    text-align: center;
+}
+button{
+    margin: 18px;
+}
+button:hover{
+    color: white;
+    background: rgb(80, 80, 175);
+}
+.text-danger{
+    position: absolute;
+    left: 0px;
+    top: 35px;
+}
+.text-danger-2{
+    color: rgb(228, 62, 62);
+    position: absolute;
+    left: 0px;
+    top: 49px;
+}

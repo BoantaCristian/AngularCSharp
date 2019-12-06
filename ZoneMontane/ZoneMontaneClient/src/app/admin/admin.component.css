@@ -1,0 +1,101 @@
+a{
+    position: absolute;
+    top: 70px;
+    left: 10%;
+    font-size: 24px;
+    text-decoration: none;
+    color: whitesmoke;
+}
+a:hover{
+    color: rgb(186, 160, 235);
+    transition: 300ms;
+}
+mat-card{
+    background: rgba(255, 255, 255, 0.459);
+    margin-top: 80px;
+}
+.membersContainer{
+    width: 900px;
+    margin: 30px auto;
+}
+.zoneContainer{
+    width: 400px;
+    margin: 0 auto;
+}
+.flexContainer{
+    display: flex;
+    text-align: center;
+}
+.flexContent{
+    flex: 1;
+}
+.flexContainer:hover{
+    background: rgba(0, 0, 0, 0.178);
+    border-radius: 20px;
+}
+button:hover{
+    color: black;
+    background: white;
+}
+.button-right{
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1;
+}
+.button-left{
+    position: fixed;
+    top: 15px;
+    right: 105px;
+    z-index: 1;
+}
+.confirmPosition{
+    position: relative;
+    top: 10px;
+}
+.viewDetails{
+    color: white;
+    position: relative;
+    left: 300px;
+
+}
+.cancelZone{
+    color: white;
+    position: relative;
+
+}
+.viewDetails:hover{
+    color: rgb(234, 126, 255);
+    cursor: pointer;
+    transition: 400ms;
+}
+.cancelZone:hover{
+    color: rgb(65, 35, 100);
+    cursor: pointer;
+    transition: 400ms;
+}
+.tip{
+    position: absolute;
+    color: rgb(65, 35, 100);
+    font-size: 13px;
+    top: 0px;
+    right: 5px;
+}
+h3{
+    text-align: center;
+    padding-top: 10px;
+}
+.button{
+    text-align: center;
+}
+button:hover{
+    color: rgb(255, 0, 0);
+    background: black;
+}
+.deleteButton{
+    background: red;
+    border-radius: 40px;
+    margin: 3px auto;
+    border: none;
+    transition: 400ms;
+}

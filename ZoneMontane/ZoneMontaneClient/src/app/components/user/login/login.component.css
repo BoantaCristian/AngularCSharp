@@ -1,0 +1,14 @@
+mat-form-field{
+    color: rgb(28, 59, 160);
+    margin-top: 10px;
+}
+.button{
+    text-align: center;
+}
+button{
+    margin: 15px;
+}
+button:hover{
+    color: white;
+    background: rgb(80, 80, 175);
+}

@@ -1,0 +1,50 @@
+<a routerLink=""> ➜ back</a><br>
+
+<div class="zoneContainer">
+    <mat-card>
+        <h3>Add Team member</h3>
+        <mat-form-field class="col-md-8 offset-2">
+            <input matInput [(ngModel)]="formModel.Name" name="Name" placeholder="Member name">
+        </mat-form-field>
+        <mat-form-field class="col-md-8 offset-2">
+            <input matInput [(ngModel)]="formModel.Telephone" name="Telephone" placeholder="Telephone">
+        </mat-form-field>
+        <mat-form-field class="col-md-8 offset-2">
+            <input matInput [(ngModel)]="formModel.Experience" name="Experience" placeholder="Experience">
+        </mat-form-field>
+        <mat-form-field class="col-md-8 offset-2">
+            <mat-label> Select team </mat-label>
+            <mat-select [(ngModel)]="formModel.TeamId" name="TeamId">
+                <mat-option *ngFor="let team of teams" [value]="team.id">
+                    {{team.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="col-md-12">
+            <div class="button">
+                <button mat-raised-button color="primary" (click)="addMember()" [disabled]="!formModel.Name || !formModel.Telephone || !formModel.Experience || !formModel.TeamId">Add Member</button>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<div class="membersContainer">
+    <mat-card>
+        <h3>All members</h3>
+        <div class="flexContainer">
+            <h5 class="flexContent"> Name </h5>
+            <h5 class="flexContent"> Date </h5>
+            <h5 class="flexContent"> Telephone </h5>
+            <h5 class="flexContent"> Experience </h5>
+            <h5 class="flexContent"> Action </h5>
+        </div>
+        <div class="flexContainer" *ngFor="let member of members">
+            <div class="flexContent">{{member.name}}</div>
+            <div class="flexContent">{{member.date | date}}</div>
+            <div class="flexContent">0{{member.telephone}}</div>
+            <div class="flexContent">{{member.experience}}</div>
+            <div class="flexContent">
+                <button class="deleteButton" color="warn" (click)="deleteMember(member.id)">Remove</button>
+            </div>
+        </div>
+    </mat-card>
+</div>
