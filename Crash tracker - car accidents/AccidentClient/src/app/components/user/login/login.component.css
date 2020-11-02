@@ -1,0 +1,11 @@
+.text-danger{
+    position: absolute;
+    left: 0;
+    top: 40px;
+}
+button{
+    margin: 0px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }

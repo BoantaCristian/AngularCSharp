@@ -1,0 +1,972 @@
+<mat-toolbar> 
+    <div style="position:fixed; left: 45%"> Medical Office </div>
+</mat-toolbar>
+
+<div *ngIf="!logged">
+  <h1 style="position: relative; top: 300px; margin: 0 auto !important; text-align: center;">Please login or register into the system...</h1>
+</div>
+
+<a  *ngIf="logged" (click)="logout()" class="rightButton">Logout</a>
+<a  *ngIf="!logged" (click)="login()" class="rightButton">Login</a>
+<a  *ngIf="!logged" (click)="register()" class="leftButton">Register</a>
+
+<div *ngIf="logged && loggedUser == 'Admin'"><br><br><br><br><br>
+    <h1 style="position: absolute; top: 100px;left: 200px;">Admin-dashboard</h1>
+    <div class="containerForm">
+        <mat-card>
+            <h2> Users </h2><br>
+            <div class="flexContainer">
+                <h5 class="flexContent title">UserName</h5>
+                <h5 class="flexContent title">Email</h5>
+                <h5 class="flexContent title">Telephone</h5>
+                <h5 class="flexContent title">Address</h5>
+                <h5 class="flexContent title">Role</h5>
+                <h5 class="flexContent title">Action</h5>
+            </div>
+            <div class="divider"></div>
+            <div *ngFor="let user of users" class="flexContainer hover">
+                <div class="flexContent title">{{user.userName}}</div>
+                <div class="flexContent title" *ngIf="user.email">{{user.email}}</div>
+                <div class="flexContent title" *ngIf="!user.email"> none </div>
+                <div class="flexContent title" *ngIf="user.phoneNumber">{{user.phoneNumber}}</div>
+                <div class="flexContent title" *ngIf="!user.phoneNumber">none</div>
+                <div class="flexContent title" *ngIf="user.address">{{user.address}}</div>
+                <div class="flexContent title" *ngIf="!user.address"> no address </div>
+                <div class="flexContent title" *ngIf="user.idDoctor">Pacient</div>
+                <div class="flexContent title" *ngIf="user.id == userDetails.id">Admin</div>
+                <div class="flexContent title" *ngIf="user.id != userDetails.id && !user.idDoctor">Doctor</div>
+                <div class="flexContent title">
+                    <button mat-raised-button class="delete" *ngIf="user.id == userDetails.id" [disabled]="true">Delete</button>
+                    <button mat-raised-button class="delete" *ngIf="user.id != userDetails.id" (click)="deleteUser(user.id)">Delete</button>
+                </div>
+            </div><br>
+            <button mat-raised-button *ngIf="!addUserZone" class="option" (click)="addZone('User')">Add User</button><br><br>
+            <div *ngIf="addUserZone">
+              <h3>Add User</h3>
+              <form [formGroup]="formModel" autocomplete="off" (submit)="registerUser()" style="text-align: center;"><br>
+                <mat-form-field>
+                    <mat-label> Select role</mat-label>
+                    <mat-select formControlName="Role">
+                        <mat-option *ngFor="let role of roles" [value]="role">
+                            {{role}}
+                        </mat-option>
+                    </mat-select>
+                    <label class="text-danger" *ngIf="formModel.get('Role').touched && formModel.get('Role').errors?.required">Select a role!</label>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput formControlName="UserName" placeholder="Username">
+                    <label class="text-danger" *ngIf="formModel.get('UserName').touched && formModel.get('UserName').errors?.required">This field is mandatory!</label>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput formControlName="Email" placeholder="Email">
+                    <label class="text-danger" *ngIf="formModel.get('Email').touched && formModel.get('Email').errors?.email">Invalid email address!</label>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput formControlName="Address" placeholder="Address">
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput formControlName="PhoneNumber" placeholder="PhoneNumber">
+                </mat-form-field>
+                <mat-form-field>
+                    <input type="password" matInput formControlName="Password" placeholder="Password" (input)="comparePasswords()">
+                    <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.required">This field is mandatory!</label>
+                    <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.minlength">Minimum 4 characters!</label>
+                </mat-form-field>
+                <mat-form-field>
+                    <input type="password" matInput formControlName="ConfirmPassword" placeholder="Confirm password" (input)="comparePasswords()">
+                    <label class="text-danger" *ngIf="formModel.get('ConfirmPassword').touched && formModel.get('ConfirmPassword').errors?.required">This field is mandatory!</label>
+                    <label class="text-danger2" *ngIf="formModel.get('ConfirmPassword').touched && mismatch">Passwords mismatch!</label>
+                </mat-form-field><br>
+                <div style="width: 200px; margin: 10px auto;">
+                  <button mat-button (click)="cancelZone()" class="cancel"style="margin-right: 10px;"> Cancel </button>
+                  <button mat-raised-button type="submit" class="option" [disabled]="!formModel.valid || mismatch">Register</button>
+                </div>
+            </form>
+            </div>
+          </mat-card>
+    </div>
+    <div class="divider2"></div>
+
+    <div class="containerForm">
+        <mat-card class="appointments">
+            <h2> Appointments </h2><br>
+            <div class="flexContainer">
+                <h5 class="flexContent title">Doctor</h5>
+                <h5 class="flexContent title">Patient</h5>
+                <h5 class="flexContent title">Patient Contact</h5>
+                <h5 class="flexContent title">Date</h5>
+                <h5 class="flexContent title">Option</h5>
+            </div>
+            <div class="divider"></div>
+            <div class="flexContainer hover" *ngFor="let appointment of appointments">
+                <div class="flexContent title">{{appointment.userName}}</div>
+                <div class="flexContent title">{{appointment.idPacient.userName}}</div>
+                <div class="flexContent title">
+                    <div *ngIf="appointment.idPacient.phoneNumber">Phone: {{appointment.idPacient.phoneNumber}}</div>
+                    <div *ngIf="appointment.idPacient.email">Email: {{appointment.idPacient.email}}</div>
+                    <div *ngIf="!appointment.idPacient.phoneNumber"> Phone: None </div>
+                    <div *ngIf="!appointment.idPacient.email">Email: None</div>
+                </div>
+                <div class="flexContent title">{{appointment.date | date}} {{appointment.hour}}:{{appointment.minute}} </div>
+                <div style="width: 20%;">
+                  <button mat-raised-button class="option" style="margin-top: 5px;" (click)="deleteAppointment(appointment.id)"> Done </button>
+                </div>
+            </div><br>
+            <button mat-raised-button *ngIf="!addAppointmentZone" class="option" (click)="addZone('Appointment')">Add Appointment</button><br><br>
+            <div *ngIf="addAppointmentZone">
+                <h3>Add Appointment</h3>
+                <mat-horizontal-stepper [linear]="isLinear" #stepper>
+                    <mat-step [stepControl]="firstFormGroup">
+                      <form [formGroup]="firstFormGroup">
+                        <ng-template matStepLabel>Fill out appointment participants</ng-template>
+                        <mat-form-field>
+                          <mat-label>Doctor</mat-label>
+                          <mat-select formControlName="Doctor">
+                            <mat-option *ngFor="let doctor of doctors" [value]="doctor.id">
+                              {{doctor.userName}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-label>Patient</mat-label>
+                          <mat-select formControlName="Patient">
+                            <mat-option *ngFor="let patient of patients" [value]="patient.id">
+                              {{patient.userName}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <div>
+                          <button mat-button (click)="cancelZone()" class="confirmMedicament cancel"> Cancel </button>
+                          <button mat-button matStepperNext class="option">Next</button>
+                        </div>
+                      </form>
+                    </mat-step>
+                    <mat-step [stepControl]="secondFormGroup">
+                      <form [formGroup]="secondFormGroup">
+                        <ng-template matStepLabel>Fill out date and time</ng-template>
+                        <mat-form-field>
+                            <input matInput formControlName="Date" [matDatepicker]="picker" placeholder="Select date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Hour</mat-label>
+                            <mat-select formControlName="Hour">
+                              <mat-option *ngFor="let hour of hours" [value]="hour">
+                                {{hour}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Minute</mat-label>
+                            <mat-select formControlName="Minute">
+                              <mat-option *ngFor="let minute of minutes" [value]="minute">
+                                {{minute}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        <div>
+                          <button mat-button (click)="cancelZone()" class="confirmMedicament cancel"> Cancel </button>
+                          <button mat-button matStepperPrevious class="option">Back</button>
+                          <button mat-button matStepperNext class="option">Next</button>
+                        </div>
+                      </form>
+                    </mat-step>
+                    <mat-step>
+                      <ng-template matStepLabel>Done</ng-template>
+                      <p>You are now done.</p>
+                      <div>
+                        <button mat-button (click)="cancelZone()" class="confirmMedicament cancel"> Cancel </button>
+                        <button mat-button matStepperPrevious class="option">Back</button>
+                        <button mat-button (click)="stepper.reset()" class="option">Reset</button>
+                        <button mat-button (click)="addAppointment()" class="option">Finish</button>
+                      </div>
+                    </mat-step>
+                  </mat-horizontal-stepper>
+            </div>
+        </mat-card>
+    </div>
+    <div class="divider2"></div>
+
+    <div class="containerForm">
+        <mat-card class="medicaments">
+            <h2>Medicaments</h2><br>
+            <div class="flexContainer">
+                <h5 class="flexContent title">Name</h5>
+                <h5 class="flexContent title">Price</h5>
+            </div>
+            <div class="divider"></div>
+            <div class="flexContainer hover" *ngFor="let medicament of medicaments">
+                <div class="flexContent title">{{medicament.name}}</div>
+                <div class="flexContent title">{{medicament.price}}</div>
+            </div><br>
+            <button mat-raised-button *ngIf="!addMedicamentZone" class="option" (click)="addZone('Medicament')">Add Medicament</button><br>
+            <div *ngIf="addMedicamentZone">
+                <h3>Add Medicament</h3>
+                <div class="flexContainer">
+                    <mat-form-field class="flexContent">
+                        <input matInput [(ngModel)]="medicament.Name" name="medicamentName" placeholder="Medicament">
+                    </mat-form-field>
+                    <mat-form-field  class="flexContent">
+                        <input type="number" min="1" [(ngModel)]="medicament.Price" name="medicamentPrice" matInput placeholder="Price">
+                    </mat-form-field>
+                    <span class="flexContent">
+                        <button mat-raised-button (click)="addMedicament()" class="confirmMedicament option" [disabled]="medicament.Name == '' || medicament.Price == null"> Finish </button>
+                    </span>
+                    <span class="flexContent">
+                        <button mat-raised-button (click)="cancelZone()" class="confirmMedicament cancel"> Cancel </button>
+                    </span>
+                </div>
+            </div>
+        </mat-card><br>
+    </div>
+    <div class="divider2"></div>
+    
+    <div class="containerForm">
+        <mat-card class="illness">
+            <h2 class="animated">Illnesses</h2><br>
+            <div class="flexContainer">
+                <h5 class="flexContent title">Name</h5>
+                <h5 class="flexContent title">Symptoms</h5>
+                <h5 class="flexContent title">Risk</h5>
+            </div>
+            <div class="divider"></div>
+            <div class="flexContainer hover" *ngFor="let illness of illnesses">
+                <div class="flexContent title">{{illness.name}}</div>
+                <div class="flexContent title">{{illness.symptoms}}</div>
+                <div class="flexContent title">{{illness.risk}}</div>
+            </div><br>
+            <button mat-raised-button *ngIf="!addIllnessesZone" class="option"  (click)="addZone('Illness')">Add Illness</button><br><br>
+            <div *ngIf="addIllnessesZone">
+              <h3>Add Illness</h3>
+              <mat-horizontal-stepper [linear]="isLinear" #stepper>
+                <mat-step [stepControl]="illnessForm">
+                  <form [formGroup]="illnessForm">
+                    <ng-template matStepLabel>Fill out illness details</ng-template>
+                    <mat-form-field>
+                      <mat-label>Name</mat-label>
+                      <input matInput placeholder="Illness name" formControlName="Name" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Symptoms</mat-label>
+                      <input matInput placeholder="Symptoms" formControlName="Symptoms" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Risk</mat-label>
+                      <mat-select formControlName="Risk">
+                        <mat-option *ngFor="let risk of risks" [value]="risk">
+                          {{risk}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <div>
+                      <button mat-button (click)="cancelZone()" class="confirmMedicament cancel"> Cancel </button>
+                      <button mat-button matStepperNext class="option">Next</button>
+                    </div>
+                  </form>
+                </mat-step>
+                <mat-step [stepControl]="illnessDetailsForm">
+                  <form [formGroup]="illnessDetailsForm">
+                    <ng-template matStepLabel>Fill out medicine</ng-template>
+                    <mat-form-field>
+                      <mat-label>Duration</mat-label>
+                      <input matInput type="number" placeholder="Duration" formControlName="Duration" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Daily Dose</mat-label>
+                      <input matInput type="number" placeholder="DailyDose" formControlName="DailyDose" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Period</mat-label>
+                      <input matInput placeholder="Period" formControlName="Period" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Medicament</mat-label>
+                      <mat-select formControlName="MedicamentId">
+                        <mat-option *ngFor="let medicament of medicaments" [value]="medicament.id">
+                          {{medicament.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <div>
+                      <button mat-button (click)="cancelZone()" class="confirmMedicament cancel"> Cancel </button>
+                      <button mat-button matStepperPrevious class="option">Back</button>
+                      <button mat-button matStepperNext class="option">Next</button>
+                    </div>
+                  </form>
+                </mat-step>
+                
+                <mat-step>
+                  <ng-template matStepLabel>Done</ng-template>
+                  <p>You are now done.</p>
+                  <div>
+                    <button mat-button (click)="cancelZone()" class="confirmMedicament cancel"> Cancel </button>
+                    <button mat-button matStepperPrevious class="option">Back</button>
+                    <button mat-button (click)="stepper.reset()" class="option">Reset</button>
+                    <button mat-button (click)="addIllness()" class="option">Finish</button>
+                  </div>
+                </mat-step>
+              </mat-horizontal-stepper>
+              
+          </div>
+        </mat-card><br>
+    </div>
+    <div class="divider2"></div>
+
+  <div class="containerHistoric">
+    <mat-card>
+        <h2> Historic of appointments </h2><br>
+        <div class="flexContainer">
+            <h5 class="flexContent title">Doctor</h5>
+            <h5 class="flexContent title">Patient</h5>
+            <h5 class="flexContent title">Date Hour Minute</h5>
+        </div>
+        <div class="divider"></div>
+        <div class="flexContainer hover" *ngFor="let hist of historic">
+            <div class="flexContent title">{{hist.idMedic}}</div>
+            <div class="flexContent title">{{hist.idPacient}}</div>
+            <div class="flexContent title" *ngIf="hist.minute != 0">{{hist.date | date}} {{hist.hour}}:{{hist.minute}} </div>
+            <div class="flexContent title" *ngIf="hist.minute == 0">{{hist.date | date}} {{hist.hour}}:0{{hist.minute}} </div>
+        </div><br>
+        <br><br>
+    </mat-card>
+  </div>
+</div>
+
+
+<div *ngIf="logged && loggedUser == 'Doctor'"><br><br><br><br><br>
+  <h1 style="position: absolute; top: 100px;left: 200px;">Welcome Doctor {{userDetails.userName}} </h1>
+  <div class="containerForm">
+    <mat-card style="width: 1600px">
+        <h2> Your patients </h2><br>
+        <div class="flexContainer" style="min-width: 1511px;">
+            <h5 class="flexContent title">Name</h5>
+            <h5 class="flexContent title">Email</h5>
+            <h5 class="flexContent title">Telephone</h5>
+            <h5 class="flexContent title">Address</h5>
+            <h5 class="flexContent title">Manage</h5>
+        </div>
+        <div class="divider" style="min-width: 1511px;"></div>
+        <div *ngFor="let patient of currentPatients" class="flexContainer hover"  style="min-width: 1511px;">
+            <div class="flexContent title">{{patient.userName}}</div>
+            <div class="flexContent title" *ngIf="patient.email">{{patient.email}}</div>
+            <div class="flexContent title" *ngIf="!patient.email"> none </div>
+            <div class="flexContent title" *ngIf="patient.phoneNumber">{{patient.phoneNumber}}</div>
+            <div class="flexContent title" *ngIf="!patient.phoneNumber">none</div>
+            <div class="flexContent title" *ngIf="patient.address">{{patient.address}}</div>
+            <div class="flexContent title" *ngIf="!patient.address"> no address </div>
+           <div class="flexContent title">
+                <button mat-raised-button class="option" (click)="selectIll(patient.id, patient.userName)">Add ill</button>
+                <button mat-raised-button class="option" (click)="addDetailDoctorZone(patient.id,  patient.userName, patient)" style="position: absolute; right: 320px; margin-top: 0px;" >Add detail</button>
+                <button mat-raised-button class="option" (click)="patientAppointmentZone(patient.id, patient.userName)" >Appointment</button>
+                <button mat-raised-button class="delete" (click)="deleteUser(patient.id)">Delete</button>
+            </div>
+        </div><br>
+        <button mat-raised-button *ngIf="!addPatientZone && !addAppointmentDoctor && !addIllnessToPatient && !addDetailsDoctor" class="option" (click)="addZone('AddPatient')">Add Patient</button><br><br>
+        <div *ngIf="addIllnessToPatient">
+          <h3>Add illness to patient: {{selectedPatientIll}} </h3>
+          <mat-form-field>
+            <mat-label>Select illness</mat-label>
+            <mat-select [(ngModel)]="selectedIllForPatient">
+              <mat-option *ngFor="let ill of illnesses" [value]="ill.id">
+                {{ill.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-button (click)="cancelZone()" class="confirmMedicament cancel"> Cancel </button>
+          <button mat-button class="confirmMedicament option" (click)="addIllnessToExistingPatient()" [disabled]="!selectedIllForPatient"> Finish </button>
+        </div>
+        <div *ngIf="addDetailsDoctor">
+          <h3>Add details to patient: {{selectedPatientAppointment}} </h3>
+          <form [formGroup]="patientDetailsForm" autocomplete="off" (submit)="addPatientDoctorDetails()" class="flexContainer" style="width: 1200px;"><br>
+            <mat-form-field>
+                <input matInput type="number" min="1" formControlName="Height" placeholder="Height (cm)">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="number" min="1" formControlName="Weight" placeholder="Weight (kg)">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="number" min="1" formControlName="Age" placeholder="Age">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label> Select body type</mat-label>
+              <mat-select formControlName="bodyType">
+                  <mat-option *ngFor="let body of bodyType" [value]="body">
+                      {{body}}
+                  </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label> Select daily activity intensity</mat-label>
+              <mat-select formControlName="Activity">
+                  <mat-option *ngFor="let act of activity" [value]="act">
+                      {{act}}
+                  </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div style="margin: 10px auto; margin-top: 20px;">
+              <button mat-button (click)="cancelZone()" class="cancel"style="margin-right: 10px;"> Back </button>
+              <button mat-raised-button type="submit" class="option" [disabled]="!patientDetailsForm.valid">Finish</button>
+            </div>
+          </form>
+        </div>
+        <div *ngIf="addPatientZone && !addIllnessToPatient">
+          <h3>Add Patient</h3>
+          <form [formGroup]="formModel" autocomplete="off" (submit)="addPatient()" style="text-align: center;"><br>
+            <mat-form-field>
+                <input matInput formControlName="UserName" placeholder="Name">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Select illness if case</mat-label>
+              <mat-select formControlName="IllnessId">
+                <mat-option *ngFor="let ill of illnesses" [value]="ill.id">
+                  {{ill.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="Email" placeholder="Email">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="Address" placeholder="Address">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput formControlName="PhoneNumber" placeholder="PhoneNumber">
+            </mat-form-field>
+            <mat-form-field>
+                <input type="password" matInput formControlName="Password" placeholder="Password" (input)="comparePasswords()">
+            </mat-form-field>
+            <mat-form-field>
+                <input type="password" matInput formControlName="ConfirmPassword" placeholder="Confirm password" (input)="comparePasswords()">
+            </mat-form-field><br>
+            <div style="margin: 10px auto;">
+              <button mat-button (click)="cancelZone()" class="cancel"style="margin-right: 10px;"> Cancel </button>
+              <button mat-raised-button type="submit" class="option" [disabled]="!formModel.value.UserName || !formModel.value.Password || !formModel.value.ConfirmPassword || mismatch">Add patient</button>
+            </div>
+        </form>
+        </div>
+        <div *ngIf="addAppointmentDoctor">
+          <h3>Add Appointment for patient: {{selectedPatientAppointment}} </h3>
+          <form>
+            <mat-form-field>
+                <input matInput [(ngModel)]="newDoctorAppointment.Date" name="date" [matDatepicker]="picker" placeholder="Select date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Hour</mat-label>
+                <mat-select [(ngModel)]="newDoctorAppointment.Hour" name="hour">
+                  <mat-option *ngFor="let hour of hours" [value]="hour">
+                    {{hour}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            <mat-form-field>
+                <mat-label>Minute</mat-label>
+                <mat-select [(ngModel)]="newDoctorAppointment.Minute" name="minute">
+                  <mat-option *ngFor="let minute of minutes" [value]="minute">
+                    {{minute}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button mat-button (click)="cancelZone()" class="confirmMedicament cancel"> Cancel </button>
+              <button mat-button class="confirmMedicament option" (click)="addDoctorAppointment()" [disabled]="!newDoctorAppointment.Date || !newDoctorAppointment.Hour || newDoctorAppointment.Minute == null"> Finish </button>
+          </form>
+      </div>
+      </mat-card>
+  </div>
+  <div class="divider2"></div>
+
+  <div class="containerForm">
+    <mat-card>
+        <h2> Your Appointments </h2><br>
+        <div class="flexContainer">
+            <h5 class="flexContent title">Patient</h5>
+            <h5 class="flexContent title">Email</h5>
+            <h5 class="flexContent title">Address</h5>
+            <h5 class="flexContent title">Phone Number</h5>
+            <h5 class="flexContent title">Date</h5>
+            <h5 class="flexContent title">Manage</h5>
+        </div>
+        <div class="divider"></div>
+        <div class="flexContainer hover" *ngFor="let appointment of currentAppointments">
+            <div class="flexContent title">{{appointment.idPacient.userName}}</div>
+            <div class="flexContent title" *ngIf="appointment.idPacient.email">{{appointment.idPacient.email}}</div>
+            <div class="flexContent title" *ngIf="!appointment.idPacient.email">None</div>
+            <div class="flexContent title" *ngIf="appointment.idPacient.address">{{appointment.idPacient.address}}</div>
+            <div class="flexContent title" *ngIf="!appointment.idPacient.address">None</div>
+            <div class="flexContent title" *ngIf="appointment.idPacient.phoneNumber">{{appointment.idPacient.phoneNumber}}</div>
+            <div class="flexContent title" *ngIf="!appointment.idPacient.phoneNumber">None</div>
+            <div class="flexContent title" *ngIf="appointment.minute != 0">{{appointment.date | date}} {{appointment.hour}}:{{appointment.minute}} </div>
+            <div class="flexContent title" *ngIf="appointment.minute == 0">{{appointment.date | date}} {{appointment.hour}}:0{{appointment.minute}} </div>
+            <div style="width: 16.5%;">
+              <button mat-raised-button *ngIf="!addAppointmentZone" class="option" style="margin-top: 2px;" (click)="deleteAppointment(appointment.id)"> Done </button>
+            </div>
+        </div><br>
+        <br><br>
+        
+    </mat-card>
+  </div>
+  <div class="divider2"></div>
+
+  <div class="containerForm">
+    <mat-card>
+        <h2> Sick patients </h2><br>
+        <div class="flexContainer">
+            <h5 class="flexContent title">Patient</h5>
+            <h5 class="flexContent title">Illness</h5>
+            <h5 class="flexContent title">Risk</h5>
+            <h5 class="flexContent title">Symptoms</h5>
+            <h5 class="flexContent title">Medicament</h5>
+            <h5 class="flexContent title">Duration(days)</h5>
+            <h5 class="flexContent title">Daily Dose</h5>
+            <h5 class="flexContent title">Period</h5>
+            <h5 class="flexContent title">Manage</h5>
+        </div>
+        <div class="divider"></div>
+        <div class="flexContainer hover" *ngFor="let patient of patientIllMedicine">
+            <div class="flexContent title" *ngIf="patient.cured == false">{{patient.userName}}</div>
+            <div class="flexContent title" *ngIf="patient.cured == false">{{patient.ill}}</div>
+            <div class="flexContent title" *ngIf="patient.cured == false">{{patient.risk}}</div>
+            <div class="flexContent title" *ngIf="patient.cured == false">{{patient.symptoms}}</div>
+            <div class="flexContent title" *ngIf="patient.cured == false">{{patient.medicament}} </div>
+            <div class="flexContent title" *ngIf="patient.cured == false">{{patient.duration}} </div>
+            <div class="flexContent title" *ngIf="patient.cured == false">{{patient.dailyDose}} </div>
+            <div class="flexContent title" *ngIf="patient.cured == false">{{patient.period}} </div>
+            <div style="width: 11.1%;">
+              <button mat-raised-button class="option" style="margin-top: 2px;"  *ngIf="patient.cured == false" (click)="curePatient(patient.userName)"> Cured </button>
+            </div>
+        </div><br>
+        <br><br>
+    </mat-card>
+  </div>
+  <div class="divider2"></div>
+
+  <div class="containerForm" style=" min-width: 1600px !important;">
+    <mat-card style="position: relative; top: -25px;">
+      <h2> Nutritional details <br><br></h2>
+      <div>
+        <div class="flexContainer">
+          <h5 class="flexContent title">Patient</h5>
+          <h5 class="flexContent title">Height (cm)</h5>
+          <h5 class="flexContent title">Weight</h5>
+          <h5 class="flexContent title">Age</h5>
+          <h5 class="flexContent title">Body Type</h5>
+          <h5 class="flexContent title">Activity</h5>
+          <h5 class="flexContent title">Mass Index</h5>
+          <h5 class="flexContent title">Body State</h5>
+          <h5 class="flexContent title">Ideal Weight</h5>
+          <h5 class="flexContent title">Manage</h5>
+        </div>
+        <div class="divider"></div>
+        <div *ngIf="!edit && !patientShowDetails">
+          <div class="flexContainer hover" *ngFor="let patient of patientDoctorDetails">
+            <div class="flexContent title">{{patient.user.userName}}</div>
+            <div class="flexContent title">{{patient.height}}</div>
+            <div class="flexContent title">{{patient.weight}}</div>
+            <div class="flexContent title">{{patient.age}}</div>
+            <div class="flexContent title">{{patient.bodyType}}</div>
+            <div class="flexContent title">{{patient.activity}}</div>
+            <div class="flexContent title">{{patient.massIndex | number : '1.2-2'}} </div>
+            <div class="flexContent title">{{patient.bodyState}} </div>
+            <div class="flexContent title">{{patient.idealWeight | number : '1.2-2'}} </div>
+            <div style="width: 9%;">
+              <button mat-raised-button class="option" style="margin-top: 2px; margin-left: 0px;" (click)="updateDetailsDoctor(patient.user.id, patient.id, patient)"> Update </button>
+              <button mat-raised-button class="option" style="position: absolute; margin-top: 2px; margin-left: 0px;" (click)="getOnePatientDoctorDetails(patient.user.id, patient.user.userName)"> Details </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="edit">
+          <div *ngFor="let patient of patientDoctorDetails">
+            <div class="flexContainer" *ngIf="patient.user.id == selectedPatientDetailId" style="background-image: linear-gradient(to right, rgba(0, 128, 96, 0.342), white);">
+              <div class="flexContent title">{{patient.user.userName}}</div>
+              <div class="flexContent title">{{patient.height}}</div>
+              <div class="flexContent title">{{patient.weight}}</div>
+              <div class="flexContent title">{{patient.age}}</div>
+              <div class="flexContent title">{{patient.bodyType}}</div>
+              <div class="flexContent title">{{patient.activity}}</div>
+              <div class="flexContent title">{{patient.massIndex | number : '1.2-2'}} </div>
+              <div class="flexContent title">{{patient.bodyState}} </div>
+              <div class="flexContent title">{{patient.idealWeight | number : '1.2-2'}} </div>
+              <div class="flexContent title">Updating </div>
+            </div>
+            <div class="flexContainer" *ngIf="patient.user.id != selectedPatientDetailId">
+              <div class="flexContent title">{{patient.user.userName}}</div>
+              <div class="flexContent title">{{patient.height}}</div>
+              <div class="flexContent title">{{patient.weight}}</div>
+              <div class="flexContent title">{{patient.age}}</div>
+              <div class="flexContent title">{{patient.bodyType}}</div>
+              <div class="flexContent title">{{patient.activity}}</div>
+              <div class="flexContent title">{{patient.massIndex | number : '1.2-2'}} </div>
+              <div class="flexContent title">{{patient.bodyState}} </div>
+              <div class="flexContent title">{{patient.idealWeight | number : '1.2-2'}} </div>
+              <div class="flexContent title">Updating </div>
+            </div>
+          </div>
+        </div>
+            <div *ngIf="patientShowDetails">
+              <div *ngFor="let patient of patientDoctorDetails">
+                <div class="flexContainer" *ngIf="patient.user.userName == currentPacientNutritionistDetails" style="background-image: linear-gradient(to right, rgba(0, 128, 96, 0.342), white);">
+                  <div class="flexContent title">{{patient.user.userName}}</div>
+                  <div class="flexContent title">{{patient.height}}</div>
+                  <div class="flexContent title">{{patient.weight}}</div>
+                  <div class="flexContent title">{{patient.age}}</div>
+                  <div class="flexContent title">{{patient.bodyType}}</div>
+                  <div class="flexContent title">{{patient.activity}}</div>
+                  <div class="flexContent title">{{patient.massIndex | number : '1.2-2'}} </div>
+                  <div class="flexContent title">{{patient.bodyState}} </div>
+                  <div class="flexContent title">{{patient.idealWeight | number : '1.2-2'}} </div>
+                  <div class="flexContent title">Viewing Details </div>
+                </div>
+                <div class="flexContainer" *ngIf="patient.user.userName != currentPacientNutritionistDetails">
+                <div class="flexContent title">{{patient.user.userName}}</div>
+                <div class="flexContent title">{{patient.height}}</div>
+                <div class="flexContent title">{{patient.weight}}</div>
+                <div class="flexContent title">{{patient.age}}</div>
+                <div class="flexContent title">{{patient.bodyType}}</div>
+                <div class="flexContent title">{{patient.activity}}</div>
+                <div class="flexContent title">{{patient.massIndex | number : '1.2-2'}} </div>
+                <div class="flexContent title">{{patient.bodyState}} </div>
+                <div class="flexContent title">{{patient.idealWeight | number : '1.2-2'}} </div>
+                <div class="flexContent title">Viewing Details </div>
+                </div>
+              </div>
+            </div>
+      </div>
+      <div class="flexContainer" *ngIf="patientHasDetails && updateZone">
+        <form [formGroup]="patientDetailsForm" autocomplete="off" (submit)="addPatientDoctorDetails()" class="flexContainer" style="width: 1250px;"><br>
+          <mat-form-field>
+            <input matInput type="number" min="1" formControlName="Height" [(ngModel)]="patientDetailsObj.Height" placeholder="Height (cm)">
+          </mat-form-field>
+          <mat-form-field>
+              <input matInput type="number" min="1" formControlName="Weight" [(ngModel)]="patientDetailsObj.Weight" placeholder="Weight (kg)">
+          </mat-form-field>
+          <mat-form-field>
+              <input matInput type="number" min="1" formControlName="Age" [(ngModel)]="patientDetailsObj.Age" placeholder="Age">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label> Select body type</mat-label>
+            <mat-select formControlName="bodyType" [(ngModel)]="patientDetailsObj.bodyType">
+                <mat-option *ngFor="let body of bodyType" [value]="body">
+                    {{body}}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label> Select daily activity</mat-label>
+            <mat-select formControlName="Activity" [(ngModel)]="patientDetailsObj.Activity">
+                <mat-option *ngFor="let act of activity" [value]="act">
+                    {{act}}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div style="margin: 10px auto; margin-top: 20px;">
+            <button mat-raised-button class="cancel" style="margin-top: 2px; margin-left: -20px;" (click)="cancelZone()"> Cancel </button>
+          <button mat-raised-button class="option" type="submit"> Finish </button>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="patientShowDetails" style="min-width: 1600px;"><br><br>
+        <h5>Patient {{currentPacientNutritionistDetails}} nutritional details</h5><br>
+        <div class="flexContainer hover nutritionDetails">
+          <h6 class="flexContent title">Basal Metabolism: </h6>
+          <p class="flexContent title">{{patientDetails.basalMetabolism | number : '1.2-2'}} kcal/day</p>      
+        </div>
+        <div class="flexContainer hover nutritionDetails">
+          <h6 class="flexContent title">Caloric Ratio: </h6>
+          <p class="flexContent title">{{patientDetails.caloricRatio | number : '1.2-2'}} kcal/day</p>
+        </div>
+        <div class="divider" style="width: 450px;"></div>
+        <div class="flexContainer hover nutritionDetails">
+          <h6 class="flexContent title">Glucid: </h6>
+          <p class="flexContent title">{{patientDetails.glucid | number : '1.2-2'}} kcal / {{patientDetails.glucidGrams | number : '1.2-2'}} g</p>   
+        </div>
+        <div class="flexContainer hover nutritionDetails">      
+          <h6 class="flexContent title">Lipid: </h6>
+          <p class="flexContent title">{{patientDetails.lipid | number : '1.2-2'}} kcal / {{patientDetails.lipidGrams | number : '1.2-2'}} g</p>     
+        </div>
+        <div class="flexContainer hover nutritionDetails">      
+          <h6 class="flexContent title">Protein: </h6>
+          <p class="flexContent title">{{patientDetails.protein | number : '1.2-2'}} kcal / {{patientDetails.proteindGrams | number : '1.2-2'}} g</p>      
+        </div>
+        <div class="divider" style="width: 450px;"></div>
+        <div class="flexContainer hover">      
+          <h6 class="flexContent title">Breakfast: </h6>
+          <p class="flexContent title">{{patientDetails.breakfast | number : '1.2-2'}} kcal</p>      
+          <h6 class="flexContent title">Breakfast glucid: </h6>
+          <p class="flexContent title">{{patientDetails.breakfastGlucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.breakfastGlucid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Breakfast lipid: </h6>
+          <p class="flexContent title">{{patientDetails.breakfastLipid * 9.1 | number : '1.2-2'}} kcal / {{patientDetails.breakfastLipid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Breakfast protein: </h6>
+          <p class="flexContent title">{{patientDetails.breakfastProtein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.breakfastProtein | number : '1.2-2'}} g</p>      
+        </div>
+        <div class="flexContainer hover">      
+          <h6 class="flexContent title">Morning snack: </h6>
+          <p class="flexContent title">{{patientDetails.snack1 | number : '1.2-2'}} kcal</p>      
+          <h6 class="flexContent title">Morning snack glucid: </h6>
+          <p class="flexContent title">{{patientDetails.snack1Glucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.snack1Glucid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Morning snack lipid: </h6>
+          <p class="flexContent title">{{patientDetails.snack1Lipid * 9.1 | number : '1.2-2'}} kcal / {{patientDetails.snack1Lipid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Morning snack protein: </h6>
+          <p class="flexContent title">{{patientDetails.snack1Protein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.snack1Protein | number : '1.2-2'}} g</p>      
+        </div>
+        <div class="flexContainer hover">      
+          <h6 class="flexContent title">Launch: </h6>
+          <p class="flexContent title">{{patientDetails.launch | number : '1.2-2'}} kcal</p>      
+          <h6 class="flexContent title">Launch glucid: </h6>
+          <p class="flexContent title">{{patientDetails.launchGlucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.launchGlucid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Launch lipid: </h6>
+          <p class="flexContent title">{{patientDetails.launchLipid *9.1 | number : '1.2-2'}} kcal / {{patientDetails.launchLipid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Launch protein: </h6>
+          <p class="flexContent title">{{patientDetails.launchProtein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.launchProtein | number : '1.2-2'}} g</p>      
+        </div>
+        <div class="flexContainer hover">      
+          <h6 class="flexContent title">Evening snack: </h6>
+          <p class="flexContent title">{{patientDetails.snack2 | number : '1.2-2'}} kcal</p>      
+          <h6 class="flexContent title">Evening snack glucid: </h6>
+          <p class="flexContent title">{{patientDetails.snack2Glucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.snack2Glucid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Evening snack lipid: </h6>
+          <p class="flexContent title">{{patientDetails.snack2Lipid * 9.1 | number : '1.2-2'}} kcal / {{patientDetails.snack2Lipid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Evening snack protein: </h6>
+          <p class="flexContent title">{{patientDetails.snack2Protein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.snack2Protein | number : '1.2-2'}} g</p>      
+        </div>
+        <div class="flexContainer hover">      
+          <h6 class="flexContent title">Dinner: </h6>
+          <p class="flexContent title">{{patientDetails.dinner | number : '1.2-2'}} kcal</p>      
+          <h6 class="flexContent title">Dinner glucid: </h6>
+          <p class="flexContent title">{{patientDetails.dinnerGlucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.dinnerGlucid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Dinner lipid: </h6>
+          <p class="flexContent title">{{patientDetails.dinnerLipid * 9.1 | number : '1.2-2'}} kcal / {{patientDetails.dinnerLipid | number : '1.2-2'}} g</p>      
+          <h6 class="flexContent title">Dinner protein: </h6>
+          <p class="flexContent title">{{patientDetails.dinnerProtein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.dinnerProtein | number : '1.2-2'}} g</p>      
+        </div><br>
+        <button mat-raised-button class="cancel" style="margin-top: 2px;" (click)="cancelZone()"> Cancel </button>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+
+<div *ngIf="logged && loggedUser == 'Pacient'"><br><br><br><br><br>
+  <h1 style="position: absolute; top: 100px;left: 200px;">Welcome Patient {{userDetails.userName}} </h1>
+  <div class="containerForm">
+    <mat-card>
+      <h2> Your details </h2><br>
+      <div class="flexContainer hover patientDetails">
+        <h6 class="flexContent title">Doctor: </h6>
+        <h6 class="flexContent title">{{userDetails.doctor}}</h6>
+      </div>
+      <div class="flexContainer hover patientDetails">
+          <h6 class="flexContent title">Username: </h6>
+          <h6 class="flexContent title">{{userDetails.userName}}</h6>
+      </div>
+      <div class="flexContainer hover patientDetails">
+          <h6 class="flexContent title">Email: </h6>
+          <h6 class="flexContent title" *ngIf="userDetails.email">{{userDetails.email}}</h6>
+          <h6 class="flexContent title" *ngIf="!userDetails.email">None</h6>
+      </div>
+      <div class="flexContainer hover patientDetails">
+          <h6 class="flexContent title">Phone number: </h6>
+          <h6 class="flexContent title" *ngIf="userDetails.phoneNumber">{{userDetails.phoneNumber}}</h6>
+          <h6 class="flexContent title" *ngIf="!userDetails.phoneNumber">None</h6>
+      </div>
+      <div class="flexContainer hover patientDetails">
+          <h6 class="flexContent title">Address: </h6>
+          <h6 class="flexContent title" *ngIf="userDetails.address">{{userDetails.address}}</h6>
+          <h6 class="flexContent title" *ngIf="!userDetails.address">None</h6>
+      </div>
+    </mat-card>
+    <div class="divider3"></div>
+    
+      <div *ngIf="currentPatientAppointments == ''" style="position: relative; top: 0px; margin: 40px;"> 
+        <h2> You have no appointments for the moment </h2>
+      </div>
+    
+    <mat-card *ngIf="currentPatientAppointments != ''" style="position: relative; top: -20px;">
+      <h2 *ngIf="currentPatientAppointments != ''"> Your appointments </h2><br>
+      <div class="flexContainer patientAppointments" *ngIf="currentPatientAppointments != ''">
+        <h5 class="flexContent"> You have appointments with your doctor on: </h5>
+        <div>
+          <div *ngFor="let appointment of currentPatientAppointments">
+            {{appointment.date | date}} {{appointment.hour}}:{{appointment.minute}}
+          </div>
+      </div>
+    </div>
+    </mat-card>
+    <div class="divider3"></div>
+    
+    <mat-card style="position: relative; top: -25px;">
+      <h2 *ngIf="patientHasDetails && !updateZone"> Your nutritional details <br><br></h2>
+      <h2 *ngIf="patientHasDetails && updateZone"> Update your nutritional details <br><br></h2>
+      <div *ngIf="patientHasDetails && !updateZone">
+        <div class="flexContainer">
+          <h5 class="flexContent title">Height (cm)</h5>
+          <h5 class="flexContent title">Weight</h5>
+          <h5 class="flexContent title">Age</h5>
+          <h5 class="flexContent title">Body Type</h5>
+          <h5 class="flexContent title">Activity</h5>
+          <h5 class="flexContent title">Mass Index</h5>
+          <h5 class="flexContent title">Body State</h5>
+          <h5 class="flexContent title">Ideal Weight</h5>
+          <h5 class="flexContent title">Manage</h5>
+        </div>
+        <div class="divider"></div>
+        <div class="flexContainer">
+          <div class="flexContent title">{{patientDetails.height}}</div>
+          <div class="flexContent title">{{patientDetails.weight}}</div>
+          <div class="flexContent title">{{patientDetails.age}}</div>
+          <div class="flexContent title">{{patientDetails.bodyType}}</div>
+          <div class="flexContent title">{{patientDetails.activity}}</div>
+          <div class="flexContent title">{{patientDetails.massIndex | number : '1.2-2'}} </div>
+          <div class="flexContent title">{{patientDetails.bodyState}} </div>
+          <div class="flexContent title">{{patientDetails.idealWeight | number : '1.2-2'}} </div>
+          <div style="width: 10%;">
+            <button mat-raised-button class="option" style="margin-top: 2px; margin-left: -20px;" (click)="updateDetails()"> Update </button>
+          </div>
+        </div>
+      </div>
+      <div class="flexContainer" *ngIf="patientHasDetails && updateZone">
+        <form [formGroup]="patientDetailsForm" autocomplete="off" (submit)="addPatientDetails()" class="flexContainer" style="width: 1200px;"><br>
+          <mat-form-field>
+              <input matInput type="number" min="1" formControlName="Height" [(ngModel)]="patientDetailsObj.Height" placeholder="Height (cm)">
+          </mat-form-field>
+          <mat-form-field>
+              <input matInput type="number" min="1" formControlName="Weight" [(ngModel)]="patientDetailsObj.Weight" placeholder="Weight (kg)">
+          </mat-form-field>
+          <mat-form-field>
+              <input matInput type="number" min="1" formControlName="Age" [(ngModel)]="patientDetailsObj.Age" placeholder="Age">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label> Select body type</mat-label>
+            <mat-select formControlName="bodyType" [(ngModel)]="patientDetailsObj.bodyType">
+                <mat-option *ngFor="let body of bodyType" [value]="body">
+                    {{body}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+          <mat-form-field>
+            <mat-label> Select daily activity</mat-label>
+            <mat-select formControlName="Activity" [(ngModel)]="patientDetailsObj.Activity">
+                <mat-option *ngFor="let act of activity" [value]="act">
+                    {{act}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+          <div style="margin: 10px auto; margin-top: 20px;">
+            <button mat-raised-button class="cancel" style="margin-top: 2px; margin-left: -20px;" (click)="cancelZone()"> Cancel </button>
+          <button mat-raised-button class="option" type="submit"> Finish </button>
+          </div>
+      </form>
+      </div><br>
+
+      <h2 *ngIf="!patientHasDetails"> Add nutritional details </h2><br>
+      <form  *ngIf="!patientHasDetails" [formGroup]="patientDetailsForm" autocomplete="off" (submit)="addPatientDetails()" class="flexContainer" style="width: 1200px;"><br>
+        <mat-form-field>
+            <input matInput type="number" min="1" formControlName="Height" placeholder="Height (cm)">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" min="1" formControlName="Weight" placeholder="Weight (kg)">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="number" min="1" formControlName="Age" placeholder="Age">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label> Select body type</mat-label>
+          <mat-select formControlName="bodyType">
+              <mat-option *ngFor="let body of bodyType" [value]="body">
+                  {{body}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+        <mat-form-field>
+          <mat-label> Select body type</mat-label>
+          <mat-select formControlName="Activity">
+              <mat-option *ngFor="let act of activity" [value]="act">
+                  {{act}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+        <div style="margin: 10px auto; margin-top: 20px;">
+          <button mat-button (click)="cancelZone()" class="cancel"style="margin-right: 10px;"> Reset </button>
+          <button mat-raised-button type="submit" class="option" [disabled]="!patientDetailsForm.valid">Finish</button>
+        </div>
+    </form>
+    <h6 *ngIf="patientHasDetails && !showDetails" style="position: relative; top: -30px;" (click)="nutritionalDetailsZone()" class="showDetails">Show nutritional parameters and meals</h6>
+    <h6 *ngIf="patientHasDetails && showDetails" style="position: relative; top: -30px;" (click)="nutritionalDetailsZone()" class="showDetails">Hide nutritional parameters and meals</h6>
+    <div *ngIf="showDetails">
+      <div class="flexContainer hover nutritionDetails">
+        <h6 class="flexContent title">Basal Metabolism: </h6>
+        <p class="flexContent title">{{patientDetails.basalMetabolism | number : '1.2-2'}} kcal/day</p>      
+      </div>
+      <div class="flexContainer hover nutritionDetails">
+        <h6 class="flexContent title">Caloric Ratio: </h6>
+        <p class="flexContent title">{{patientDetails.caloricRatio | number : '1.2-2'}} kcal/day</p>
+      </div>
+      <div class="divider" style="width: 450px;"></div>
+      <div class="flexContainer hover nutritionDetails">
+        <h6 class="flexContent title">Glucid: </h6>
+        <p class="flexContent title">{{patientDetails.glucid | number : '1.2-2'}} kcal / {{patientDetails.glucidGrams | number : '1.2-2'}} g</p>   
+      </div>
+      <div class="flexContainer hover nutritionDetails">      
+        <h6 class="flexContent title">Lipid: </h6>
+        <p class="flexContent title">{{patientDetails.lipid | number : '1.2-2'}} kcal / {{patientDetails.lipidGrams | number : '1.2-2'}} g</p>     
+      </div>
+      <div class="flexContainer hover nutritionDetails">      
+        <h6 class="flexContent title">Protein: </h6>
+        <p class="flexContent title">{{patientDetails.protein | number : '1.2-2'}} kcal / {{patientDetails.proteindGrams | number : '1.2-2'}} g</p>      
+      </div>
+      <div class="divider" style="width: 450px;"></div>
+      <div class="flexContainer hover">      
+        <h6 class="flexContent title">Breakfast: </h6>
+        <p class="flexContent title">{{patientDetails.breakfast | number : '1.2-2'}} kcal</p>      
+        <h6 class="flexContent title">Breakfast glucid: </h6>
+        <p class="flexContent title">{{patientDetails.breakfastGlucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.breakfastGlucid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Breakfast lipid: </h6>
+        <p class="flexContent title">{{patientDetails.breakfastLipid * 9.1 | number : '1.2-2'}} kcal / {{patientDetails.breakfastLipid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Breakfast protein: </h6>
+        <p class="flexContent title">{{patientDetails.breakfastProtein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.breakfastProtein | number : '1.2-2'}} g</p>      
+      </div>
+      <div class="flexContainer hover">      
+        <h6 class="flexContent title">Morning snack: </h6>
+        <p class="flexContent title">{{patientDetails.snack1 | number : '1.2-2'}} kcal</p>      
+        <h6 class="flexContent title">Morning snack glucid: </h6>
+        <p class="flexContent title">{{patientDetails.snack1Glucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.snack1Glucid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Morning snack lipid: </h6>
+        <p class="flexContent title">{{patientDetails.snack1Lipid * 9.1 | number : '1.2-2'}} kcal / {{patientDetails.snack1Lipid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Morning snack protein: </h6>
+        <p class="flexContent title">{{patientDetails.snack1Protein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.snack1Protein | number : '1.2-2'}} g</p>      
+      </div>
+      <div class="flexContainer hover">      
+        <h6 class="flexContent title">Launch: </h6>
+        <p class="flexContent title">{{patientDetails.launch | number : '1.2-2'}} kcal</p>      
+        <h6 class="flexContent title">Launch glucid: </h6>
+        <p class="flexContent title">{{patientDetails.launchGlucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.launchGlucid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Launch lipid: </h6>
+        <p class="flexContent title">{{patientDetails.launchLipid *9.1 | number : '1.2-2'}} kcal / {{patientDetails.launchLipid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Launch protein: </h6>
+        <p class="flexContent title">{{patientDetails.launchProtein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.launchProtein | number : '1.2-2'}} g</p>      
+      </div>
+      <div class="flexContainer hover">      
+        <h6 class="flexContent title">Evening snack: </h6>
+        <p class="flexContent title">{{patientDetails.snack2 | number : '1.2-2'}} kcal</p>      
+        <h6 class="flexContent title">Evening snack glucid: </h6>
+        <p class="flexContent title">{{patientDetails.snack2Glucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.snack2Glucid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Evening snack lipid: </h6>
+        <p class="flexContent title">{{patientDetails.snack2Lipid * 9.1 | number : '1.2-2'}} kcal / {{patientDetails.snack2Lipid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Evening snack protein: </h6>
+        <p class="flexContent title">{{patientDetails.snack2Protein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.snack2Protein | number : '1.2-2'}} g</p>      
+      </div>
+      <div class="flexContainer hover">      
+        <h6 class="flexContent title">Dinner: </h6>
+        <p class="flexContent title">{{patientDetails.dinner | number : '1.2-2'}} kcal</p>      
+        <h6 class="flexContent title">Dinner glucid: </h6>
+        <p class="flexContent title">{{patientDetails.dinnerGlucid * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.dinnerGlucid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Dinner lipid: </h6>
+        <p class="flexContent title">{{patientDetails.dinnerLipid * 9.1 | number : '1.2-2'}} kcal / {{patientDetails.dinnerLipid | number : '1.2-2'}} g</p>      
+        <h6 class="flexContent title">Dinner protein: </h6>
+        <p class="flexContent title">{{patientDetails.dinnerProtein * 4.1 | number : '1.2-2'}} kcal / {{patientDetails.dinnerProtein | number : '1.2-2'}} g</p>      
+      </div>
+    </div>  
+    </mat-card>
+  </div>
+</div>

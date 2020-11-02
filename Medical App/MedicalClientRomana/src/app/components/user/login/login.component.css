@@ -1,0 +1,27 @@
+mat-form-field{
+    margin-bottom: 7px;
+    color: white;
+}
+button{
+    color: white;
+    background: rgb(77, 148, 121);
+}
+::ng-deep .mat-form-field-label {
+    /*change color of label*/
+    color: white !important;
+}
+
+::ng-deep.mat-form-field-underline {
+/*change color of underline*/
+background-color: white !important;
+}
+::ng-deep.mat-form-field-ripple {
+/*change color of underline when focused*/
+background-color: white !important;;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-arrow {
+color: white !important;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-value {
+color: white !important;
+}

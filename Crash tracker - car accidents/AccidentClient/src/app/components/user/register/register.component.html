@@ -1,0 +1,21 @@
+<form [formGroup]="registerForm" autocomplete="off" (submit)="register()">
+    <mat-form-field>
+        <input type="text" matInput formControlName="UserName" placeholder="Username">
+        <label class="text-danger" *ngIf="registerForm.get('UserName').touched && registerForm.get('UserName').errors?.required">Mandatory</label>
+    </mat-form-field>
+    <mat-form-field>
+        <input type="text" matInput formControlName="Email" placeholder="Email">
+        <label class="text-danger" *ngIf="registerForm.get('Email').touched && registerForm.get('Email').errors?.email">Invalid email</label>
+    </mat-form-field>
+    <mat-form-field>
+        <input type="text" matInput formControlName="Password" placeholder="Password" (input)="matchPasswords()">
+        <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.required">Mandatory</label>
+        <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.minlength">Minimum 4 chars</label>
+    </mat-form-field>
+    <mat-form-field>
+        <input type="text" matInput formControlName="ConfirmPassword" placeholder="Confirm password" (input)="matchPasswords()">
+        <label class="text-danger" *ngIf="registerForm.get('ConfirmPassword').touched && registerForm.get('ConfirmPassword').errors?.required">Mandatory</label>
+        <label class="text-danger2" *ngIf="registerForm.get('ConfirmPassword').touched && mismatch">Passwords mismatch</label>
+    </mat-form-field>
+    <button mat-raised-button type="submit" [disabled]="!registerForm.valid || mismatch"> Register </button>
+</form>

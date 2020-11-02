@@ -1,0 +1,23 @@
+<form [formGroup]="formModel" autocomplete="off" (submit)="register()">
+    <mat-form-field class="col-md-6 offset-3 animated fadeInDown">
+        <input matInput formControlName="UserName" placeholder="Username">
+        <label *ngIf="formModel.get('UserName').touched && formModel.get('UserName').errors?.required" class="text-danger">Mandatory Field</label>    
+    </mat-form-field>
+    <mat-form-field class="col-md-6 offset-3 animated fadeInDown">
+        <input matInput formControlName="Email" placeholder="Email">
+        <label *ngIf="formModel.get('Email').touched && formModel.get('Email').errors?.email" class="text-danger">Invalid email</label>
+    </mat-form-field>
+    <mat-form-field class="col-md-6 offset-3 animated fadeInDown">
+        <input matInput formControlName="Password" (input)="comparePasswords()" placeholder="Password">
+        <label *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.required" class="text-danger">Mandatory Field</label>
+        <label *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.minlength" class="text-danger">Minim 4 chars</label>
+    </mat-form-field>
+    <mat-form-field class="col-md-6 offset-3 animated fadeInDown">
+        <input matInput formControlName="ConfirmPassword" (input)="comparePasswords()" placeholder="Confirm Password">
+        <label *ngIf="formModel.get('ConfirmPassword').touched && formModel.get('ConfirmPassword').errors?.required" class="text-danger">Mandatory Field</label>
+        <label *ngIf="formModel.get('ConfirmPassword').touched && !passwordsMatch" class="text-danger-2">Passwords mismatch</label>
+    </mat-form-field><br><br>
+    <div class="col-md-6 offset-4 animated fadeInDown">
+        <button type="submit" mat-raised-button color="primary" [disabled]="!formModel.valid || !passwordsMatch">Register</button>
+    </div><br>
+</form>

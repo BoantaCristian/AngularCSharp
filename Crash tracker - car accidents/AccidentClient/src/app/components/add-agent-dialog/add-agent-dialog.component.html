@@ -1,0 +1,26 @@
+<mat-dialog-content>
+    <h2 style="text-align: center;">Add agent</h2>
+    <form [formGroup]="agentForm" autocomplete="off" class="col-md-10 offset-1" >
+        <mat-form-field>
+            <input type="text" matInput formControlName="UserName" placeholder="Username">
+            <label class="text-danger" *ngIf="agentForm.get('UserName').touched && agentForm.get('UserName').errors?.required">Mandatory</label>
+        </mat-form-field><br> 
+        <mat-form-field>
+            <input type="text" matInput formControlName="Email" placeholder="Email">
+            <label class="text-danger" *ngIf="agentForm.get('Email').touched && agentForm.get('Email').errors?.email">Invalid email</label>
+        </mat-form-field><br>
+        <mat-form-field>
+            <input type="text" matInput formControlName="Password" placeholder="Password" (input)="matchPasswords()">
+            <label class="text-danger" *ngIf="agentForm.get('Password').touched && agentForm.get('Password').errors?.required">Mandatory</label>
+            <label class="text-danger" *ngIf="agentForm.get('Password').touched && agentForm.get('Password').errors?.minlength">Minimum 4 chars</label>
+        </mat-form-field><br>
+        <mat-form-field>
+            <input type="text" matInput formControlName="ConfirmPassword" placeholder="Confirm password" (input)="matchPasswords()">
+            <label class="text-danger" *ngIf="agentForm.get('ConfirmPassword').touched && agentForm.get('ConfirmPassword').errors?.required">Mandatory</label>
+            <label class="text-danger2" *ngIf="agentForm.get('ConfirmPassword').touched && mismatch">Passwords mismatch</label>
+        </mat-form-field><br><br>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button (click)="addAgent()" mat-dialog-close mat-dialog-close="true" [disabled]="!agentForm.valid || mismatch" style="text-align: center;"> Add agent </button>
+</mat-dialog-actions><br>

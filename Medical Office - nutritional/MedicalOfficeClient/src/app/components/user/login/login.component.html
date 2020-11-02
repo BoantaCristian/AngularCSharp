@@ -1,0 +1,11 @@
+<form><br>
+    <mat-form-field>
+        <input matInput [(ngModel)]="formModel.UserName" name="UserName" placeholder="Username">
+    </mat-form-field>
+    <mat-form-field>
+        <input type="password" matInput [(ngModel)]="formModel.Password" name="Password" placeholder="Password">
+    </mat-form-field>
+    <div>
+        <button mat-raised-button style=" margin-left: 20px; margin-top: 15px;" (click)="login()" [disabled]="formModel.UserName == '' || formModel.Password == ''">Login</button><br><br>
+    </div>
+</form>

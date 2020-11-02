@@ -1,0 +1,37 @@
+mat-card{
+    width: 700px;
+    box-shadow: none !important;
+}
+.flexContainer{
+    display: flex;
+}
+.flexContent{
+    flex: 1;
+}
+.flexContent1{
+    flex: 25%;
+}
+.imageContainer{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+.image{
+    max-width: 700px;
+    max-height: 500px;
+    margin: 0px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+::ng-deep .mat-tooltip {
+    font-size: 15px!important;
+    position: relative;
+    left: -45px;
+    top: -10px;
+    
+}
+.settle:hover{
+    cursor: pointer;
+}

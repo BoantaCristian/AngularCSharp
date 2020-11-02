@@ -1,0 +1,12 @@
+<h2 style="text-align: center;">Login</h2><br>
+<form [formGroup]="loginForm" autocomplete="off" (submit)="login()">
+    <mat-form-field class="col-md-10 offset-1">
+        <input type="text" matInput formControlName="UserName" placeholder="Username">
+        <label class="text-danger" *ngIf="loginForm.get('UserName').touched && loginForm.get('UserName').errors?.required"> Mandatory </label>
+    </mat-form-field>
+    <mat-form-field class="col-md-10 offset-1">
+        <input type="text" matInput formControlName="Password" placeholder="Password">
+        <label class="text-danger" *ngIf="loginForm.get('Password').touched && loginForm.get('Password').errors?.required"> Mandatory </label>
+    </mat-form-field><br><br><br>
+    <button mat-raised-button type="submit" [disabled]="!loginForm.valid"> Login </button>
+</form>

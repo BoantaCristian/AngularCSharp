@@ -1,0 +1,129 @@
+mat-card{
+    background: rgba(255, 255, 255, 0.459);
+    margin-top: 40px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.822);
+}
+mat-form-field{
+    color: white;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+h3{
+    color: white;
+    text-align: center;
+    padding-top: 10px;
+}
+a{
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    position: absolute;
+    top: 70px;
+    left: 200px;
+}
+a:hover{
+    color:rgb(86, 248, 159);
+    font-size: 19px;
+    transition: 400ms
+}
+.usersContainer{
+    width: 900px;
+    margin: 0 auto;
+    margin-top: 600px;
+    margin-bottom: 400px;
+}
+.addContainer{
+    width: 400px;
+    margin: auto;
+}
+.flexContainer{
+    display: flex;
+    text-align: center;
+    color: white;
+}
+.flexContent{
+    flex: 1;
+}
+.title{
+    margin: 3px;
+}
+.divider{
+    border: solid 2px rgba(255, 255, 255, 0.411);
+    border-radius: 50% !important;
+    margin: 8px;
+}
+.delete:hover{
+    background: white;
+    color: red;
+}
+.confirm:hover{
+    background: white;
+    color: rgb(77, 148, 121);
+}
+mat-form-field{
+    margin-bottom: 7px;
+}
+.text-danger{
+    position: absolute;
+    top: 40px !important;
+    left: 0;
+}
+.text-danger2{
+    color: rgb(199, 52, 52);
+    position: absolute;
+    top: 60px !important;
+    left: 0;
+}
+.symptoms{
+    margin: 10px;
+    flex: 10px, 10px, 10px, 10px, 10px, 10px, 10px, 10px;
+    position: relative;
+    top: -10px;
+}
+.transfer{
+    text-align: center;
+    color: white;
+}
+.optionsContainer{
+    margin-left: 300px;
+}
+.option{
+    position: relative;
+    top: 100px;
+    min-width: 715px;
+    text-align: left;
+    margin: -20px auto;
+    font-size: 75px;
+    color: white;
+    text-shadow: black 0px 2px 10px;
+}
+.option:hover{
+    cursor: pointer;
+    color: rgb(77, 148, 121);
+    font-size: 78px;
+    transition: 400ms;
+}
+button{
+    color: white;
+    background: rgb(77, 148, 121);
+}
+::ng-deep .mat-form-field-label {
+    /*change color of label*/
+    color: white !important;
+}
+::ng-deep.mat-form-field-underline {
+/*change color of underline*/
+background-color: white !important;
+}
+::ng-deep.mat-form-field-ripple {
+/*change color of underline when focused*/
+background-color: white !important;;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-arrow {
+color: white !important;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-value {
+color: white !important;
+}

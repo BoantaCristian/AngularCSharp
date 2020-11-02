@@ -1,0 +1,24 @@
+mat-form-field{
+    margin: 10px;
+    width: 100%;
+}
+mat-dialog-content{
+    width: 400px !important;
+}
+.text-danger{
+    position: absolute;
+    left: 0;
+    top: 40px;
+}
+.text-danger2{
+    color: rgb(212, 49, 49);
+    position: absolute;
+    left: 0;
+    top: 60px;
+}
+button{
+  margin: 0px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

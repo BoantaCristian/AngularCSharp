@@ -1,0 +1,41 @@
+mat-form-field{
+    margin-bottom: 7px;
+    color: white;
+}
+.text-danger{
+    color: rgb(255, 0, 0) !important;
+    position: absolute;
+    top: 40px !important;
+    left: 0;
+}
+.text-danger2{
+    color: rgb(255, 0, 0);
+    position: absolute;
+    top: 60px !important;
+    left: 0;
+}
+button{
+    margin-top: 10px;
+    color: white;
+    background: rgb(77, 148, 121);
+}
+
+::ng-deep .mat-form-field-label {
+    /*change color of label*/
+    color: white !important;
+}
+
+::ng-deep.mat-form-field-underline {
+/*change color of underline*/
+background-color: white !important;
+}
+::ng-deep.mat-form-field-ripple {
+/*change color of underline when focused*/
+background-color: white !important;;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-arrow {
+color: white !important;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-value {
+color: white !important;
+}

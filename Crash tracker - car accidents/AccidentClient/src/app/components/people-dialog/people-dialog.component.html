@@ -1,0 +1,31 @@
+<mat-dialog-content>
+    <h2 style="text-align: center;">Add people</h2>
+    <form [formGroup]="person" autocomplete="off">
+        <mat-form-field>
+            <input type="text" matInput formControlName="Name" placeholder="Name">
+        </mat-form-field>
+        <mat-form-field>
+            <input type="text" matInput formControlName="PhoneNumber" placeholder="Phone number">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Choose a date</mat-label>
+            <input matInput formControlName="BirthDate" [matDatepicker]="picker" placeholder="New date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Select gender</mat-label>
+            <mat-select formControlName="Sex">
+                <mat-option *ngFor="let gender of genders" [value]="gender">
+                    {{gender}}
+                  </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <input type="text" matInput formControlName="Address" placeholder="Address">
+        </mat-form-field><br><br>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button (click)="addPeople()" mat-dialog-close mat-dialog-close="true" [disabled]="!person.valid" style="text-align: center;"> Confirm </button>
+</mat-dialog-actions><br>

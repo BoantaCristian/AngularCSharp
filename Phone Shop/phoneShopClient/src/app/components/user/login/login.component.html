@@ -1,0 +1,9 @@
+<mat-form-field class="col-md-6 offset-3 animated fadeInDown">
+    <input matInput [(ngModel)]="formModel.UserName" name="UserName" placeholder="Username">
+</mat-form-field>
+<mat-form-field class="col-md-6 offset-3 animated fadeInDown">
+    <input matInput [(ngModel)]="formModel.Password" name="Password" placeholder="Password">
+</mat-form-field><br><br>
+<div class="col-md-6 offset-4 animated fadeInDown">
+    <button mat-raised-button color="primary" (click)="login()" [disabled]="!formModel.UserName || !formModel.Password">Login</button>
+</div><br>

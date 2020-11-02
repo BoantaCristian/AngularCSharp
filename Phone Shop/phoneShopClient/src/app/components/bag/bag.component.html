@@ -1,0 +1,33 @@
+<br><br><br><br><br>
+<h1 class="animated fadeInDown" style="text-align: center; color: white;" *ngIf="!emptyShoppingBag">Finish your shopping!</h1>
+<br><br><br><br>
+<a routerLink="" *ngIf="!emptyShoppingBag" class="animated fadeInDown"> ➜ continue shopping</a>
+<mat-card *ngIf="!emptyShoppingBag" class="animated fadeIn">
+    <div class="flexContainer animated fadeInDown">
+        <div class="flexContent title"> <b> Name </b></div>
+        <div class="flexContent title"> <b> Unit Price </b></div>
+        <div class="flexContent title"> <b> Quantity</b></div>
+        <div class="flexContent title"> <b> Quantity price</b></div>
+        <div class="flexContent title"> <b> Remove</b></div>
+        <div class="flexContent title"> <b> Total</b></div>
+    </div>
+    <div class="divider"></div>
+    <div *ngFor="let bag of shoppingBag" class="flexContainer animated fadeIn">
+        <div class="flexContent content"> {{bag.name}} </div>
+        <div class="flexContent content">{{bag.price}} RON</div>
+        <div class="flexContent content">
+            <button class="quantityButton" (click)="editQuantity(bag.id, bag.quantity-1, bag.userName, bag.phoneId)"> - </button>
+            {{bag.quantity}}
+            <button class="quantityButton" (click)="editQuantity(bag.id, bag.quantity+1, bag.userName, bag.phoneId)"> + </button>
+        </div>
+        <div class="flexContent">{{bag.quantity * bag.price |  currency : 'RON' : true : '1.2-2'}}</div>
+        <div class="flexContent"><button class="removeButton" (click)="removeFromBag(bag.id)"> remove </button></div>
+        <div class="flexContent"></div>
+    </div>
+    <div class="total animated fadeInDown"> <b>{{total |  currency : 'RON' : true : '1.2-2'}}</b></div><br>
+    <button mat-raised-button color="primary" (click)="checkOut()" class="animated fadeInDown">CheckOut</button><br>
+</mat-card>
+<div *ngIf="emptyShoppingBag">
+    <div routerLink="" class="buyMessage animated fadeIn" style="color: white;"><b> Nothing to buy here, go back to shopping</b></div>
+</div>
+<mat-spinner *ngIf="emptyShoppingBag" class="animated fadeIn"></mat-spinner>

@@ -1,0 +1,52 @@
+<h2 mat-dialog-title style="text-align: center"> {{currentPhoneDetails.telephone.name}} Details </h2>
+<mat-dialog-content style="width: 850px;">
+    <mat-grid-list cols="2" rowHeight="1:1">
+        <mat-grid-tile> 
+            <div>
+                <div class="flexContainer">
+                    <p class="flexContent">Dimensions: </p>
+                    <p class="flexContent">{{currentPhoneDetails.dimensions}} mm </p>
+                </div>
+                <div class="flexContainer">
+                    <p class="flexContent">Weight: </p>
+                    <p class="flexContent">{{currentPhoneDetails.weight}}g</p>
+                </div>
+                <div class="flexContainer">
+                    <p class="flexContent">Display type: </p>
+                    <p class="flexContent">{{currentPhoneDetails.displayType}}</p>
+                </div>
+                <div class="flexContainer">
+                    <p class="flexContent">Resolution: </p>
+                    <p class="flexContent">{{currentPhoneDetails.resolution}} pixels</p>
+                </div>
+                <div class="flexContainer">
+                    <p class="flexContent">OS: </p>
+                    <p class="flexContent">{{currentPhoneDetails.os}}</p>
+                </div>
+                <div class="flexContainer">
+                    <p class="flexContent">Main Camera: </p>
+                    <p class="flexContent">{{currentPhoneDetails.mainCamera}}</p>
+                </div>
+                <div class="flexContainer">
+                    <p class="flexContent">Selfie Camera: </p>
+                    <p class="flexContent">{{currentPhoneDetails.selfieCamera}}</p>
+                </div>
+                <div class="flexContainer">
+                    <p class="flexContent">Battery: </p>
+                    <p class="flexContent">{{currentPhoneDetails.battery}} mAh</p>
+                </div>
+                </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <div>
+                <img [(src)]="currentPhoneDetails.telephone.imagePath" style="width: 250px; height: 302px;">
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+    
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div class="cancel">
+        <button mat-raised-button mat-dialog-close mat-dialog-close="true" color="primary"> Cancel </button>
+    </div>
+</mat-dialog-actions><br>

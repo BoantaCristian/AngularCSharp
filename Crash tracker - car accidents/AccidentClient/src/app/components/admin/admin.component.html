@@ -1,0 +1,151 @@
+<div class="bg">
+    <br><h2>Admin Pannel</h2><br><br>
+    <button mat-raised-button class="logout" (click)="logout()">Logout</button>
+    <!--list of users-->
+    <mat-card class="col-md-8 offset-2">
+        <h3>List of users</h3><br>
+        <h6 *ngIf="admins.length == 0"> <b>No Admins</b> <br> <br> </h6>
+        <div *ngIf="admins.length != 0">
+            <h6> <b>Admins:</b> </h6>
+            <div class="flexContainer title">
+                <div class="flexContent">Username</div>
+                <div class="flexContent">Email</div>
+                <div class="flexContent"></div>
+                <div class="flexContent">Action</div>
+            </div>
+            <div class="flexContainer element" *ngFor="let admin of admins">
+                <div class="flexContent"> {{admin.userName}} </div>
+                <div class="flexContent"> {{admin.email}} </div>
+                <div class="flexContent"></div>
+                <div class="flexContent"> <button mat-raised-button color="warn" class="delete" (click)="deleteUser(admin.userName)"> Delete </button> </div>
+            </div><br>
+        </div>
+        <h6 *ngIf="supervisors.length == 0"> <b>No Supervisors <br><br> </b> </h6>
+        <div *ngIf="supervisors.length != 0">
+            <h6> <b>Supervisors:</b> </h6>
+            <div class="flexContainer title">
+                <div class="flexContent">Username</div>
+                <div class="flexContent">Email</div>
+                <div class="flexContent"></div>
+                <div class="flexContent">Action</div>
+            </div>
+            <div class="flexContainer element" *ngFor="let supervisor of supervisors">
+                <div class="flexContent"> {{supervisor.userName}} </div>
+                <div class="flexContent"> {{supervisor.email}} </div>
+                <div class="flexContent"></div>
+                <div class="flexContent"> <button mat-raised-button color="warn" class="delete" (click)="deleteUser(supervisor.userName)"> Delete </button> </div>
+            </div><br>
+        </div>
+        <h6 *ngIf="agents.length == 0"> <b>No Agents <br> <br> </b> </h6>
+        <div *ngIf="agents.length != 0">
+            <h6> <b>Agents:</b> </h6>
+            <div class="flexContainer title">
+                <div class="flexContent">Username</div>
+                <div class="flexContent">Email</div>
+                <div class="flexContent">Supervisor</div>
+                <div class="flexContent">Action</div>
+            </div>
+            <div class="flexContainer element" *ngFor="let agent of agents">
+                <div class="flexContent"> {{agent.userName}} </div>
+                <div class="flexContent"> {{agent.email}} </div>
+                <div class="flexContent"> {{agent.userSupervisor.userName}} </div>
+                <div class="flexContent"> <button mat-raised-button color="warn" class="delete" (click)="deleteUser(agent.userName)"> Delete </button> </div>
+            </div>
+        </div>
+    </mat-card><br><br>
+    <button mat-raised-button class="addUser" (click)="openRegisterDialog()">Add user</button>
+    <br><br><br>
+    <!--list of people-->
+    <mat-card class="col-md-8 offset-2">
+        <h3>List of people</h3><br>
+        <div class="flexContainer title">
+            <div class="flexContent"> Name </div>
+            <div class="flexContent"> Sex </div>
+            <div class="flexContent"> Birth Date </div>
+            <div class="flexContent"> Age </div>
+            <div class="flexContent"> Address </div>
+            <div class="flexContent"> Contact </div>
+            <div class="flexContent"> Accidents Guilty </div>
+            <div class="flexContent"> Accidents Innocent </div>
+            <div class="flexContent"> Action </div>
+        </div>
+        <div class="flexContainer element" *ngFor="let person of people">
+            <div class="flexContent"> {{person.name}} </div>
+            <div class="flexContent"> {{person.sex}} </div>
+            <div class="flexContent"> {{person.birthDate | date}}</div>
+            <div class="flexContent"> {{person.age}} </div>
+            <div class="flexContent"> {{person.address}} </div>
+            <div class="flexContent"> {{person.phoneNumber}} </div>
+            <div class="flexContent"> {{person.accidentsCommitted}} </div>
+            <div class="flexContent"> {{person.accidentsInvolved}} </div>
+            <div class="flexContent"> <button mat-raised-button color="warn" class="delete" (click)="deletePerson(person.id)"> Delete </button> </div>
+        </div>
+    </mat-card><br><br>
+    <button mat-raised-button class="addUser" (click)="openPeopleDialog()">Add people</button><br><br><br>
+    <!--list of accidents-->
+    <mat-card class="col-md-8 offset-2">
+        <h3 style="text-align: center;">List of accidents</h3><br>
+        <h6 *ngIf="accidents.length == 0"> <b>No Accident recorded <br> <br> </b> </h6>
+        <div *ngIf="accidents.length != 0">
+            <div class="flexContainer title">
+                <div class="flexContent">Date/Time</div>
+                <div class="flexContent">Location</div>
+                <div class="flexContent">Agent</div>
+                <div class="flexContent">Guilty</div>
+                <div class="flexContent">Innocent</div>
+                <div class="flexContent">Action</div>
+            </div>
+            <div class="flexContainer element" *ngFor="let accident of accidents">
+                <div class="flexContent" *ngIf="accident.minute != 0" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.date | date}} at {{accident.hour}}:{{accident.minute}} </div>
+                <div class="flexContent" *ngIf="accident.minute == 0" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.date | date}} at {{accident.hour}}:0{{accident.minute}} </div>
+                <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.location}} </div>
+                <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.userName}} </div>
+                <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.guiltyPeopleName}} </div>
+                <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.innocentPeopleName}} </div>
+                <div class="flexContent"> <button mat-raised-button color="warn" class="delete" (click)="deleteAccident(accident.id)"> Delete </button> </div>
+            </div>
+        </div>
+    </mat-card><br><br>
+    <button mat-raised-button class="addUser" (click)="openAddAccidentDetailsDialog()">Add accident</button>
+    <br><br><br>
+    <mat-card class="col-md-6 offset-3">
+        <h3 style="text-align: center;">Statistics</h3><br>
+        <h6> <b> Summary details </b></h6>
+        <div class="flexContainer">
+            <div class="flexContent"> <b> Total accidents: </b> {{statistics.totalAccidentsNumber}} </div>
+            <div class="flexContent"> <b> Total people: </b> {{statistics.totalPeople}} </div>
+            <div class="flexContent"> women: {{statistics.totalWomen}} </div>
+        </div>
+        <div class="flexContainer">
+            <div class="flexContent">  </div>
+            <div class="flexContent">  </div>
+            <div class="flexContent"> men: {{statistics.totalMen}} </div>
+        </div><br>
+        <div class="flexContainer">
+            <div class="flexContent"> <b> Accident rates: </b> </div>
+            <div class="flexContent"> <b> Women: </b> {{statistics.womenProbability}}% </div>
+            <div class="flexContent">  </div>
+        </div>
+        <div class="flexContainer">
+            <div class="flexContent">  </div>
+            <div class="flexContent"> <b> Men: </b> {{statistics.menProbability}}% </div>
+            <div class="flexContent">  </div>
+        </div><br>
+        <h6> <b> Location risks </b></h6>
+        <div class="flexContainer">
+            <div class="flexContent"> <b> Location </b> </div>
+            <div class="flexContent"> <b> Number of Accidents </b> </div>
+            <div class="flexContent"> <b> Percentage </b> </div>
+            <div class="flexContent"> <b> Zone Risk </b> </div>
+        </div><br>
+        <div class="flexContainer element" *ngFor="let zone of statistics.locationsRiskList">
+            <div class="flexContent"> {{zone.location}} </div>
+            <div class="flexContent"> {{zone.accidents}} </div>
+            <div class="flexContent"> {{zone.percentage}} </div>
+            <div class="flexContent" *ngIf="zone.percentage <= 10"> Low </div>
+            <div class="flexContent" *ngIf="zone.percentage > 10 && zone.percentage <= 25"> Medium </div>
+            <div class="flexContent" *ngIf="zone.percentage > 25 && zone.percentage <= 50"> High </div>
+            <div class="flexContent" *ngIf="zone.percentage > 50"> Dangerous </div>
+        </div><br>
+    </mat-card><br>
+</div>

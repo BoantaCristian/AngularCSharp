@@ -1,0 +1,173 @@
+mat-toolbar{
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    background-color: black;
+    color: white;
+}
+::ng-deep .mat-tooltip {
+    font-size: 14px!important;
+}
+img:hover{
+    cursor: pointer;
+}
+.detials{
+    color: white;
+    position: fixed;
+    right: 100px;
+    top: 0;
+    z-index: 1;
+    padding: 20px;
+}
+.detials:hover{
+    cursor: pointer;
+}
+.logout{
+    position: fixed;
+    right: 10px;
+    top: 0px;
+    z-index: 1;
+    margin: 15px;
+}
+.logout:hover{
+    color: red;
+    background-color: white;
+}
+.register{
+    position: fixed;
+    right: 10px;
+    top: 0px;
+    z-index: 1;
+    margin: 15px;
+}
+.register:hover{
+    color: rgb(70, 67, 255);
+    background-color: white;
+}
+.login{
+    position: fixed;
+    right: 105px;
+    top: 0px;
+    z-index: 1;
+    margin: 15px;
+}
+.login:hover{
+    color: rgb(70, 67, 255);
+    background-color: white;
+}
+/*grid template*/
+.phoneContainer{
+    width: 300px;
+    height: 380px;
+    box-shadow: rgb(41, 41, 41) 0px 0px 10px !important;
+    background: rgba(255, 255, 255, 0.74);
+    border-radius: 4px;
+}
+.content{
+    width: 60%;
+    min-width: 1050px;
+    margin: 0 auto;
+}
+.title{
+    text-align: center;
+    margin: 5px;
+    font-size: 20px;
+}
+.image{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+.price{ 
+    position: relative;
+    text-align: center;
+    font-size: 18px;
+    margin: 5px;
+}
+.date{
+    margin: 5px;
+    position: relative;
+    text-align: center;
+}
+.addButton{
+    margin: 10px;
+    text-align: center;
+}
+.shoppingCart{
+    position: fixed;
+    z-index: 1;
+    width: 35px;
+    top: 15px;
+    right: 250px;
+}
+.quantity{
+    width: 50px !important;
+    position: absolute;
+    left: 50px;
+    bottom: 40px;
+}
+.search{
+    color: white !important;
+    position: absolute;
+    top: 110px;
+    left: 100px;
+    
+}
+.search2{
+    color: white !important;
+    position: absolute;
+    top: 110px;
+    left: 300px;
+    
+}
+.searchCompany{
+    color: white !important;
+    position: absolute;
+    top: 160px;
+    left: 100px;
+}
+.searchTip{
+    color: rgb(153, 153, 245);
+    position: absolute;
+    left: 100px;
+    top: 85px;
+}
+.reset{
+    color: rgb(153, 153, 245);
+    position: absolute;
+    left: 500px;
+    top: 129px;
+}
+.reset2{
+    color: rgb(153, 153, 245);
+    position: absolute;
+    left: 300px;
+    top: 129px;
+}
+.searchTip:hover, .reset:hover{
+    cursor: pointer;
+    color: white;
+    transition: 400ms;
+}
+::ng-deep.mat-form-field-label {
+    /*change color of label*/
+    color: white !important;
+}
+
+::ng-deep.mat-form-field-underline {
+/*change color of underline*/
+background-color: white !important;
+} 
+
+::ng-deep.mat-form-field-ripple {
+/*change color of underline when focused*/
+background-color: white !important;;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-arrow {
+color: white !important;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-value {
+color: white !important;
+}
+    

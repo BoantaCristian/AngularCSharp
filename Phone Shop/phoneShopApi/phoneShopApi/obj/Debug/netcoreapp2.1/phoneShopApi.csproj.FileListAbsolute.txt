@@ -1,0 +1,16 @@
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\bin\Debug\netcoreapp2.1\appsettings.Development.json
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\bin\Debug\netcoreapp2.1\appsettings.json
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\bin\Debug\netcoreapp2.1\phoneShopApi.deps.json
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\bin\Debug\netcoreapp2.1\phoneShopApi.runtimeconfig.json
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\bin\Debug\netcoreapp2.1\phoneShopApi.runtimeconfig.dev.json
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\bin\Debug\netcoreapp2.1\phoneShopApi.dll
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\bin\Debug\netcoreapp2.1\phoneShopApi.pdb
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\obj\Debug\netcoreapp2.1\phoneShopApi.csprojAssemblyReference.cache
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\obj\Debug\netcoreapp2.1\phoneShopApi.RazorAssemblyInfo.cache
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\obj\Debug\netcoreapp2.1\phoneShopApi.RazorAssemblyInfo.cs
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\obj\Debug\netcoreapp2.1\phoneShopApi.AssemblyInfoInputs.cache
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\obj\Debug\netcoreapp2.1\phoneShopApi.AssemblyInfo.cs
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\obj\Debug\netcoreapp2.1\phoneShopApi.RazorTargetAssemblyInfo.cache
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\obj\Debug\netcoreapp2.1\phoneShopApi.dll
+D:\AngularCSharp\PhoneShop\phoneShopApi\phoneShopApi\obj\Debug\netcoreapp2.1\phoneShopApi.pdb

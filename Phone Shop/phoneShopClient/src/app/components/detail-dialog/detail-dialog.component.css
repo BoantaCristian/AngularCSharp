@@ -1,0 +1,10 @@
+.flexContainer{
+    display: flex;
+}
+.flexContent{
+    flex: 1;
+}
+.cancel{
+    position: relative;
+    left: 47% !important;
+}

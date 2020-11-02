@@ -1,0 +1,69 @@
+<mat-toolbar>Phone store app</mat-toolbar>
+
+<div class="detials" *ngIf="logged" [(matTooltip)]="userDetails.email" (click)="manage()">Hello {{userDetails.userName}}!</div>
+<button mat-raised-button *ngIf="logged"  color="warn" class="logout" (click)="logout()">Logout</button>
+<button mat-raised-button *ngIf="!logged" color="primary" class="login" routerLink="user/login">Login</button>
+<button mat-raised-button *ngIf="!logged" color="primary" class="register" routerLink="user/register">Register</button>
+<br><br><br><br><br><br>
+
+<img src="../../../assets/cart1.png" *ngIf="logged" matBadge="4" matBadgeOverlap="false" matTooltip="Shopping Cart" class="shoppingCart" routerLink="shoppingBag">
+<span *ngIf="bagNumber != 0" [(matBadge)]="bagNumber" matBadgeColor="warn" class="shoppingCart"></span>
+
+<mat-form-field *ngIf="searchProduct" class="search animated fadeInDown">
+    <input matInput [formControl]="myControl" [matAutocomplete]="auto" name="searchName" [(ngModel)]="searchName" (input)="Search()" placeholder="Search by product">
+    <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (click)="Search()">
+          {{option}}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>
+<mat-form-field *ngIf="!searchProduct" class="search animated fadeInDown">
+    <mat-label>Select feature</mat-label>
+    <mat-select [(ngModel)]="selectedFeature">
+      <mat-option *ngFor="let feature of features" [value]="feature">
+        {{feature}}
+      </mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field *ngIf="!searchProduct" class="search2 animated fadeInDown">
+    <input matInput name="searchName" [(ngModel)]="searchName" (input)="Search()" placeholder="Search by details" [disabled]="selectedFeature == ''">
+</mat-form-field>
+
+<div *ngIf="searchProduct" class="searchTip animated fadeInDown" (click)="searchMode()">Search by details</div>
+<div *ngIf="!searchProduct" class="searchTip animated fadeInDown"(click)="searchMode()">Search by product</div>
+<div *ngIf="!searchProduct && selectedFeature" class="reset animated fadeInDown"(click)="resetFeature()">reset</div>
+<div *ngIf="searchProduct && searchName" class="reset2 animated fadeInDown"(click)="resetFeature()">reset</div>
+
+<mat-form-field class="searchCompany animated fadeInDown">
+    <mat-label>Filter by company</mat-label>
+    <mat-select [(ngModel)]="companyToSearch">
+    <mat-option (click)="filterCompany('All')">
+        All
+    </mat-option>
+    <mat-option *ngFor="let company of companies" [value]="company.name" (click)="filterCompany(company.name)">
+        {{company.name}}
+    </mat-option>
+    </mat-select>
+  </mat-form-field>
+<br><br><br>
+<h2 class="animated fadeInDown" style="text-align: center; color: white;">Telephones</h2><br><br>
+<div class="content animated fadeIn">
+    <mat-grid-list cols="3" rowHeight="20:24">
+        <mat-grid-tile *ngFor="let phone of phones"> 
+            <div class="phoneContainer">
+	           <div class="title animated fadeInDown"> {{phone.name}}</div>
+               <div class="image animated fadeIn">
+                   <img [(src)]="phone.imagePath" (click)="openDialog(phone.id)" style="width: 160px; height: 212px;">
+                </div>
+                <div class="date animated fadeInDown"> Launch date: {{phone.launchDate | date}}</div>
+                <div class="price animated fadeInDown"> <b>Price:</b> {{phone.price}} RON</div>
+                <mat-form-field *ngIf="logged" class="quantity animated fadeInDown">
+                    <input matInput type="number" min="1" value="1" [(ngModel)]="currentPhoneQuantity" name="currentPhoneQuantity" placeholder="quantity">
+                </mat-form-field>
+                <div class="addButton">
+                    <button mat-raised-button color="primary" class="animated fadeInDown" *ngIf="logged" (click)="addToBag(phone.id)">Add to cart</button>     
+                </div>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

@@ -1,0 +1,433 @@
+<div class="animated fadeIn">
+    <!--toolbar-->
+    <mat-toolbar>Medical App</mat-toolbar>
+    <div *ngIf="logged" [(matTooltip)]="userDetails.email" class="welcome">Bine ai venit {{userDetails.userName}}!</div>
+    <br><br><br>
+    <!--Not Loged-->
+    <div *ngIf="!logged" class="notLoggedContainer">
+        <div class="mainTitle" (click)="enterAccounts()" style="min-width: 1000px;"> <b>Bine ati venit la Medical App!</b></div><br>
+        <div class="loadingContainer" (click)="enterAccounts()">
+            <div class="loadingItems"> <b>Niciun utilizator conectat</b></div>
+            <div class="play-bar loadingItems">
+                <div class="obj"></div>
+                <div class="obj"></div>
+                <div class="obj"></div>
+                <div class="obj"></div>
+                <div class="obj"></div>
+                <div class="obj"></div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="accountsZone" class="accountContainer animated fadeInDown">
+        <p class="login" routerLink='user/login'> <b> Autentificare </b> </p>
+        <p class="register" routerLink='user/register'> <b> Inregistrare </b> </p>
+        <p class="backButton" (click)="scrollUp()"> <b> Inapoi </b> </p><br><br><br><br><br>
+    </div>
+    <!--admin logged-->
+    <div *ngIf="admin" class="accountContainer animated fadeInDown">
+        <p class="manage" routerLink='admin'> <b> Administreaza </b> </p>
+        <p class="details" (click)="showUser()"> <b> Detaii utilizator </b> </p>
+        <p class="logout" (click)="logout()"> <b> Deconectare </b> </p>
+        <!--<img src="../../../assets/manage.png" class="image2" routerLink='admin'>-->
+    </div>
+    <!--user details-->
+    <div class="userContainer">
+        <div class="flexContainer">
+            <div class="flexContent">
+                    <mat-card *ngIf="logged && showUserDetails"  class="animated fadeIn" style="height: 190px; width: 450px;">
+                        <div class="flexContainer animated fadeInDown">
+                            <div class="flexContent userTitle"> <b>Nume utilizator: </b></div>
+                            <div class="flexContent userTitle">{{userDetails.userName}}</div>
+                        </div>
+                        <div class="flexContainer animated fadeInDown">
+                            <div class="flexContent userTitle"><b>Email: </b></div>
+                            <div class="flexContent userTitle">{{userDetails.email}}</div>
+                        </div>
+                        <div class="flexContainer animated fadeInDown">
+                            <div class="flexContent userTitle"><b>Telefon: </b></div>
+                            <div class="flexContent userTitle" *ngIf="userDetails.phoneNumber">{{userDetails.phoneNumber}}</div>
+                            <div class="flexContent userTitle" *ngIf="!userDetails.phoneNumber"> Neatribuit</div>
+                        </div>
+                        <div class="flexContainer animated fadeInDown">
+                            <div class="flexContent userTitle"><b>Rol: </b></div>
+                            <div class="flexContent userTitle">{{userDetails.role}}</div>
+                        </div>
+                    </mat-card>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!admin && logged" class="optionsContainer"><br><br><br><br><br><br><br>
+        <p class="option" (click)="showOption(1)"> <b> Pacienti </b> </p>
+        <p class="option" (click)="showOption(2)"> <b> Programari </b> </p>
+        <p class="option" (click)="showUser()"> <b> Detalii utilizator </b> </p>
+        <p class="option" (click)="logout()"> <b> Deconectare </b> </p>
+    </div>
+    <!--See your patients-->
+    <div *ngIf="!admin && logged && toDisplay == 1 && !noPatients">
+        <mat-card class="addContainer">
+            <div *ngIf="!patientZone && !detailsZone && !getSickZone">
+                <mat-form-field class="search animated fadeInDown">
+                    <input matInput name="searchName" [(ngModel)]="searchName" (input)="Search()" placeholder="Search patient">
+                </mat-form-field>
+                <br><br><br>
+                <h3 class="animated fadeInDown">Pacientii dumneavoastra</h3><br><br>
+                <div class="flexPatients animated fadeInDown">
+                    <h5 class="flexItems title hover" (click)="sortPatients()" matTooltip="click to sort patients" matTooltipPosition="above">Nume</h5>
+                    <h5 class="flexItems title">Adresa</h5>
+                    <h5 class="flexItems title">Data de nastere</h5>
+                    <h5 class="flexItems title">Actiune</h5>
+                </div>
+                <div class="divider"></div>
+                <div class="flexPatients animated fadeInDown" *ngFor="let patient of currentMedicPatients">
+                    <div class="flexItems title">{{patient.name}}</div>
+                    <div class="flexItems title">{{patient.address}}</div>
+                    <div class="flexItems title">{{patient.date | date}}</div>
+                    <div class="flexItems title">
+                        <button mat-raised-button class="confirm" (click)="getSick(patient.name)" style="margin-right: 5px;">Imbolnavit</button>
+                        <button mat-raised-button color="warn" class="delete" (click)="deletePatient(patient.id)">Sterge</button>
+                    </div>
+                </div><br>
+                <div style="text-align: center;" class="flexPatients">
+                    <div class="flexItems"></div>
+                    <div class="flexItems">
+                        <button mat-raised-button (click)="addPatientsZone()" class="confirm animated fadeInDown" style="margin: 5px;"> Adauga pacient </button>
+                        <button mat-raised-button (click)="details()" class="animated fadeInDown" style="margin: 5px;">Detalii</button><br>
+                    </div>
+                    <div class="flexItems"></div>
+                </div>
+
+            </div>
+            <div *ngIf="!patientZone && !detailsZone && getSickZone">
+                <div>
+                    <h3 class="animated fadeInDown">Adauga boala pacientului: {{nextSickPatient}}</h3><br>
+                    
+                    <div class="back animated fadeInDown" (click)="cencelAdd()">anuleaza</div>
+                    <div class="col-md-6 offset-4 animated fadeInDown">
+                        <mat-form-field>
+                            <mat-label>Selecteaza boala</mat-label>
+                            <mat-select [(ngModel)]="newIllToExistingPatient" name="newIllToExistingPatient">
+                                <mat-option *ngFor="let ill of illnesses" [value]="ill.id">
+                                    {{ill.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-raised-button (click)="addIllToExistingPatient()" [disabled]="newIllToExistingPatient == ''">Confirma</button>
+                    </div>
+                </div>
+            </div>
+            <!--add patient-->
+            <div *ngIf="patientZone && !detailsZone && !getSickZone">
+                <div *ngIf="!addPatientZone">
+                    <h3 class="animated fadeInDown">Adauga pacient</h3>
+                    <mat-form-field class="animated fadeInDown">
+                        <input matInput [(ngModel)]="newPatient.Name" name="name" placeholder="Nume">
+                    </mat-form-field>
+                    <mat-form-field class="animated fadeInDown">
+                        <input matInput [(ngModel)]="newPatient.Address" name="address" placeholder="Adresa">
+                    </mat-form-field>
+                    <mat-form-field class="animated fadeInDown">
+                        <input matInput [(ngModel)]="newPatient.Date" [matDatepicker]="picker" placeholder="Data nastere">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <button mat-raised-button class="animated fadeInDown" (click)="confirmPatient()" [disabled]="newPatient.Name == '' || newPatient.Address == '' || newPatient.Date == ''">Confirma</button>
+                </div>
+                <!--add ill-->
+                <div *ngIf="addPatientZone">
+                    <h3 class="animated fadeInDown">Adauga boala</h3><br>
+                    
+                    <div class="back animated fadeInDown" (click)="cencelAdd()">anuleaza</div>
+                    <div class="animated fadeInDown" style="color: white;">
+                        <b>Pacient:</b> {{newPatient.Name}}  <b>Adresa:</b> {{newPatient.Address}} <b>Data</b> {{newPatient.Date | date}}
+                    </div>
+                    <div class="col-md-6 offset-4 animated fadeInDown">
+                        <mat-form-field>
+                            <mat-label>Selecteaza boala</mat-label>
+                            <mat-select [(ngModel)]="newPatient.IllnessId" name="selectedZone">
+                                <mat-option *ngFor="let ill of illnesses" [value]="ill.id">
+                                    {{ill.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-raised-button (click)="addPatient()">Confirma</button>
+                    </div>
+                </div>
+                <button mat-raised-button (click)="addPatientsZone()" class="confirm animated fadeInDown" style="left: 41%;"> Inapoi la pacienti </button>
+            </div>
+            <!--patient details-->
+            <div *ngIf="detailsZone" style="text-align: center;">
+                <h3 class="animated fadeInDown">Detalii</h3><br>
+                <mat-form-field class="animated fadeInDown">
+                    <mat-label>Selecteaza pacient</mat-label>
+                    <mat-select [(ngModel)]="newPatient.IllnessId" name="selectedZone">
+                        <mat-option *ngFor="let patient of currentMedicPatients" [value]="patient.id" (click)="selectPatient(patient.id)">
+                            {{patient.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div *ngIf="selectedPatient && patientNoIllness">
+                    <h3 class="animated fadeInDown"> <b> Pacientul selectat nu are nicio boala. </b> </h3><br>
+                </div>
+                <div *ngIf="selectedPatient && !patientNoIllness">
+                    <div class="section">
+                        <h4 class="animated fadeInDown">Detaill pacient</h4><br>
+                        <div class="flexPatients animated fadeInDown">
+                            <h5 class="flexItems title">Nume</h5>
+                            <h5 class="flexItems title">Adresa</h5>
+                            <h5 class="flexItems title">Data nastere</h5>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="flexPatients animated fadeInDown">
+                            <div class="flexItems title">{{selectedPatientDetails.name}}</div>
+                            <div class="flexItems title">{{selectedPatientDetails.address}}</div>
+                            <div class="flexItems title">{{selectedPatientDetails.date | date}}</div>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h4 class="animated fadeInDown">Detalii boala</h4><br>
+                        <div class="flexPatients animated fadeInDown">
+                            <h5 class="flexItems title">Boala</h5>
+                            <h5 class="flexItems title">Simptome</h5>
+                            <h5 class="flexItems title">Depistat</h5>
+                            <h5 class="flexItems title">Vindecat</h5>
+                            <h5 class="flexItems title">Severitate</h5>
+                            <h5 class="flexItems title">Actiune</h5>
+                        </div>
+                        <div class="divider"></div>
+                        <div *ngFor="let selectedPatient of selectedPatientIllnessesAndTreatments" class="flexPatients animated fadeInDown">
+                            <div class="flexItems title">{{selectedPatient.illnessName}}</div>
+                            <div class="flexItems title">
+                                <div *ngFor="let symptome of selectedPatient.illnessSymptomes" class=" title">
+                                    {{symptome}}
+                                </div>
+                            </div>
+                            <div class="flexItems title">{{selectedPatient.startDate | date}}</div>
+                            <div class="flexItems title" *ngIf="selectedPatient.finishDate == '0001-01-01T00:00:00'"> In tratament</div>
+                            <div class="flexItems title" *ngIf="selectedPatient.finishDate != '0001-01-01T00:00:00'">{{selectedPatient.finishDate | date}}</div>
+                            <div class="flexItems title">{{selectedPatient.illnessSeverity}}</div>
+                            <div class="flexItems title">
+                                <button mat-raised-button color="accent" class="animated fadeInDown" (click)="healed(selectedPatient.historicId, selectedPatient.id, selectedPatient.illnessId)" [disabled]="selectedPatient.finishDate != '0001-01-01T00:00:00'"> Vindecat </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h4>Tratament</h4><br>
+                        <div class="flexPatients animated fadeInDown">
+                            <h5 class="flexItems title">Boala</h5>
+                            <h5 class="flexItems title">Medicament</h5>
+                            <h5 class="flexItems title">Pret pe unitate</h5>
+                            <h5 class="flexItems title">Durata</h5>
+                            <h5 class="flexItems title">Cantitate</h5>
+                            <h5 class="flexItems title">Administrare pe zi</h5>
+                            <h5 class="flexItems title">Perioada</h5>
+                        </div>
+                        <div class="divider"></div>
+                        <div *ngFor="let selectedPatient of selectedPatientIllnessesAndTreatments" class="flexPatients animated fadeInDown">
+                            <div class="flexItems title">{{selectedPatient.illnessName}}</div>
+                            <div class="flexItems title">{{selectedPatient.medicamentName}}</div>
+                            <div class="flexItems title">{{selectedPatient.medicamentPrice}} RON</div>
+                            <div class="flexItems title" *ngIf="selectedPatient.treatmentDuration == 1">{{selectedPatient.treatmentDuration}} zi</div>
+                            <div class="flexItems title" *ngIf="selectedPatient.treatmentDuration != 1">{{selectedPatient.treatmentDuration}} zile</div>
+                            <div class="flexItems title">{{selectedPatient.treatmentQuantity}}</div>
+                            <div class="flexItems title">{{selectedPatient.treatmentFrequency}}</div>
+                            <div class="flexItems title">{{selectedPatient.dayTime}}</div>
+                        </div>   
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <button mat-raised-button class="animated fadeInDown" (click)="details()">Anuleaza</button><br>
+                </div>
+            </div>
+        </mat-card><br><br>
+        <p class="backOption" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    <!--no patients-->
+    <div *ngIf="!admin && logged && toDisplay == 1 && noPatients">
+        <mat-card class="addContainer" style="color: white; text-align: center; text-shadow: black 0px 10px 15px; padding-top: 50px;">
+            <div *ngIf="!patientZone && !detailsZone && !getSickZone">
+                <h1 class="animated fadeInDown"> <b> Nu aveti niciun pacient </b> </h1><br>
+                <div class="play-bar loadingItems2 animated fadeInDown" style="position: absolute; left: 590px; top: 46px;">
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                </div>
+                <button mat-raised-button (click)="addPatientsZone()" class="confirm animated fadeInDown" style="margin: 5px;"> Adauga pacient </button>
+            </div>
+            <div *ngIf="patientZone && !detailsZone && !getSickZone">
+                <div *ngIf="!addPatientZone">
+                    <h3 class="animated fadeInDown">Adauga pacient</h3>
+                    <mat-form-field class="animated fadeInDown">
+                        <input matInput [(ngModel)]="newPatient.Name" name="name" placeholder="Nume">
+                    </mat-form-field>
+                    <mat-form-field class="animated fadeInDown">
+                        <input matInput [(ngModel)]="newPatient.Address" name="address" placeholder="Adresa">
+                    </mat-form-field>
+                    <mat-form-field class="animated fadeInDown">
+                        <input matInput [(ngModel)]="newPatient.Date" [matDatepicker]="picker" placeholder="Data nastere">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <button mat-raised-button class="animated fadeInDown" (click)="confirmPatient()" [disabled]="newPatient.Name == '' || newPatient.Address == '' || newPatient.Date == ''">Confirma</button>
+                </div>
+                <!--add ill-->
+                <div *ngIf="addPatientZone">
+                    <h3 class="animated fadeInDown">Adauga boala</h3><br>
+                    
+                    <div class="back animated fadeInDown" (click)="cencelAdd()">anuleaza</div>
+                    <div class="animated fadeInDown" style="color: white;">
+                        <b>Pacient:</b> {{newPatient.Name}}  <b>Adresa:</b> {{newPatient.Address}} <b>Data</b> {{newPatient.Date | date}}
+                    </div>
+                    <div class="col-md-6 offset-4 animated fadeInDown">
+                        <mat-form-field>
+                            <mat-label>Selecteaza boala</mat-label>
+                            <mat-select [(ngModel)]="newPatient.IllnessId" name="selectedZone">
+                                <mat-option *ngFor="let ill of illnesses" [value]="ill.id">
+                                    {{ill.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-raised-button (click)="addPatient()">Confirma</button>
+                    </div>
+                </div>
+                <button mat-raised-button (click)="addPatientsZone()" class="confirm animated fadeInDown" style="left: 41%;"> Inapoi la pacienti </button>
+            </div>
+        </mat-card><br><br>
+        <p class="backOption" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    <!--show appointments-->
+    <div *ngIf="!admin && logged && toDisplay == 2 && appointments.length != 0">
+        <mat-card class="addContainer">
+            <div *ngIf="!appointmentZone">
+                <h3 class="animated fadeInDown">Programari</h3><br>
+                <div class="flexContainer animated fadeInDown">
+                    <h5 class="flexContent title">Pacient</h5>
+                    <h5 class="flexContent title">Data/Ora/Minut</h5>
+                    <h5 class="flexContent title">Tip programare</h5>
+                    <h5 class="flexContent title">Actiune</h5>
+                </div>
+                <div class="divider"></div>
+                <div class="flexContainer animated fadeInDown" *ngFor="let appointment of appointments">
+                    <div class="flexContent title">{{appointment.patientName}}</div>
+                    <div class="flexContent title" *ngIf="appointment.minute >= 10">{{appointment.date | date}} la {{appointment.hour}}:{{appointment.minute}} </div>
+                    <div class="flexContent title" *ngIf="appointment.minute < 10">{{appointment.date | date}} la {{appointment.hour}}:0{{appointment.minute}} </div>
+                    <div class="flexContent title">{{appointment.type}}</div>
+                    <div class="flexContent title">
+                        <button mat-raised-button color="warn" class="delete" (click)="deleteAppointment(appointment.id)">Concluzioneaza</button>
+                    </div>
+                </div><br>
+                <button mat-raised-button (click)="addAppointmentZone()" class="confirm animated fadeInDown" style="left: 41%;"> Adauga programare </button>
+            </div>
+            <!--add appointment-->
+            <div *ngIf="appointmentZone">
+                <h3 class="animated fadeInDown">Adauga programare</h3>
+                <mat-form-field class="animated fadeInDown" style="width: 150px;">
+                    <mat-label>Selecteaza pacient</mat-label>
+                    <mat-select [(ngModel)]="newAppointment.PatientId" name="PatientId">
+                        <mat-option *ngFor="let patient of currentMedicPatients" [value]="patient.id">
+                            {{patient.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="animated fadeInDown">
+                    <mat-label>Tip programare</mat-label>
+                    <mat-select [(ngModel)]="newAppointment.Type" name="Type">
+                        <mat-option *ngFor="let appoinment of appointmentTypes" [value]="appoinment">
+                            {{appoinment}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="animated fadeInDown">
+                    <input matInput [(ngModel)]="newAppointment.Date" [matDatepicker]="picker" placeholder="Selecteaza data">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="animated fadeInDown" style="width: 55px;">
+                    <mat-label>Ora</mat-label>
+                    <mat-select [(ngModel)]="newAppointment.Hour" name="Hour">
+                        <mat-option *ngFor="let hour of hours" [value]="hour">
+                            {{hour}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="animated fadeInDown" style="width: 70px;">
+                    <mat-label>Minut</mat-label>
+                    <mat-select [(ngModel)]="newAppointment.Minute" name="Minute">
+                        <mat-option *ngFor="let minute of minutes" [value]="minute">
+                            {{minute}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field><br>
+                <div style="text-align: center;">
+                    <button mat-raised-button (click)="addAppointment()" [disabled]="newAppointment.PatientId == null || newAppointment.PatientId == '' || newAppointment.Date == '' || newAppointment.Hour == null || newAppointment.Minute == null">Confirma</button> <br> <br>
+                </div>
+                <button mat-raised-button (click)="addAppointmentZone()" class="confirm animated fadeInDown" style="left: 41%;"> Inapoi la programari </button>
+            </div>
+        </mat-card><br><br>
+        <p class="backOption" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    <!--no appointments-->
+    <div *ngIf="!admin && logged && toDisplay == 2  && appointments.length == 0">
+        <mat-card class="addContainer" style="color: white; text-align: center; text-shadow: black 0px 10px 15px; padding-top: 50px;">
+            <div *ngIf="!appointmentZone">
+                <h1 class="animated fadeInDown"> <b> Nu aveti nicio programare </b> </h1><br>
+                <div class="play-bar loadingItems2 animated fadeInDown" style="position: absolute; left: 640px; top: 46px;">
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                    <div class="obj"></div>
+                </div>
+                <button mat-raised-button (click)="addAppointmentZone()" class="confirm animated fadeInDown"> Adauga programare </button>
+            </div>
+            <div *ngIf="appointmentZone">
+                <h3 class="animated fadeInDown">Adauga programare</h3>
+                <mat-form-field class="animated fadeInDown" style="width: 150px;">
+                    <mat-label>Selecteaza pacient</mat-label>
+                    <mat-select [(ngModel)]="newAppointment.PatientId" name="PatientId">
+                        <mat-option *ngFor="let patient of currentMedicPatients" [value]="patient.id">
+                            {{patient.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="animated fadeInDown">
+                    <mat-label>Tip programare</mat-label>
+                    <mat-select [(ngModel)]="newAppointment.Type" name="Type">
+                        <mat-option *ngFor="let appoinment of appointmentTypes" [value]="appoinment">
+                            {{appoinment}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="animated fadeInDown">
+                    <input matInput [(ngModel)]="newAppointment.Date" [matDatepicker]="picker" placeholder="Selecteaza data">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="animated fadeInDown" style="width: 55px;">
+                    <mat-label>Ora</mat-label>
+                    <mat-select [(ngModel)]="newAppointment.Hour" name="Hour">
+                        <mat-option *ngFor="let hour of hours" [value]="hour">
+                            {{hour}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="animated fadeInDown" style="width: 70px;">
+                    <mat-label>Minut</mat-label>
+                    <mat-select [(ngModel)]="newAppointment.Minute" name="Minute">
+                        <mat-option *ngFor="let minute of minutes" [value]="minute">
+                            {{minute}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field><br>
+                <div style="text-align: center;">
+                    <button mat-raised-button (click)="addAppointment()" [disabled]="newAppointment.PatientId == null || newAppointment.PatientId == '' || newAppointment.Date == '' || newAppointment.Hour == null || newAppointment.Minute == null">Confirma</button> <br> <br>
+                </div>
+                <button mat-raised-button (click)="addAppointmentZone()" class="confirm animated fadeInDown" style="left: 41%;"> Inapoi la programari </button>
+            </div>
+        </mat-card><br><br>
+        <p class="backOption" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+</div>

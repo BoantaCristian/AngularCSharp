@@ -1,0 +1,11 @@
+<form><br>
+    <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+        <input matInput [(ngModel)]="formModel.UserName" name="UserName" placeholder="Nume utilizator">
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+        <input type="password" matInput [(ngModel)]="formModel.Password" name="Parola" placeholder="Parola">
+    </mat-form-field>
+    <div class="col-md-12" style="text-align: center;">
+        <button mat-raised-button class="animated fadeInDown" style="margin-top: 15px;" (click)="login()" [disabled]="formModel.UserName == '' || formModel.Password == ''">Autentificare</button><br><br>
+    </div>
+</form>

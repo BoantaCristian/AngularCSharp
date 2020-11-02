@@ -1,0 +1,356 @@
+<div class="animated fadeIn"><br><br>
+    <div class="optionsContainer">
+        <p class="option" (click)="showOption(1)"> <b> Utilizatori </b> </p>
+        <p class="option" (click)="showOption(2)"> <b> Pacienti </b> </p>
+        <p class="option" (click)="showOption(3)"> <b> Programari </b> </p>
+        <p class="option" (click)="showOption(4)"> <b> Medicamente </b> </p>
+        <p class="option" (click)="showOption(5)"> <b> Boli </b> </p>
+        <p class="option" (click)="showOption(6)"> <b> Istoric </b> </p>
+        <p class="option" (click)="showOption(7)"> <b> Transfer pacient </b> </p>
+        <p class="option" routerLink=''> <b> Inapoi </b> </p>
+    </div>
+    <!--show users-->
+    <div *ngIf="toDisplay == 1" class="usersContainer">
+        
+            <div *ngIf="!userZone">
+                <mat-card>
+                <h3 class="animated fadeInDown">Utilizatori</h3><br>
+                <div class="flexContainer animated fadeInDown">
+                    <h5 class="flexContent">Nume utilizator</h5>
+                    <h5 class="flexContent">Email</h5>
+                    <h5 class="flexContent">Telefon</h5>
+                    <h5 class="flexContent">Vechime</h5>
+                    <h5 class="flexContent">Actiune</h5>
+                </div>
+                <div class="divider"></div>
+                <div *ngFor="let user of users" class="flexContainer animated fadeInDown">
+                    <div class="flexContent title">{{user.userName}}</div>
+                    <div class="flexContent title">{{user.email}}</div>
+                    <div class="flexContent title" *ngIf="user.phoneNumber">{{user.phoneNumber}}</div>
+                    <div class="flexContent title" *ngIf="!user.phoneNumber">Neatribuit</div>
+                    <div class="flexContent title" *ngIf="user.seniority != 0">{{user.seniority}}</div>
+                    <div class="flexContent title" *ngIf="user.seniority == 0">Admin</div>
+                    <div class="flexContent title">
+                        <button mat-raised-button color="warn" class="delete" *ngIf="user.userName != currentUser.userName " (click)="deleteUser(user.id)">Sterge</button>
+                        <button mat-raised-button color="warn" class="delete" *ngIf="currentUser.role == 'Admin' && user.userName == currentUser.userName" [disabled]="true">Sterge</button>
+                    </div>
+                </div><br>
+                <button mat-raised-button (click)="addUserZone()" class="confirm animated fadeInDown" style="left: 43%;"> Adauga utilizator </button>
+                </mat-card>
+            </div>
+            <div *ngIf="userZone">
+                <mat-card class="addContainer">
+                    <h3 class="animated fadeInDown">Adauga utilizator</h3>
+                    <form [formGroup]="formModel" autocomplete="off" (submit)="register()" style="text-align: center;"><br>
+                        <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                            <mat-label> Selecteaza rol</mat-label>
+                            <mat-select formControlName="Role">
+                                <mat-option *ngFor="let role of roles" [value]="role">
+                                    {{role}}
+                                </mat-option>
+                            </mat-select>
+                            <label class="text-danger" *ngIf="formModel.get('Role').touched && formModel.get('Role').errors?.required">Selecteaza un rol!</label>
+                        </mat-form-field>
+                        <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                            <input matInput formControlName="UserName" placeholder="Nume utilizator">
+                            <label class="text-danger" *ngIf="formModel.get('UserName').touched && formModel.get('UserName').errors?.required">Camp obligatoriu!</label>
+                        </mat-form-field>
+                        <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                            <input matInput formControlName="Email" placeholder="Email">
+                            <label class="text-danger" *ngIf="formModel.get('Email').touched && formModel.get('Email').errors?.email">Adresa de email invalida!</label>
+                        </mat-form-field>
+                        <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                            <input matInput formControlName="PhoneNumber" placeholder="Telefon">
+                        </mat-form-field>
+                        <mat-form-field class="col-md-8 offset-2 animated fadeInDown"  *ngIf="formModel.value.Role == 'Medic'">
+                            <input matInput type="number" formControlName="Seniority" placeholder="Vechime" [value]="formModel.value.Role">
+                        </mat-form-field>
+                        <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                            <input type="password" matInput formControlName="Password" placeholder="Parola" (input)="comparePasswords()">
+                            <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.required">Camp obligatoriu!</label>
+                            <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.minlength">Minim 4 caractere!</label>
+                        </mat-form-field>
+                        <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                            <input type="password" matInput formControlName="ConfirmPassword" placeholder="Confirma parola" (input)="comparePasswords()">
+                            <label class="text-danger" *ngIf="formModel.get('ConfirmPassword').touched && formModel.get('ConfirmPassword').errors?.required">Camp obligatoriu!</label>
+                            <label class="text-danger2" *ngIf="formModel.get('ConfirmPassword').touched && mismatch">Parole diferite!</label>
+                        </mat-form-field><br>
+                        <div class="col-md-12" style="text-align: center; margin-top: 10px;">
+                            <button mat-raised-button type="submit" class="animated fadeInDown" style="margin-top: 15px;" [disabled]="!formModel.valid || mismatch || !checkSeniority()">Adauga</button><br><br>
+                        </div>
+                    </form>
+                    <button mat-raised-button (click)="addUserZone()" class="confirm animated fadeInDown" style="left: 30%;"> <b> Inapoi la utilizatori </b> </button>
+                </mat-card>
+            </div>
+        <p class="option" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    <!--show patients-->
+    <div *ngIf="toDisplay == 2" class="usersContainer">
+        <mat-card>
+            <h3 class="animated fadeInDown">Pacienti</h3><br>
+            <div class="flexContainer animated fadeInDown">
+                <h5 class="flexContent title">Nume</h5>
+                <h5 class="flexContent title">Adresa</h5>
+                <h5 class="flexContent title">Data Nastere</h5>
+                <h5 class="flexContent title">Medic</h5>
+                <h5 class="flexContent title">Actiune</h5>
+            </div>
+            <div class="divider"></div>
+            <div class="flexContainer animated fadeInDown" *ngFor="let patient of patients">
+                <div class="flexContent title">{{patient.name}}</div>
+                <div class="flexContent title">{{patient.address}}</div>
+                <div class="flexContent title">{{patient.date | date}}</div>
+                <div class="flexContent title">{{patient.applicationUser.userName}}</div>
+                <div class="flexContent title">
+                    <button mat-raised-button color="warn" class="delete" (click)="deletePatient(patient.id)">Sterge</button>
+                </div>
+            </div>
+        </mat-card><br>
+        <p class="option" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    <!--show appointments-->
+    <div *ngIf="toDisplay == 3" class="usersContainer">
+        <mat-card>
+            <h3 class="animated fadeInDown">Programari</h3><br>
+            <div class="flexContainer animated fadeInDown">
+                <h5 class="flexContent title">Medic</h5>
+                <h5 class="flexContent title">Pacient</h5>
+                <h5 class="flexContent title">Data/Ora/Minut</h5>
+                <h5 class="flexContent title">Tip programare</h5>
+                <h5 class="flexContent title">Actiune</h5>
+            </div>
+            <div class="divider"></div>
+            <div class="flexContainer animated fadeInDown" *ngFor="let appointment of appointments">
+                <div class="flexContent title">{{appointment.medicName}}</div>
+                <div class="flexContent title">{{appointment.patientName}}</div>
+                <div class="flexContent title" *ngIf="appointment.minute != 0">{{appointment.date | date}} {{appointment.hour}}:{{appointment.minute}} </div>
+                <div class="flexContent title" *ngIf="appointment.minute == 0">{{appointment.date | date}} {{appointment.hour}}:0{{appointment.minute}} </div>
+                <div class="flexContent title">{{appointment.type}}</div>
+                <div class="flexContent title">
+                    <button mat-raised-button color="warn" class="delete" (click)="deleteAppointment(appointment.id)">Concluzioneaza</button>
+                </div>
+            </div>
+        </mat-card><br>
+        <p class="option" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    <!--show medicaments-->
+    <div *ngIf="toDisplay == 4" class="usersContainer">
+        <mat-card>
+            <div *ngIf="!medicamentZone">
+                <h3 class="animated fadeInDown">Medicamente</h3><br>
+                <div class="flexContainer animated fadeInDown">
+                    <h5 class="flexContent title">Nume</h5>
+                    <h5 class="flexContent title">Pret</h5>
+                </div>
+                <div class="divider"></div>
+                <div class="flexContainer animated fadeInDown" *ngFor="let medicament of medicaments">
+                    <div class="flexContent title">{{medicament.name}}</div>
+                    <div class="flexContent title">{{medicament.price}} lei</div>
+                </div>
+                <br><br>
+                <button mat-raised-button (click)="addMedicamentZone()" class="confirm animated fadeInDown" style="left: 41%;"> Adauga medicament </button>
+            </div>
+            <div *ngIf="medicamentZone">
+                <h3 class="animated fadeInDown">Adauga medicament</h3><br>
+                <!--Add medicament-->
+                <mat-form-field class="col-md-4 animated fadeInDown">
+                    <input matInput [(ngModel)]="medicament.Name" name="medicamentName" placeholder="Medicament">
+                </mat-form-field>
+                <mat-form-field  class="col-md-4 animated fadeInDown">
+                    <input type="number" min="1" [(ngModel)]="medicament.Price" name="medicamentPrice" matInput placeholder="Pret">
+                </mat-form-field>
+                <span class="col-md-3 offset-1">
+                    <button mat-raised-button (click)="addMedicament()" class="confirm animated fadeInDown" [disabled]="medicament.Name == '' || medicament.Price == null"> Confirma </button>
+                </span><br><br>
+                <button mat-raised-button (click)="addMedicamentZone()" class="confirm animated fadeInDown" style="left: 41%;"> <b> Inapoi la medicamente </b> </button>
+                
+            </div>
+        </mat-card><br>
+        <p class="option" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    <!--show illnesses-->
+    <div *ngIf="toDisplay == 5" class="usersContainer">
+        <mat-card>
+            <div *ngIf="!illnessZone">
+                <h3 class="animated fadeInDown">Boli</h3><br>
+                <div class="flexContainer animated fadeInDown">
+                    <h5 class="flexContent title">Nume</h5>
+                    <h5 class="flexContent title">Severitate</h5>
+                </div>
+                <div class="divider"></div>
+                <div class="flexContainer animated fadeInDown" *ngFor="let illness of illnesses">
+                    <div class="flexContent title">{{illness.name}}</div>
+                    <div class="flexContent title">{{illness.severity}}</div>
+                </div>
+                <button mat-raised-button (click)="addIllnessZone()" class="confirm animated fadeInDown" style="left: 41%;"> Adauga boala </button>
+            </div>
+            <!--add illness-->
+            <div *ngIf="illnessZone">
+                <div *ngIf="treatmentZone == 1">
+                    <h3 class="animated fadeInDown">Adauga boala</h3><br>
+                    <mat-form-field class="col-md-4 animated fadeInDown">
+                        <input matInput [(ngModel)]="illness.Name" name="illnessName" placeholder="Boala">
+                    </mat-form-field>
+                    <mat-form-field class="col-md-4 animated fadeInDown">
+                        <mat-label> Selecteaza severitate</mat-label>
+                        <mat-select [(ngModel)]="illness.Severity" name="illnessSeverity">
+                            <mat-option *ngFor="let severity of severities" [value]="severity">
+                            {{severity}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span class="col-md-3 offset-1">
+                        <button mat-raised-button class="confirm animated fadeInDown" (click)="addIllness()" [disabled]="illness.Name == '' || illness.Severity == ''"> Confirma </button>
+                    </span>
+                </div>
+                <div *ngIf="treatmentZone == 2" style="text-align: center;">
+                    <h3 class="animated fadeInDown">Adauga tratament</h3><br>
+                    <mat-form-field class="col-md-3 animated fadeInDown">
+                        <mat-label> Selecteaza medicament</mat-label>
+                        <mat-select [(ngModel)]="treatment.MedicamentId" name="medicamentId">
+                            <mat-option *ngFor="let medicament of medicaments" [value]="medicament.id">
+                            {{medicament.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="col-md-3 offset-2 animated fadeInDown">
+                        <input type="number" [(ngModel)]="treatment.Duration" name="Duration" matInput placeholder="Durata">
+                    </mat-form-field>
+                    <mat-form-field class="col-md-3 animated fadeInDown">
+                        <input type="number" [(ngModel)]="treatment.Quantity" name="Quantity" matInput placeholder="Cantitate">
+                    </mat-form-field>
+                    <mat-form-field class="col-md-3 animated fadeInDown">
+                        <input type="number" [(ngModel)]="treatment.PillPerDay" name="PillPerDay" matInput placeholder="Pe zi">
+                    </mat-form-field>
+                    <mat-form-field class="col-md-3 animated fadeInDown">
+                        <input matInput [(ngModel)]="treatment.DayTime" name="DayTime" placeholder="Perioada">
+                    </mat-form-field>
+                    <div style="text-align: center;">
+                        <button mat-raised-button class="confirm animated fadeInDown" (click)="addTreatment()" [disabled]="treatment.IllnessId == null || treatment.DayTime == ''"> Confirma </button>
+                    </div>
+                </div>
+                <div *ngIf="treatmentZone == 3" style="text-align: center; color: white;">
+                    <h3 class="animated fadeInDown">Adauga simptome</h3><br>
+                    <mat-form-field class="col-md-4 animated fadeInDown">
+                        <mat-label> Adauga simptom</mat-label>
+                        <mat-select  [(ngModel)]="currentSymptom" name="SymptomeId">
+                            <mat-option *ngFor="let symptome of symptomes" [value]="symptome.id">
+                            {{symptome.description}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span class="col-md-3 offset-2">
+                        <button mat-raised-button class="confirm animated fadeInDown" (click)="addSymptom()"> Adauga </button>
+                    </span>
+                    <div>
+                        <button mat-raised-button class="confirm animated fadeInDown" (click)="Finish()"> Confirma </button>
+                    </div><br>
+                    <span *ngIf="displayAddedSymptoms != ''" style="display: flex;"> <b>Simptome:</b>
+                        <span *ngFor="let das of displayAddedSymptoms" class="symptoms">
+                            {{das}}
+                        </span>
+                    </span>
+                </div>
+                <br>
+                <button mat-raised-button *ngIf="treatmentZone == 3 || treatmentZone == 1" (click)="addIllnessZone()" class="confirm animated fadeInDown" style="left: 44%;"> <b> Inapoi la boli </b> </button>
+            </div> 
+        </mat-card><br>
+        <p class="option" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    <!--show historic-->
+    <div *ngIf="toDisplay == 6" class="usersContainer">
+        <mat-card>
+            <h3 class="animated fadeInDown">Istoric</h3><br>
+            <div class="flexContainer animated fadeInDown">
+                <h5 class="flexContent title">Pacient</h5>
+                <h5 class="flexContent title">Boala</h5>
+                <h5 class="flexContent title">Data depistare</h5>
+                <h5 class="flexContent title">Data vindecare</h5>
+            </div>
+            <div class="divider"></div>
+            <div class="flexContainer animated fadeInDown" *ngFor="let hist of historic">
+                <div class="flexContent title">{{hist.patient.name}}</div>
+                <div class="flexContent title">{{hist.illness.name}}</div>
+                <div class="flexContent title">{{hist.startDate | date}}</div>
+                <div class="flexContent title" *ngIf="hist.finishDate != '0001-01-01T00:00:00'">{{hist.finishDate | date}}</div>
+                <div class="flexContent title" *ngIf="hist.finishDate == '0001-01-01T00:00:00'"> In tratament </div>
+            </div>
+        </mat-card><br>
+        <p class="option" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    <!--transfer user-->
+    <div *ngIf="!transfered && toDisplay == 7" class="usersContainer">
+        <mat-card>
+            <h3 class="animated fadeInDown">Transfer pacient</h3>
+            <mat-form-field class="col-md-4 animated fadeInDown">
+                <mat-label> Selecteaza pacient</mat-label>
+                <mat-select>
+                    <mat-option *ngFor="let patient of patients" [value]="patient.id" (click)="getPatientCurrentMedic(patient.id)">
+                    {{patient.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-4 animated fadeInDown">
+                <mat-label> Selecteaza medic</mat-label>
+                <mat-select>
+                    <mat-option *ngFor="let user of medics" [value]="user.id" (click)="selectNextMedic(user.id, user.userName)">
+                    {{user.userName}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <span class="col-md-3 offset-1">
+                <button mat-raised-button class="confirm animated fadeInDown" (click)="transferPatient()" [disabled]="currentPatient.name == '' ||nextMedic.name == ''"> Confirma </button>
+            </span>
+            <div *ngIf="patientSelected && !nextMedicSelected"   class="transfer animated fadeInDown">Transfera pacient <b>{{currentPatient.name}}  </b> de la medicul <b>{{currentPatient.medicName}}</b> la medicul <i> selecteaza medic</i> </div>
+            <div *ngIf="nextMedicSelected" class="transfer">Transfera pacient <b>{{currentPatient.name}}</b> de le medicul <b>{{currentPatient.medicName}}</b> la medicul <b>{{nextMedic.name}}.</b> </div>
+        </mat-card>
+        <p class="option" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+    
+    <!--add user-->
+    <div *ngIf="toDisplay == 10" class="addContainer"><br><br><br><br><br><br><br><br><br><br>
+        <mat-card>
+            <h3 class="animated fadeInDown">Adauga utilizator</h3>
+        
+            <form [formGroup]="formModel" autocomplete="off" (submit)="register()" style="text-align: center;"><br>
+                <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                    <mat-label> Selecteaza rol</mat-label>
+                    <mat-select formControlName="Role">
+                        <mat-option *ngFor="let role of roles" [value]="role">
+                            {{role}}
+                        </mat-option>
+                    </mat-select>
+                    <label class="text-danger" *ngIf="formModel.get('Role').touched && formModel.get('Role').errors?.required">Selecteaza un rol!</label>
+                </mat-form-field>
+                <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                    <input matInput formControlName="UserName" placeholder="Nume utilizator">
+                    <label class="text-danger" *ngIf="formModel.get('UserName').touched && formModel.get('UserName').errors?.required">Camp obligatoriu!</label>
+                </mat-form-field>
+                <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                    <input matInput formControlName="Email" placeholder="Email">
+                    <label class="text-danger" *ngIf="formModel.get('Email').touched && formModel.get('Email').errors?.email">Adresa de email invalida!</label>
+                </mat-form-field>
+                <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                    <input matInput formControlName="PhoneNumber" placeholder="Telefon">
+                </mat-form-field>
+                <mat-form-field class="col-md-8 offset-2 animated fadeInDown"  *ngIf="formModel.value.Role == 'Medic'">
+                    <input matInput type="number" formControlName="Seniority" placeholder="Vechime" [value]="formModel.value.Role">
+                </mat-form-field>
+                <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                    <input type="password" matInput formControlName="Password" placeholder="Parola" (input)="comparePasswords()">
+                    <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.required">Camp obligatoriu!</label>
+                    <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.minlength">Minim 4 caractere!</label>
+                </mat-form-field>
+                <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+                    <input type="password" matInput formControlName="ConfirmPassword" placeholder="Confirma parola" (input)="comparePasswords()">
+                    <label class="text-danger" *ngIf="formModel.get('ConfirmPassword').touched && formModel.get('ConfirmPassword').errors?.required">Camp obligatoriu!</label>
+                    <label class="text-danger2" *ngIf="formModel.get('ConfirmPassword').touched && mismatch">Parole diferite!</label>
+                </mat-form-field><br>
+                <div class="col-md-12" style="text-align: center; margin-top: 10px;">
+                    <button mat-raised-button type="submit" class="animated fadeInDown" style="margin-top: 15px;" [disabled]="!formModel.valid || mismatch || !checkSeniority()">Adauga</button><br><br>
+                </div>
+            </form>
+        </mat-card>
+        <p class="option" (click)="scrollUp()"> <b> Inapoi </b> </p>
+    </div>
+</div>

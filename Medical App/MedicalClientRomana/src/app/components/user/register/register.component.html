@@ -1,0 +1,30 @@
+<form [formGroup]="formModel" autocomplete="off" (submit)="register()"><br>
+    <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+        <input matInput formControlName="UserName" placeholder="Nume utilizator">
+        <label class="text-danger" *ngIf="formModel.get('UserName').touched && formModel.get('UserName').errors?.required">Camp Obligatoriu!</label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+        <input matInput formControlName="Email" placeholder="Email">
+        <label class="text-danger" *ngIf="formModel.get('Email').touched && formModel.get('Email').errors?.email">Adresa email invalida!</label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+        <input matInput formControlName="PhoneNumber" placeholder="Telefon">
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+        <input matInput type="number" min="1" formControlName="Seniority" placeholder="Vechime">
+        <label class="text-danger" *ngIf="formModel.get('Seniority').touched && formModel.get('Seniority').errors?.required">Camp Obligatoriu!</label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+        <input type="password" matInput formControlName="Password" placeholder="Parola" (input)="comparePasswords()">
+        <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.required">Camp Obligatoriu!</label>
+        <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.minlength">Minim 4 caractere!</label>
+    </mat-form-field>
+    <mat-form-field class="col-md-8 offset-2 animated fadeInDown">
+        <input type="password" matInput formControlName="ConfirmPassword" placeholder="Confirmare parola" (input)="comparePasswords()">
+        <label class="text-danger" *ngIf="formModel.get('ConfirmPassword').touched && formModel.get('ConfirmPassword').errors?.required">Camp Obligatoriu!</label>
+        <label class="text-danger2" *ngIf="formModel.get('ConfirmPassword').touched && mismatch">Parole diferite!</label>
+    </mat-form-field><br>
+    <div class="col-md-12" style="text-align: center; margin-top: 10px;">
+        <button mat-raised-button type="submit" class="animated fadeInDown" style="margin-top: 15px;" [disabled]="!formModel.valid || mismatch">Inregistrare</button><br><br>
+    </div>
+</form>

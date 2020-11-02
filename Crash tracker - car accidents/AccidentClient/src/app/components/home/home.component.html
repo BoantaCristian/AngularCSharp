@@ -1,0 +1,103 @@
+<div class="bg">
+    <button mat-raised-button class="logout" (click)="logout()"> Logout </button><br><br>
+    <div *ngIf="loggedUserRole == 'Agent'">
+        <h2 style="text-align: center;">Welcome agent {{currentUserDetails.userName}} </h2><br>
+        <mat-card class="col-md-4 offset-4">
+            <h3>User details</h3><br>
+            <div class="flexContainer title">
+                <div class="flexContent">Username</div>
+                <div class="flexContent">Email</div>
+                <div class="flexContent">Supervisor</div>
+            </div>
+            <div class="flexContainer element">
+                <div class="flexContent"> {{currentUserDetails.userName}} </div>
+                <div class="flexContent"> {{currentUserDetails.email}} </div>
+                <div class="flexContent"> {{currentUserDetails.supervisor}} </div>
+            </div>
+        </mat-card><br><br><br>
+        <mat-card class="col-md-8 offset-2">
+            <h3>List of people</h3><br>
+        <div class="flexContainer title">
+            <div class="flexContent"> Name </div>
+            <div class="flexContent"> Sex </div>
+            <div class="flexContent"> Birth Date </div>
+            <div class="flexContent"> Age </div>
+            <div class="flexContent"> Address </div>
+            <div class="flexContent"> Contact </div>
+            <div class="flexContent"> Accidents Guilty </div>
+            <div class="flexContent"> Accidents Innocent </div>
+        </div>
+        <div class="flexContainer element" *ngFor="let person of people">
+            <div class="flexContent"> {{person.name}} </div>
+            <div class="flexContent"> {{person.sex}} </div>
+            <div class="flexContent"> {{person.birthDate | date}}</div>
+            <div class="flexContent"> {{person.age}} </div>
+            <div class="flexContent"> {{person.address}} </div>
+            <div class="flexContent"> {{person.phoneNumber}} </div>
+            <div class="flexContent"> {{person.accidentsCommitted}} </div>
+            <div class="flexContent"> {{person.accidentsInvolved}} </div>
+        </div>
+        </mat-card><br><br><br><br>
+        <button mat-raised-button class="addUser" (click)="openPeopleDialog()">Add people</button><br><br><br><br><br>
+        <mat-card class="col-md-8 offset-2">
+            <h3 style="text-align: center;">List of your accidents</h3><br>
+        <h6 *ngIf="currentAgentsAccidents.length == 0"> <b>No Accident recorded <br> <br> </b> </h6>
+        <div class="flexContainer title">
+            <div class="flexContent">Date/Time</div>
+            <div class="flexContent">Location</div>
+            <div class="flexContent">Guilty</div>
+            <div class="flexContent">Innocent</div>
+        </div>
+        <div class="flexContainer element" *ngFor="let accident of currentAgentsAccidents">
+            <div class="flexContent" *ngIf="accident.minute != 0" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.date | date}} at {{accident.hour}}:{{accident.minute}} </div>
+            <div class="flexContent" *ngIf="accident.minute == 0" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.date | date}} at {{accident.hour}}:0{{accident.minute}} </div>
+            <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.location}} </div>
+            <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.guiltyPeopleName}} </div>
+            <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.innocentPeopleName}} </div>
+        </div>
+        </mat-card><br><br><br>
+        <button mat-raised-button class="addUser" (click)="openAddAccidentDetailsDialog()">Add accident</button><br><br><br><br>
+    
+    
+    </div>
+    <div *ngIf="loggedUserRole == 'Supervizor'">
+        <h2 style="text-align: center;">Welcome supervisor {{currentUserDetails.userName}} </h2><br>
+        <mat-card class="col-md-4 offset-4">
+            <div class="flexContainer title">
+                <div class="flexContent"> Username </div>
+                <div class="flexContent"> Email </div>
+                <div class="flexContentDelete"> Action </div>
+            </div>
+            <div class="flexContainer element" *ngFor="let agent of currnetAgents">
+                <div class="flexContent"> {{agent.userName}} </div>
+                <div class="flexContent"> {{agent.email}} </div>
+                <div class="flexContentDelete"> <button mat-raised-button color="warn" class="delete" (click)="deleteAgent(agent.userName)"> Delete </button> </div>
+            </div>
+        </mat-card><br><br><br><br>
+        <button mat-raised-button class="addUser" (click)="openAddAgentDialog()">Add agent</button><br><br><br><br><br>
+        <mat-card class="col-md-8 offset-2">
+            <h3 style="text-align: center;">List of accidents</h3><br>
+            <h6 *ngIf="currentSupervisorAgentsAccidents.length == 0"> <b>No Accident recorded <br> <br> </b> </h6>
+            <div *ngIf="currentSupervisorAgentsAccidents.length != 0">
+                <div class="flexContainer title">
+                    <div class="flexContent">Date/Time</div>
+                    <div class="flexContent">Location</div>
+                    <div class="flexContent">Agent</div>
+                    <div class="flexContent">Guilty</div>
+                    <div class="flexContent">Innocent</div>
+                    <div class="flexContent">Action</div>
+                </div>
+                <div class="flexContainer element" *ngFor="let accident of currentSupervisorAgentsAccidents">
+                    <div class="flexContent" *ngIf="accident.minute != 0" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.date | date}} at {{accident.hour}}:{{accident.minute}} </div>
+                    <div class="flexContent" *ngIf="accident.minute == 0" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.date | date}} at {{accident.hour}}:0{{accident.minute}} </div>
+                    <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.location}} </div>
+                    <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.userName}} </div>
+                    <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.guiltyPeopleName}} </div>
+                    <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.innocentPeopleName}} </div>
+                    <div class="flexContent"> <button mat-raised-button color="warn" class="delete" (click)="deleteAccident(accident.id)"> Delete </button> </div>
+                </div>
+            </div>
+        </mat-card><br><br><br><br>
+        <button mat-raised-button class="addUser" (click)="openAddAccidentDetailsDialog()">Add accident</button><br>
+    </div>
+</div>

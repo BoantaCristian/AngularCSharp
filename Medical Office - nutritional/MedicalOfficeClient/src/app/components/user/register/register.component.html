@@ -1,0 +1,37 @@
+<form [formGroup]="formModel" autocomplete="off" (submit)="register()"><br>
+    <mat-form-field>
+        <input matInput formControlName="UserName" placeholder="Username">
+        <label class="text-danger" *ngIf="formModel.get('UserName').touched && formModel.get('UserName').errors?.required">This field is mandatory!</label>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput formControlName="Email" placeholder="Email">
+        <label class="text-danger" *ngIf="formModel.get('Email').touched && formModel.get('Email').errors?.email">Invalid email address!</label>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput formControlName="Address" placeholder="Address">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput formControlName="PhoneNumber" placeholder="PhoneNumber">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Select your doctor</mat-label>
+        <mat-select formControlName="IdDoctor">
+          <mat-option *ngFor="let doctor of doctors" [value]="doctor.id">
+            {{doctor.userName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    <mat-form-field>
+        <input type="password" matInput formControlName="Password" placeholder="Password" (input)="comparePasswords()">
+        <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.required">This field is mandatory!</label>
+        <label class="text-danger" *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.minlength">Minimum 4 characters!</label>
+    </mat-form-field>
+    <mat-form-field>
+        <input type="password" matInput formControlName="ConfirmPassword" placeholder="Confirm password" (input)="comparePasswords()">
+        <label class="text-danger" *ngIf="formModel.get('ConfirmPassword').touched && formModel.get('ConfirmPassword').errors?.required">This field is mandatory!</label>
+        <label class="text-danger2" *ngIf="formModel.get('ConfirmPassword').touched && mismatch">Passwords mismatch!</label>
+    </mat-form-field><br>
+    <div style=" margin-top: 10px; margin-left: 20px;">
+        <button mat-raised-button type="submit" class="animated fadeInDown" style="margin-top: 15px;" [disabled]="!formModel.valid || mismatch">Register</button><br><br>
+    </div>
+</form>

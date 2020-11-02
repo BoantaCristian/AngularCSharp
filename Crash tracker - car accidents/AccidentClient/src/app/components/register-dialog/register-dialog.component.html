@@ -1,0 +1,44 @@
+<mat-dialog-content>
+    <h2 style="text-align: center;">Add user</h2>
+    <form [formGroup]="registerForm" autocomplete="off" class="col-md-10 offset-1" >
+        <mat-form-field>
+            <input type="text" matInput formControlName="UserName" placeholder="Username">
+            <label class="text-danger" *ngIf="registerForm.get('UserName').touched && registerForm.get('UserName').errors?.required">Mandatory</label>
+        </mat-form-field><br>
+        <mat-form-field>
+            <mat-label>Select role</mat-label>
+            <mat-select formControlName="Role">
+              <mat-option *ngFor="let role of roles" [value]="role" (click)="selectSupervizor(role)">
+                {{role}}
+              </mat-option>
+            </mat-select>
+            <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+        </mat-form-field>  
+        <mat-form-field *ngIf="needSupervizor">
+            <mat-label>Select Supervisor</mat-label>
+            <mat-select formControlName="Supervizor">
+              <mat-option *ngFor="let supervisor of supervisors" [value]="supervisor.userName" (click)="supervisorSelected()">
+                {{supervisor.userName}}
+              </mat-option>
+            </mat-select>
+            <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+        </mat-form-field>   
+        <mat-form-field>
+            <input type="text" matInput formControlName="Email" placeholder="Email">
+            <label class="text-danger" *ngIf="registerForm.get('Email').touched && registerForm.get('Email').errors?.email">Invalid email</label>
+        </mat-form-field><br>
+        <mat-form-field>
+            <input type="text" matInput formControlName="Password" placeholder="Password" (input)="matchPasswords()">
+            <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.required">Mandatory</label>
+            <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.minlength">Minimum 4 chars</label>
+        </mat-form-field><br>
+        <mat-form-field>
+            <input type="text" matInput formControlName="ConfirmPassword" placeholder="Confirm password" (input)="matchPasswords()">
+            <label class="text-danger" *ngIf="registerForm.get('ConfirmPassword').touched && registerForm.get('ConfirmPassword').errors?.required">Mandatory</label>
+            <label class="text-danger2" *ngIf="registerForm.get('ConfirmPassword').touched && mismatch">Passwords mismatch</label>
+        </mat-form-field><br><br>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button (click)="register()" mat-dialog-close mat-dialog-close="true" [disabled]="!registerForm.valid || mismatch || (needSupervizor && !selectedSupervisor)" style="text-align: center;"> Register </button>
+</mat-dialog-actions><br>

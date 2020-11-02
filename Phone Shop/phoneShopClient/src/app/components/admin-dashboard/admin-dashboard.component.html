@@ -1,0 +1,228 @@
+<a class="animated fadeInDown" routerLink="" *ngIf="!emptyShoppingBag"> ➜ back</a><br><br><br><br><br>
+<!--show all users-->
+<mat-card class="col-md-8 offset-2 animated fadeIn">
+    <h2 class="animated fadeInDown">All users</h2>
+    <div class="flexContainer animated fadeInDown">
+        <div class="flexContent title"> Username </div>
+        <div class="flexContent title"> Email </div>
+        <div class="flexContent title"> Role </div>
+        <div class="flexContent title"> Action </div>
+    </div>
+    <div class="divider"></div>
+    <div class="flexContainer animated fadeInDown" *ngFor="let user of users">
+        <div class="flexContent content"> {{user.userName}} </div>
+        <div class="flexContent content" *ngIf="user.email"> {{user.email}} </div>
+        <div class="flexContent content" *ngIf="!user.email"> no email </div>
+        <div class="flexContent content" *ngIf="user.userName == 'Admin'"> Admin </div>
+        <div class="flexContent content" *ngIf="user.userName != 'Admin'"> Client </div>
+        <div class="flexContent content"> 
+            <button mat-raised-button color="warn" (click)="deleteUser(user.userName)"> Delete </button>    
+        </div>
+    </div>
+</mat-card><br><br>
+<!--show historic-->
+<mat-card class="col-md-8 offset-2 animated fadeIn" style="min-width: 910px;">
+    <h2 class="animated fadeInDown">Historic</h2><br>
+    <div class="flexContainer animated fadeInDown">
+        <div class="flexContent title"> Name </div>
+        <div class="flexContent title"> Address </div>
+        <div class="flexContent title"> Contact </div>
+        <div class="flexContent title"> Order </div>
+        <div class="flexContent title"> Payment method </div>
+        <div class="flexContent title"> Order date </div>
+        <div class="flexContent title" matTooltip="click on current status to mark it as delivered" matTooltipPosition="above"> Status </div>
+    </div>
+    <div class="divider"></div>
+    <div class="flexContainer animated fadeInDown" *ngFor="let hist of historic">
+        <div class="flexContent content"> {{hist.userName}} </div>
+        <div class="flexContent content"> {{hist.address}} </div>
+        <div class="flexContent content"> {{hist.contact}} </div>
+        <div class="flexContent content"> {{hist.order}} </div>
+        <div class="flexContent content"> {{hist.paymentMethod}} </div>
+        <div class="flexContent content"> {{hist.dateTime | date}} </div>
+        <div class="flexContent content pending" *ngIf="hist.status == 'Pending'" matTooltip="Click to mark as delivered" matTooltipPosition="above" (click)="delivered(hist.id)" style="color: palevioletred;"> {{hist.status}} </div>
+        <div class="flexContent content" *ngIf="hist.status == 'Delivered'"> {{hist.status}} </div>
+    </div>
+</mat-card><br><br>
+<!--show all phones-->
+<mat-card class="col-md-8 offset-2 animated fadeIn" style="min-width: 910px;">
+    <h2 class="animated fadeInDown">All phones</h2>
+    <div class="flexContainer animated fadeInDown">
+        <div class="flexContent title"> Name </div>
+        <div class="flexContent title"> Company </div>
+        <div class="flexContent title"> Launch Date </div>
+        <div class="flexContent title"> Price </div>
+        <div class="flexContent title"> Actions </div>
+    </div>
+    <div class="divider"></div>
+    <div class="flexContainer animated fadeInDown" *ngFor="let phone of phones">
+        <!--display mode-->
+        <div *ngIf="currentEditPhone != phone.id" class="flexContent content"> {{phone.name}} </div>
+        <div *ngIf="currentEditPhone != phone.id" class="flexContent content"> {{phone.company.name}} </div>
+        <div *ngIf="currentEditPhone != phone.id" class="flexContent content"> {{phone.launchDate | date}} </div>
+        <div *ngIf="currentEditPhone != phone.id" class="flexContent content"> {{phone.price}} </div>
+        <div *ngIf="currentEditPhone != phone.id" class="flexContent content"> 
+            <button mat-raised-button color="primary" style="margin-right: 7px;" (click)="edit(phone.id, phone.name, phone.company.name, phone.launchDate, phone.price)"> Edit </button>    
+            <button mat-raised-button color="warn" (click)="deletePhone(phone.id)"> Delete </button>    
+        </div>
+        <!--edit mode-->
+        <div *ngIf="currentEditPhone == phone.id"  class="flexContent content"> 
+            <mat-form-field class="editElement">
+                <input matInput [(ngModel)]="updatePhone.newName" placeholder="Name">
+            </mat-form-field>
+        </div>
+        <div *ngIf="currentEditPhone == phone.id" class="flexContent content"> 
+            <mat-form-field class="editElement">
+                <mat-label>New company</mat-label>
+                <mat-select [(ngModel)]="updatePhone.newCompany">
+                  <mat-option *ngFor="let company of companies" [value]="company.name">
+                    {{company.name}}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>    
+        </div>
+        <div *ngIf="currentEditPhone == phone.id" class="flexContent content"> 
+            <mat-form-field class="editElement">
+                <input matInput [(ngModel)]="updatePhone.newLaunchDate" [matDatepicker]="picker" placeholder="New date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>    
+        </div>
+        <div *ngIf="currentEditPhone == phone.id" class="flexContent content"> 
+            <mat-form-field class="editElement">
+                <input type="number" matInput [(ngModel)]="updatePhone.newPrice" placeholder="Price">
+            </mat-form-field>    
+        </div>
+        <div *ngIf="currentEditPhone == phone.id" class="flexContent content"> 
+            <button mat-raised-button color="primary" style="margin-right: 7px;" (click)="update()"> Update </button>    
+            <button mat-raised-button color="warn" (click)="cancelEdit()"> Cancel </button>    
+        </div>
+    </div>
+</mat-card><br><br>
+
+<!--add a phone with details-->
+<mat-card class="animated fadeIn" style="width: 800px">
+    <h2 *ngIf="detailsPhoneZone != 3" class="animated fadeInDown">Add phone</h2>
+    <div *ngIf="detailsPhoneZone == 1" class="flexContainer animated fadeInDown">
+        <mat-form-field class="flexContent content">
+            <input matInput [(ngModel)]="newPhone.Name" placeholder="Name">
+        </mat-form-field>
+        <mat-form-field class="flexContent content">
+            <mat-label>Select Company</mat-label>
+            <mat-select [(ngModel)]="newPhone.CompanyId">
+              <mat-option *ngFor="let company of companies" [value]="company.id">
+                {{company.name}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="flexContent content">
+            <input matInput [(ngModel)]="newPhone.Price" type="number" min="0" placeholder="Price">
+        </mat-form-field>
+        <div class="flexContent content" style="margin-top: 15px;"> 
+            <button mat-raised-button color="primary" (click)="confirmZone()" [disabled]="newPhone.Name == '' || newPhone.Company == '' || newPhone.Price == null"> Confirm </button>    
+        </div>
+    </div>
+    <div *ngIf="detailsPhoneZone == 2">
+        <img [src]="imagePath" style="width: 200px; height: 250px;"><br><br>
+        <input class="animated fadeInDown" type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)" class="offset-2" placeholder="Choose Image"><br><br>
+        <mat-form-field class="animated fadeInDown">
+            <input matInput [(ngModel)]="newPhone.LaunchDate" [matDatepicker]="picker" placeholder="Select launch date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div style="margin-top: 15px;"> 
+            <button class="animated fadeInDown" mat-raised-button color="primary" (click)="addPhone()" [disabled]="newPhone.LaunchDate == '' || newPhone.ImagePath == ''"> Confirm </button>    
+        </div>
+    </div>
+    <div *ngIf="detailsPhoneZone == 3">
+        <h2 class="animated fadeInDown">Add phone details</h2>
+        <div class="flexContainer animated fadeInDown">
+            <mat-form-field class="flexContent content">
+                <input matInput [(ngModel)]="newPhoneDetails.Dimensions" placeholder="Dimensions">
+            </mat-form-field>
+            <mat-form-field class="flexContent content">
+                <input matInput [(ngModel)]="newPhoneDetails.Weight" placeholder="Weight">
+            </mat-form-field>
+            <mat-form-field class="flexContent content">
+                <input matInput [(ngModel)]="newPhoneDetails.DisplayType" placeholder="DisplayType">
+            </mat-form-field>
+            <mat-form-field class="flexContent content">
+                <input matInput [(ngModel)]="newPhoneDetails.Resolution" placeholder="Resolution">
+            </mat-form-field><br>
+        </div>
+        <div class="flexContainer animated fadeInDown">
+            <mat-form-field class="flexContent content">
+                <input matInput [(ngModel)]="newPhoneDetails.OS" placeholder="OS">
+            </mat-form-field>
+            <mat-form-field class="flexContent content">
+                <input matInput [(ngModel)]="newPhoneDetails.MainCamera" placeholder="MainCamera">
+            </mat-form-field>
+            <mat-form-field class="flexContent content">
+                <input matInput [(ngModel)]="newPhoneDetails.SelfieCamera" placeholder="SelfieCamera">
+            </mat-form-field>
+            <mat-form-field class="flexContent content">
+                <input matInput [(ngModel)]="newPhoneDetails.Battery" placeholder="Battery">
+            </mat-form-field>
+        </div>
+        <div style="margin-top: 15px;"> 
+            <button mat-raised-button color="primary" (click)="addDetails()" [disabled]="newPhoneDetails.Dimensions == '' || newPhoneDetails.Weight == '' || newPhoneDetails.DisplayType == '' || newPhoneDetails.Resolution == '' || newPhoneDetails.OS == '' || newPhoneDetails.MainCamera == '' || newPhoneDetails.SelfieCamera == '' || newPhoneDetails.Battery == ''"> Finish </button>    
+        </div>
+    </div>
+    <div *ngIf="newPhone.Name != '' || newPhone.Price != null || newPhone.CompanyId != null || detailsPhoneZone != 1" class="cancelAddZone animated fadeIn" (click)="cancelAddZone()">reset</div>
+</mat-card><br><br>
+<!--add company-->
+<mat-card class="animated fadeIn" style="width: 800px">
+    <h2>Add company</h2>
+    <div class="flexContainer animated fadeInDown">
+        <mat-form-field class="flexContent content">
+            <input matInput [(ngModel)]="newCompany.Name" placeholder="Name">
+        </mat-form-field>
+        <mat-form-field class="flexContent content">
+            <input matInput [(ngModel)]="newCompany.Description" placeholder="Description">
+        </mat-form-field>
+        <mat-form-field style="position: relative; top: -4px;">
+            <input matInput [(ngModel)]="newCompany.LaunchDate" [matDatepicker]="picker" placeholder="New date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div class="flexContent content" style="margin-top: 15px;"> 
+            <button mat-raised-button color="primary" (click)="addCompany()" [disabled]="newCompany.Name == '' || newCompany.Description == '' || newCompany.LaunchDate == ''"> Finish </button>    
+        </div>
+    </div>
+</mat-card><br><br>
+<!--add a user-->
+<mat-card class="animated fadeIn" style="width: 400px;">
+    <h2 class="animated fadeInDown">Add user</h2>
+    <form [formGroup]="formModel" autocomplete="off" (submit)="register()">
+        <mat-form-field class="animated fadeInDown">
+            <input matInput formControlName="UserName" placeholder="Username">
+            <label *ngIf="formModel.get('UserName').touched && formModel.get('UserName').errors?.required" class="text-danger">Mandatory Field</label>    
+        </mat-form-field><br>
+        <mat-form-field class="animated fadeInDown">
+            <input matInput formControlName="Email" placeholder="Email">
+            <label *ngIf="formModel.get('Email').touched && formModel.get('Email').errors?.email" class="text-danger">Invalid email</label>
+        </mat-form-field><br>
+        <mat-form-field class="animated fadeInDown">
+            <mat-label>Select Role</mat-label>
+            <mat-select formControlName="Role">
+              <mat-option *ngFor="let role of roles" [value]="role">
+                {{role}}
+              </mat-option>
+            </mat-select>
+            <label *ngIf="formModel.get('Role').touched && formModel.get('Role').errors?.required" class="text-danger">Mandatory Field</label>
+        </mat-form-field><br>
+        <mat-form-field class="animated fadeInDown">
+            <input matInput formControlName="Password" (input)="comparePasswords()" placeholder="Password">
+            <label *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.required" class="text-danger">Mandatory Field</label>
+            <label *ngIf="formModel.get('Password').touched && formModel.get('Password').errors?.minlength" class="text-danger">Minim 4 chars</label>
+        </mat-form-field><br>
+        <mat-form-field class="animated fadeInDown">
+            <input matInput formControlName="ConfirmPassword" (input)="comparePasswords()" placeholder="Confirm Password">
+            <label *ngIf="formModel.get('ConfirmPassword').touched && formModel.get('ConfirmPassword').errors?.required" class="text-danger">Mandatory Field</label>
+            <label *ngIf="formModel.get('ConfirmPassword').touched && !passwordsMatch" class="text-danger-2">Passwords mismatch</label>
+        </mat-form-field><br><br>
+        <div class="col-md-6 offset-3 animated fadeInDown">
+            <button type="submit" mat-raised-button color="primary" [disabled]="!formModel.valid || !passwordsMatch">Register</button>
+        </div><br>
+    </form>
+</mat-card><br><br>

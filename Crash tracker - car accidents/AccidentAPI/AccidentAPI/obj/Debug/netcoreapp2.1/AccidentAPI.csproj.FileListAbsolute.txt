@@ -1,0 +1,16 @@
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\bin\Debug\netcoreapp2.1\appsettings.Development.json
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\bin\Debug\netcoreapp2.1\appsettings.json
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\bin\Debug\netcoreapp2.1\AccidentAPI.deps.json
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\bin\Debug\netcoreapp2.1\AccidentAPI.runtimeconfig.json
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\bin\Debug\netcoreapp2.1\AccidentAPI.runtimeconfig.dev.json
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\bin\Debug\netcoreapp2.1\AccidentAPI.dll
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\obj\Debug\netcoreapp2.1\AccidentAPI.csprojAssemblyReference.cache
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\obj\Debug\netcoreapp2.1\AccidentAPI.RazorAssemblyInfo.cache
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\obj\Debug\netcoreapp2.1\AccidentAPI.RazorAssemblyInfo.cs
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\obj\Debug\netcoreapp2.1\AccidentAPI.AssemblyInfoInputs.cache
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\obj\Debug\netcoreapp2.1\AccidentAPI.AssemblyInfo.cs
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\obj\Debug\netcoreapp2.1\AccidentAPI.RazorTargetAssemblyInfo.cache
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\bin\Debug\netcoreapp2.1\AccidentAPI.pdb
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\obj\Debug\netcoreapp2.1\AccidentAPI.dll
+D:\AngularCSharp\Accidente\AccidentAPI\AccidentAPI\obj\Debug\netcoreapp2.1\AccidentAPI.pdb

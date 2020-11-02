@@ -1,0 +1,99 @@
+<mat-dialog-content>
+    <h2 style="text-align: center;">Add accident</h2>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <mat-horizontal-stepper [linear]="isLinear" #stepper>
+        <mat-step [stepControl]="accidentDetailsForm">
+          <form [formGroup]="accidentDetailsForm">
+            <ng-template matStepLabel>Accident details</ng-template>
+            <mat-form-field class="col-md-3">
+              <mat-label>Location</mat-label>
+              <input matInput placeholder="Location" formControlName="Location">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+                <mat-label>Choose a date</mat-label>
+                <input matInput formControlName="Date" [matDatepicker]="picker" placeholder="New date" (dateChange)="checkDate()">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+                <mat-label>Select hour</mat-label>
+                <mat-select formControlName="Hour">
+                    <mat-option *ngFor="let hour of hours" [value]="hour" (input)="checkDate()" (click)="checkDate()">
+                        {{hour}}
+                      </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+                <mat-label>Select minutes</mat-label>
+                <input type="number" min="0" max="59" matInput  formControlName="Minute" placeholder="Minutes" (input)="checkDate()">
+            </mat-form-field>
+            <div>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="photoForm" label="Photo and severity">
+          <form [formGroup]="photoForm">
+            <div class="col-md-4 offset-4"><br><br><br><br><br><br>
+                <img [src]="imagePath" style="width: 300px; height: 250px;" class="photo"><br><br><br><br><br><br>
+                <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)"  formControlName="Photo" placeholder="Choose Image"><br><br>
+            </div>
+            <mat-form-field class="col-md-4 offset-4">
+                <mat-label>Select severity</mat-label>
+                <mat-select formControlName="Severity">
+                    <mat-option *ngFor="let severity of severities" [value]="severity.id">
+                        {{severity.type}}
+                      </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="involvedPeopleForm">
+            <form [formGroup]="involvedPeopleForm">
+              <ng-template matStepLabel>People involved {{data.role}} {{data.userName}} </ng-template>
+              <mat-form-field class="col-md-4" *ngIf="data.role != 'Agent'">
+                  <mat-label>AgentName</mat-label>
+                  <mat-select formControlName="AgentName">
+                        <mat-option *ngFor="let agent of agents" [value]="agent.userName">
+                          {{agent.userName}}
+                        </mat-option>
+                  </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-md-4">
+                  <mat-label>Guilty</mat-label>
+                  <mat-select formControlName="Guilty">
+                      <mat-option *ngFor="let guilt of people" [value]="guilt.id" (click)="updatePeople()">
+                          {{guilt.name}}
+                        </mat-option>
+                  </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-md-4">
+                  <mat-label>Innocent</mat-label>
+                  <label *ngIf="identicPeople" class="text-danger">Guilty and Innocent are identic!</label>
+                  <mat-select formControlName="Innocent">
+                        <mat-option *ngFor="let innocent of people" [value]="innocent.id" (click)="updatePeople()">
+                          {{innocent.name}}
+                        </mat-option>
+                  </mat-select>
+              </mat-form-field>
+              <div>
+                <button mat-button matStepperNext>Next</button>
+              </div>
+            </form>
+          </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          <p>Check accident and if it is ok click finish</p>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+            <button mat-button (click)="addAccident()" mat-dialog-close mat-dialog-close="true" [disabled]="identicPeople">Finish</button>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+</mat-dialog-actions>

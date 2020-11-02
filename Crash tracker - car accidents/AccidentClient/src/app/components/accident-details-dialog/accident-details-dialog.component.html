@@ -1,0 +1,93 @@
+<h2 style="text-align: center;">Accident details</h2>
+<mat-card>
+    <div class="imageContainer"> <img [(src)]="currentAccident.photo" class="image"> </div><br> 
+    <div class="flexContainer">
+        <h6 class="flexContent">Environment details</h6>
+        <h6 class="flexContent">People</h6>
+    </div>
+    <div class="flexContainer">
+        <div class="flexContent">
+            <div class="flexContainer">
+                <div class="flexContent"> Date/Time:   </div>
+                <div class="flexContent" *ngIf="currentAccident.minute != 0"> {{currentAccident.date | date}} at {{currentAccident.hour}}:{{currentAccident.minute}}   </div>
+                <div class="flexContent" *ngIf="currentAccident.minute == 0"> {{currentAccident.date | date}} at {{currentAccident.hour}}:{{currentAccident.minute}}0   </div>
+                <div class="flexContent">Agent:</div>
+                <div class="flexContent">{{currentAccident.agent}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="flexContainer">
+        <div class="flexContent">
+            <div class="flexContainer">
+                <div class="flexContent"> Location:   </div>
+                <div class="flexContent"> {{currentAccident.location}}   </div>
+                <div class="flexContent">Guilty:</div>
+                <div class="flexContent">{{currentAccident.guiltyPeopleName}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="flexContainer">
+        <div class="flexContent">
+            <div class="flexContainer">
+                <div class="flexContent"> Status: </div>
+                <div class="flexContent" *ngIf="currentAccident.settled"> Settled {{currentAccident.settledDate | date}} </div>
+                <div class="flexContent settle" *ngIf="!currentAccident.settled" matTooltip="Mark as settled!" (click)="settle(currentAccident.id)"> In process </div>
+                <div class="flexContent">Innocent:</div>
+                <div class="flexContent">{{currentAccident.innocentPeopleName}}</div>
+            </div>
+        </div>
+    </div><br>
+    <h6 class="flexContent">Involved people details</h6>
+    <div class="flexContainer">
+        <div class="flexContent">
+            <div class="flexContainer">
+                <div class="flexContent" *ngIf="currentAccident.guiltyPeopleSex == 'Masculin'"> {{currentAccident.guiltyPeopleName}} (M)</div>
+                <div class="flexContent" *ngIf="currentAccident.guiltyPeopleSex == 'Feminin'"> {{currentAccident.guiltyPeopleName}} (F)</div>
+                <div class="flexContent"> {{currentAccident.guiltyPeopleContact}} </div>
+                <div class="flexContent">Innocent:</div>
+                <div class="flexContent">{{currentAccident.guiltyPeopleAccidentsInvolved}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="flexContainer">
+        <div class="flexContent">
+            <div class="flexContainer">
+                <div class="flexContent">  </div>
+                <div class="flexContent">  </div>
+                <div class="flexContent">Guilty:</div>
+                <div class="flexContent">{{currentAccident.guiltyPeopleAccidentsCommitted}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="flexContainer">
+        <div class="flexContent">
+            <div class="flexContainer">
+                <div class="flexContent" *ngIf="currentAccident.innocentPeopleSex == 'Masculin'"> {{currentAccident.innocentPeopleName}} (M) </div>
+                <div class="flexContent" *ngIf="currentAccident.innocentPeopleSex == 'Feminin'"> {{currentAccident.innocentPeopleName}} (F)</div>
+                <div class="flexContent"> {{currentAccident.innocentPeopleContact}} </div>
+                <div class="flexContent">Innocent:</div>
+                <div class="flexContent">{{currentAccident.innocentPeopleActidentsInvolved}}</div>
+            </div>
+        </div>
+    </div>    
+    <div class="flexContainer">
+        <div class="flexContent">
+            <div class="flexContainer">
+                <div class="flexContent">  </div>
+                <div class="flexContent">  </div>
+                <div class="flexContent">Guilty:</div>
+                <div class="flexContent">{{currentAccident.innocentPeopleAccidentsCommitted}}</div>
+            </div>
+        </div>
+    </div>    
+    <h6 class="flexContent">Description </h6>
+    <div class="flexContainer">
+        <div class="flexContent">
+            <div class="flexContainer">
+                <div class="flexContent"> Type: {{currentAccident.type}} </div>
+                <div class="flexContent"> Vehicle: {{currentAccident.vehicle}} </div>
+                <div class="flexContent1"> {{currentAccident.description}} </div>
+            </div>
+        </div>
+    </div>    
+</mat-card>

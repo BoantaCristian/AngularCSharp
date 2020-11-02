@@ -1,0 +1,51 @@
+.formContainer{
+    width: 450px;
+    margin: 0 auto;
+}
+mat-card{
+    background: rgba(255, 255, 255, 0.829);
+}
+.flexContainer{
+    display: flex;
+}
+.flexContent{
+    flex: 1;
+    text-align: center;
+}
+h2.active{
+    color: white;
+    border-bottom: solid 3px;
+    border-radius: 3px;
+}
+a{
+    position: absolute;
+    top: 70px;
+    left: 20%;
+    font-size: 24px;
+    text-decoration: none;
+    color: whitesmoke;
+}
+a:hover{
+    color: rgb(186, 160, 235);
+    transition: 300ms;
+}
+
+::ng-deep .mat-form-field-label {
+    /*change color of label*/
+    color: grey !important;
+}
+
+::ng-deep.mat-form-field-underline {
+/*change color of underline*/
+background-color: grey !important;
+}
+::ng-deep.mat-form-field-ripple {
+/*change color of underline when focused*/
+background-color: grey !important;;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-arrow {
+color: grey !important;
+}
+::ng-deep.mat-select .mat-select-trigger .mat-select-value {
+color: grey !important;
+}

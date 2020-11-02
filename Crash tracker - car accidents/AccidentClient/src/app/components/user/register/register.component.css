@@ -1,0 +1,11 @@
+.text-danger{
+    position: absolute;
+    left: 0;
+    top: 40px;
+}
+.text-danger2{
+    color: rgb(212, 49, 49);
+    position: absolute;
+    left: 0;
+    top: 60px;
+}
