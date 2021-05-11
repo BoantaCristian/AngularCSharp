@@ -1,5 +1,6 @@
 <mat-dialog-content>
-    <h2 style="text-align: center;">Add accident</h2>
+    <h2 *ngIf="!update" style="text-align: center;">Add accident</h2>
+    <h2 *ngIf="update" style="text-align: center;">Update accident</h2>
 </mat-dialog-content>
 <mat-dialog-actions>
     <mat-horizontal-stepper [linear]="isLinear" #stepper>
@@ -8,17 +9,17 @@
             <ng-template matStepLabel>Accident details</ng-template>
             <mat-form-field class="col-md-3">
               <mat-label>Location</mat-label>
-              <input matInput placeholder="Location" formControlName="Location">
+              <input matInput placeholder="Location" formControlName="Location" [value]="accidentDetailsForm.value.Location">
             </mat-form-field>
             <mat-form-field class="col-md-3">
                 <mat-label>Choose a date</mat-label>
-                <input matInput formControlName="Date" [matDatepicker]="picker" placeholder="New date" (dateChange)="checkDate()">
+                <input matInput formControlName="Date" [value]="accidentDetailsForm.value.Date" [matDatepicker]="picker" placeholder="New date" (dateChange)="checkDate()">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="col-md-3">
                 <mat-label>Select hour</mat-label>
-                <mat-select formControlName="Hour">
+                <mat-select formControlName="Hour" [value]="accidentDetailsForm.value.Hour">
                     <mat-option *ngFor="let hour of hours" [value]="hour" (input)="checkDate()" (click)="checkDate()">
                         {{hour}}
                       </mat-option>
@@ -26,7 +27,7 @@
             </mat-form-field>
             <mat-form-field class="col-md-3">
                 <mat-label>Select minutes</mat-label>
-                <input type="number" min="0" max="59" matInput  formControlName="Minute" placeholder="Minutes" (input)="checkDate()">
+                <input type="number" min="0" max="59" matInput  formControlName="Minute"  [value]="accidentDetailsForm.value.Minute" placeholder="Minutes" (input)="checkDate()">
             </mat-form-field>
             <div>
               <button mat-button matStepperNext>Next</button>

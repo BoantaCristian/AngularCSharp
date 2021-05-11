@@ -33,6 +33,7 @@ h6{
 }
 .title{
     font-weight: bold;
+    margin-bottom: 10px;
 }
 .addUser{
     font-size: 28px;
@@ -56,3 +57,10 @@ h6{
     background-position: center;
     background-repeat: no-repeat;
 }
+::ng-deep .mat-tooltip {
+    font-size: 15px!important;
+    position: relative;
+    left: 0%;
+    top: -0px;
+    
+} 

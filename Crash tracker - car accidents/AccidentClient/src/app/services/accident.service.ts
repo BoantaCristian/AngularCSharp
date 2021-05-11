@@ -42,6 +42,20 @@ export class AccidentService {
     var token = new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')})
     return this.http.get(`${this.URI}/Accident/GetPeople`, {headers: token})
   }
+  //
+  getPeopleEnum(){
+    var token = new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')})
+    return this.http.get(`${this.URI}/Accident/GetPeopleEnum`, {headers: token})
+  }
+  getPeopleIAction(){
+    var token = new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')})
+    return this.http.get(`${this.URI}/Accident/GetPeopleIAction`, {headers: token})
+  }
+  getPeopleAsyncTolist(){
+    var token = new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')})
+    return this.http.get(`${this.URI}/Accident/GetPeopleAsyncTolist`, {headers: token})
+  }
+  //
   addPeople(body){
     var token = new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')})
     return this.http.post(`${this.URI}/Accident/AddPeople`, body, {headers: token})
@@ -71,6 +85,10 @@ export class AccidentService {
   addAccident(body){
     var token = new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')})
     return this.http.post(`${this.URI}/Accident/AddAccident`, body, {headers: token})
+  }
+  updateAccident(idAccident, body){
+    var token = new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')})
+    return this.http.post(`${this.URI}/Accident/UpdateAccident/${idAccident}`, body, {headers: token})
   }
   deleteAccident(idAccident){
     var token = new HttpHeaders({'Authorization': 'Bearer ' + localStorage.getItem('token')})

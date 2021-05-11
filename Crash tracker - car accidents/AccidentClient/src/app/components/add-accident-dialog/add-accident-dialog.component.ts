@@ -32,6 +32,7 @@ export class AddAccidentDialogComponent implements OnInit {
   }
   identicPeople: boolean = false;
   imageLink: any;
+  update: boolean = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private service: AccidentService, private toastr: ToastrService) { }
 
@@ -47,7 +48,7 @@ export class AddAccidentDialogComponent implements OnInit {
     AgentName: ['']
   })
   photoForm = this.formBuilder.group({
-    Photo: "",
+    Photo: '',
     Severity: [null, Validators.required]
   })
 
@@ -55,6 +56,29 @@ export class AddAccidentDialogComponent implements OnInit {
     this.getSeverities()
     this.getPeople()
     this.getAgents()
+    this.checkAccident()
+  }
+
+  checkAccident(){
+    if(this.data != null){
+      this.service.getAccident(this.data).subscribe(
+        (res: any) => {
+          this.update = true
+          this.accidentDetailsForm.controls['Date'].setValue(res.date)
+          this.accidentDetailsForm.controls['Hour'].setValue(res.hour)
+          this.accidentDetailsForm.controls['Minute'].setValue(res.minute)
+          this.accidentDetailsForm.controls['Location'].setValue(res.location)
+
+          this.involvedPeopleForm.controls['Guilty'].setValue(res.guiltyPeopleId)
+          this.involvedPeopleForm.controls['Innocent'].setValue(res.innocentPeopleId)
+          this.involvedPeopleForm.controls['AgentName'].setValue(res.agent)
+
+          this.photoForm.controls['Severity'].setValue(res.severityId)
+          this.photoForm.value.Photo = res.photo
+          this.imagePath = res.photo
+        }
+      )
+    }
   }
 
   handleFileInput(file: FileList){
@@ -140,19 +164,30 @@ export class AddAccidentDialogComponent implements OnInit {
       Minute: this.accidentDetailsForm.value.Minute,
       Location: this.accidentDetailsForm.value.Location,
       Photo: this.imageLink,
-      Severity: this.photoForm.value.Severity,
       Guilty: this.involvedPeopleForm.value.Guilty,
       Innocent: this.involvedPeopleForm.value.Innocent,
-      AgentName: this.involvedPeopleForm.value.AgentName
+      AgentName: this.involvedPeopleForm.value.AgentName,
+      Severity: this.photoForm.value.Severity,
     }
     if(this.data.role == "Agent"){
       accident.AgentName = this.data.userName
     }
-    this.service.addAccident(accident).subscribe(
-      res => {
-        this.toastr.success('Accident added successfully', 'Success!')
-      }
-    )
+    if(!this.update){
+      this.service.addAccident(accident).subscribe(
+        res => {
+          this.toastr.success('Accident added successfully', 'Success!')
+        }
+      )
+    }
+    else{
+      accident.Photo = this.photoForm.value.Photo
+      console.log(accident)
+      this.service.updateAccident(this.data, accident).subscribe(
+        res => {
+          this.toastr.success('Accident updated successfully', 'Success!')
+        }
+      )
+    }
   }
 
 }

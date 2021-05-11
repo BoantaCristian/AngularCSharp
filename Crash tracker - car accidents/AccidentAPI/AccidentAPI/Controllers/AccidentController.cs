@@ -96,8 +96,8 @@ namespace AccidentAPI.Controllers
             var roleObj = await _userManager.GetRolesAsync(user);
             var role = roleObj.First();
             var supervisor = user.UserSupervisor;
-            
-            if(supervisor != null)
+
+            if (supervisor != null)
             {
                 return new
                 {
@@ -133,8 +133,8 @@ namespace AccidentAPI.Controllers
             //users.Add(agent);
 
             //return Ok(users);
-
-            return Ok(_context.Users);
+            var result = await _context.Users.ToListAsync();
+            return Ok(result);
         }
 
         [HttpGet]
@@ -195,7 +195,7 @@ namespace AccidentAPI.Controllers
             bool supervisorHasAgents = false;
             bool agentHasAccidents = false;
 
-            if(role == "Admin")
+            if (role == "Admin")
             {
                 var admins = await _userManager.GetUsersInRoleAsync("Admin");
                 if (admins.Count() <= 1)
@@ -204,11 +204,11 @@ namespace AccidentAPI.Controllers
                 }
             }
 
-            if(role == "Agent")
+            if (role == "Agent")
             {
                 foreach (Accident accident in _context.Accidents)
                 {
-                    if(accident.Agent == user)
+                    if (accident.Agent == user)
                     {
                         agentHasAccidents = true;
                         break;
@@ -238,7 +238,7 @@ namespace AccidentAPI.Controllers
 
             if (user != null && !supervisorHasAgents)
             {
-                
+
 
                 await _userManager.RemoveFromRoleAsync(user, role);
                 await _userManager.DeleteAsync(user);
@@ -280,7 +280,7 @@ namespace AccidentAPI.Controllers
         public async Task<IActionResult> DeletePeople(int idPerson)
         {
             var person = await _context.People.FindAsync(idPerson);
-            if(person != null)
+            if (person != null)
             {
                 _context.People.Remove(person);
                 await _context.SaveChangesAsync();
@@ -333,6 +333,54 @@ namespace AccidentAPI.Controllers
 
             return Ok(accident);
         }
+        [HttpPost("{accidentId}")]
+        [Route("UpdateAccident/{accidentId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateAccident(int accidentId, AccidentDTO model)
+        {
+            try
+            {
+                var currentAccident = await _context.Accidents.FindAsync(accidentId);
+
+                if (currentAccident != null)
+                {
+                    var guilty = await _context.People.FindAsync(model.Guilty);
+                    var innocent = await _context.People.FindAsync(model.Innocent);
+                    var agent = await _userManager.FindByNameAsync(model.AgentName);
+                    var severity = await _context.Severity.FindAsync(model.Severity);
+
+                    currentAccident.Id = accidentId;
+                    currentAccident.Date = model.Date;
+                    currentAccident.Hour = model.Hour;
+                    currentAccident.Minute = model.Minute;
+                    currentAccident.Location = model.Location;
+                    currentAccident.Photo = model.Photo;
+                    currentAccident.Settled = currentAccident.Settled;
+                    currentAccident.SettledDate = currentAccident.SettledDate;
+                    currentAccident.GuiltyPeople = guilty;
+                    currentAccident.InnocentPeople = innocent;
+                    currentAccident.Guilty = model.Guilty;
+                    currentAccident.Innocent = model.Innocent;
+                    currentAccident.Agent = agent;
+                    currentAccident.Severity = severity;
+
+                    _context.Entry(currentAccident).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+                    return Ok(currentAccident);
+                }
+                else
+                {
+                    return BadRequest(new { message = "Accident not found!" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
+        }
         [HttpGet]
         [Route("GetAccidents")]
         public IActionResult GetAccidents()
@@ -357,7 +405,7 @@ namespace AccidentAPI.Controllers
         [Route("GetAccident/{idAccident}")]
         public IActionResult GetAccident(int idAccident)
         {
-            return Ok(_context.Accidents.Include(i => i.GuiltyPeople).Include(i => i.InnocentPeople).Include(i => i.Agent).Include(i => i.Severity).Where(w => w.Id == idAccident).Select(s => new { s.Id, s.Date, s.Hour, s.Minute, s.Location, s.Photo, s.Settled, s.SettledDate, GuiltyPeopleName = s.GuiltyPeople.Name, GuiltyPeopleSex = s.GuiltyPeople.Sex, GuiltyPeopleAge = s.GuiltyPeople.Age, GuiltyPeopleAccidentsInvolved = s.GuiltyPeople.AccidentsInvolved, GuiltyPeopleAccidentsCommitted = s.GuiltyPeople.AccidentsCommitted, GuiltyPeopleContact = s.GuiltyPeople.PhoneNumber, InnocentPeopleName = s.InnocentPeople.Name, InnocentPeopleSex = s.InnocentPeople.Sex, InnocentPeopleAge = s.GuiltyPeople.Age, InnocentPeopleActidentsInvolved = s.InnocentPeople.AccidentsInvolved, InnocentPeopleAccidentsCommitted = s.InnocentPeople.AccidentsCommitted, InnocentPeopleContact = s.InnocentPeople.PhoneNumber, Agent = s.Agent.UserName, s.Severity.Type, s.Severity.Description, s.Severity.Vehicle }).First());
+            return Ok(_context.Accidents.Include(i => i.GuiltyPeople).Include(i => i.InnocentPeople).Include(i => i.Agent).Include(i => i.Severity).Where(w => w.Id == idAccident).Select(s => new { s.Id, s.Date, s.Hour, s.Minute, s.Location, s.Photo, s.Settled, s.SettledDate, GuiltyPeopleId = s.Guilty, GuiltyPeopleName = s.GuiltyPeople.Name, GuiltyPeopleSex = s.GuiltyPeople.Sex, GuiltyPeopleAge = s.GuiltyPeople.Age, GuiltyPeopleAccidentsInvolved = s.GuiltyPeople.AccidentsInvolved, GuiltyPeopleAccidentsCommitted = s.GuiltyPeople.AccidentsCommitted, GuiltyPeopleContact = s.GuiltyPeople.PhoneNumber, InnocentPeopleId = s.Innocent, InnocentPeopleName = s.InnocentPeople.Name, InnocentPeopleSex = s.InnocentPeople.Sex, InnocentPeopleAge = s.GuiltyPeople.Age, InnocentPeopleActidentsInvolved = s.InnocentPeople.AccidentsInvolved, InnocentPeopleAccidentsCommitted = s.InnocentPeople.AccidentsCommitted, InnocentPeopleContact = s.InnocentPeople.PhoneNumber, Agent = s.Agent.UserName, SeverityId = s.Severity.Id, s.Severity.Type, s.Severity.Description, s.Severity.Vehicle }).First());
         }
         [HttpDelete("{idAccident}")]
         [Route("DeleteAccident/{idAccident}")]
@@ -401,13 +449,15 @@ namespace AccidentAPI.Controllers
             decimal womenProbability = calculateAccidentChance("Feminin");
             decimal menProbability = calculateAccidentChance("Masculin");
             var locationsRiskList = ZonesRiskChance();
-            int totalAccidentsNumber = totalAccidents();
+            var timeRiskList = TimeRiskChance();
+            //hours with high risk of accidents: when happened the most accidents •	Hours or interval of hours when is most likely to happen an accident
+            int totalAccidentsNumber = TotalAccidents();
             int totalPeople = _context.People.Count();
             int totalWomen = TotalGender("Feminin");
             int totalMen = TotalGender("Masculin");
-            return Ok( new { totalAccidentsNumber, totalPeople, totalWomen, totalMen, womenProbability, menProbability, locationsRiskList });
+            return Ok( new { totalAccidentsNumber, totalPeople, totalWomen, totalMen, womenProbability, menProbability, locationsRiskList, timeRiskList });
         }
-        public int totalAccidents()
+        public int TotalAccidents()
         {
             return _context.Accidents.Count();
         }
@@ -445,9 +495,10 @@ namespace AccidentAPI.Controllers
         }
         public List<LocationRisk> ZonesRiskChance()
         {
-
             List<LocationRisk> Zones = new List<LocationRisk>();
+
             var totalAccidents = _context.Accidents.Count();
+
             foreach (Accident accident in _context.Accidents)
             {
                 bool newLocation = true;
@@ -481,6 +532,55 @@ namespace AccidentAPI.Controllers
             }
 
             return Zones;
+        }
+        public class TimeRisk
+        {
+            public int Hour { get; set; }
+            public decimal Accidents { get; set; }
+            public decimal Percentage { get; set; }
+        }
+        public List<TimeRisk> TimeRiskChance()
+        {
+            List<TimeRisk> timeRisks = new List<TimeRisk>();
+
+            var totalAccidents = TotalAccidents();
+
+            foreach (Accident accident in _context.Accidents)
+            {
+                bool newHour = true;
+                foreach (var item in timeRisks)
+                {
+                    if (accident.Hour == item.Hour)
+                    {
+                        newHour = false;
+                        break;
+                    }
+                }
+
+                if (newHour)
+                {
+                    TimeRisk newTimeRisk = new TimeRisk
+                    {
+                        Hour = accident.Hour,
+                        Accidents = 1,
+                        Percentage = decimal.Round(1m / totalAccidents * 100, 2)
+                    };
+
+                    timeRisks.Add(newTimeRisk);
+                }
+                else
+                {
+                    var currentAccident = timeRisks.FirstOrDefault(x => x.Hour == accident.Hour);
+                    
+                    if(currentAccident != null)
+                    {
+                        currentAccident.Accidents++;
+                        currentAccident.Percentage = decimal.Round(currentAccident.Accidents / totalAccidents * 100, 2);
+                    }
+                }
+            }
+
+            return timeRisks;
         }
     }
 }

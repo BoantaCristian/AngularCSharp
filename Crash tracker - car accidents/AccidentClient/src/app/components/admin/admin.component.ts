@@ -8,6 +8,7 @@ import { AccidentDetailsDialogComponent } from '../accident-details-dialog/accid
 import { AddAccidentDialogComponent } from '../add-accident-dialog/add-accident-dialog.component';
 import { PeopleDialogComponent } from '../people-dialog/people-dialog.component';
 import { RegisterDialogComponent } from '../register-dialog/register-dialog.component';
+import {TooltipPosition} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-admin',
@@ -24,6 +25,8 @@ export class AdminComponent implements OnInit {
   people: object = []
   accidents: any = [];
   statistics: any = [];
+  position: TooltipPosition = 'above'
+  ascending: any = true;
 
   constructor( public dialog:MatDialog, private form: FormBuilder, private service: AccidentService, private toastr: ToastrService, private router: Router) { }
 
@@ -39,6 +42,10 @@ export class AdminComponent implements OnInit {
     this.getAllUsers()
     this.getAccidents()
     this.getStatistics()
+    setTimeout(() => {
+      this.sort()
+    }, 500);
+    
   }
 
   register(){
@@ -109,7 +116,22 @@ export class AdminComponent implements OnInit {
     setTimeout(() => {
           this.getAccidents()
           this.getStatistics()
-    }, 300))
+          setTimeout(() => {
+            this.sort()
+          }, 200);
+    }, 400))
+  }
+  openUpdateAccidentDialog(idAccident){
+    console.log(idAccident)
+    var updateAccidentDialog = this.dialog.open(AddAccidentDialogComponent, {data: idAccident})
+    updateAccidentDialog.afterClosed().subscribe( () => 
+    setTimeout(() => {
+          this.getAccidents()
+          this.getStatistics()
+          setTimeout(() => {
+            this.sort()
+          }, 200);
+    }, 400))
   }
   getAllUsers(){
     this.service.getAdmins().subscribe(
@@ -179,5 +201,157 @@ export class AdminComponent implements OnInit {
         this.statistics = res
       }
     )
+  }
+  compareHoursAscending( a, b ) {
+    if ( a.hour < b.hour ){
+      return -1;
+    }
+    if ( a.hour > b.hour ){
+      return 1;
+    }
+    return 0;
+  }
+  compareHoursDescending( a, b ) {
+    if ( a.hour > b.hour ){
+      return -1;
+    }
+    if ( a.hour < b.hour ){
+      return 1;
+    }
+    return 0;
+  }
+  compareAccidentsAscending( a, b ) {
+    if ( a.accidents < b.accidents ){
+      return -1;
+    }
+    if ( a.accidents > b.accidents ){
+      return 1;
+    }
+    return 0;
+  }
+  compareAccidentsDescending( a, b ) {
+    if ( a.accidents > b.accidents ){
+      return -1;
+    }
+    if ( a.accidents < b.accidents ){
+      return 1;
+    }
+    return 0;
+  }
+  comparePercentageAscending( a, b ) {
+    if ( a.percentage < b.percentage ){
+      return -1;
+    }
+    if ( a.percentage > b.percentage ){
+      return 1;
+    }
+    return 0;
+  }
+  comparePercentageDescending( a, b ) {
+    if ( a.percentage > b.percentage ){
+      return -1;
+    }
+    if ( a.percentage < b.percentage ){
+      return 1;
+    }
+    return 0;
+  }
+  compareLocationAscending( a, b ) {
+    if ( a.location < b.location ){
+      return -1;
+    }
+    if ( a.location > b.location ){
+      return 1;
+    }
+    return 0;
+  }
+  compareLocationDescending( a, b ) {
+    if ( a.location > b.location ){
+      return -1;
+    }
+    if ( a.location < b.location ){
+      return 1;
+    }
+    return 0;
+  }
+  sort(){
+    this.statistics.timeRiskList.sort( this.compareHoursAscending )
+    this.statistics.locationsRiskList.sort( this.compareLocationAscending )
+  }
+  sortByProperty(property){
+    switch(property){
+      case 'hour':{
+        if(this.ascending){
+          this.statistics.timeRiskList.sort( this.compareHoursDescending )
+          this.ascending = false
+
+        }
+        else{
+          this.statistics.timeRiskList.sort( this.compareHoursAscending )
+          this.ascending = true
+        }
+        break;
+      }
+      case 'accidents':{
+        if(this.ascending){
+          this.statistics.timeRiskList.sort( this.compareAccidentsAscending )
+          this.ascending = false
+
+        }
+        else{
+          this.statistics.timeRiskList.sort( this.compareAccidentsDescending )
+          this.ascending = true
+        }
+        break;
+      }
+      case 'percentage':{
+        if(this.ascending){
+          this.statistics.timeRiskList.sort( this.comparePercentageAscending )
+          this.ascending = false
+
+        }
+        else{
+          this.statistics.timeRiskList.sort( this.comparePercentageDescending )
+          this.ascending = true
+        }
+        break;
+      }
+      case 'location':{
+        if(this.ascending){
+          this.statistics.locationsRiskList.sort( this.compareLocationDescending )
+          this.ascending = false
+
+        }
+        else{
+          this.statistics.locationsRiskList.sort( this.compareLocationAscending )
+          this.ascending = true
+        }
+        break;
+      }
+      case 'locationAccidents':{
+        if(this.ascending){
+          this.statistics.locationsRiskList.sort( this.compareAccidentsAscending )
+          this.ascending = false
+
+        }
+        else{
+          this.statistics.locationsRiskList.sort( this.compareAccidentsDescending )
+          this.ascending = true
+        }
+        break;
+      }
+      case 'locationPercentage':{
+        if(this.ascending){
+          this.statistics.locationsRiskList.sort( this.comparePercentageAscending )
+          this.ascending = false
+
+        }
+        else{
+          this.statistics.locationsRiskList.sort( this.comparePercentageDescending )
+          this.ascending = true
+        }
+        break;
+      }
+    }
   }
 }

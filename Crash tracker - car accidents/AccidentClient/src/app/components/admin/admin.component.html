@@ -93,7 +93,7 @@
                 <div class="flexContent">Agent</div>
                 <div class="flexContent">Guilty</div>
                 <div class="flexContent">Innocent</div>
-                <div class="flexContent">Action</div>
+                <div class="flexContent" style="text-align: center; position: relative; left: -20px;">Actions</div>
             </div>
             <div class="flexContainer element" *ngFor="let accident of accidents">
                 <div class="flexContent" *ngIf="accident.minute != 0" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.date | date}} at {{accident.hour}}:{{accident.minute}} </div>
@@ -102,7 +102,10 @@
                 <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.userName}} </div>
                 <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.guiltyPeopleName}} </div>
                 <div class="flexContent" (click)="openAccidentDetailsDialog(accident.id)"> {{accident.innocentPeopleName}} </div>
-                <div class="flexContent"> <button mat-raised-button color="warn" class="delete" (click)="deleteAccident(accident.id)"> Delete </button> </div>
+                <div class="flexContent">
+                    <button mat-raised-button color="primary" class="update" (click)="openUpdateAccidentDialog(accident.id)"> Update </button> 
+                    <button mat-raised-button color="warn" class="delete" (click)="deleteAccident(accident.id)"> Delete </button> 
+                </div>
             </div>
         </div>
     </mat-card><br><br>
@@ -131,21 +134,38 @@
             <div class="flexContent"> <b> Men: </b> {{statistics.menProbability}}% </div>
             <div class="flexContent">  </div>
         </div><br>
-        <h6> <b> Location risks </b></h6>
+        <h6> <b matTooltip="Low under 10%; Medium 10% - 25%; High 25% - 50%; Dangerous over 50%"> Location risks </b></h6>
         <div class="flexContainer">
-            <div class="flexContent"> <b> Location </b> </div>
-            <div class="flexContent"> <b> Number of Accidents </b> </div>
-            <div class="flexContent"> <b> Percentage </b> </div>
-            <div class="flexContent"> <b> Zone Risk </b> </div>
+            <div class="flexContent"> <b matTooltip="Sort by Location" [matTooltipPosition]="position" (click)="sortByProperty('location')"> Location </b> </div>
+            <div class="flexContent"> <b matTooltip="Sort by nuber of accidents" [matTooltipPosition]="position" (click)="sortByProperty('locationAccidents')"> Number of Accidents </b> </div>
+            <div class="flexContent"> <b matTooltip="Sort by percentage" [matTooltipPosition]="position" (click)="sortByProperty('locationPercentage')"> Percentage </b> </div>
+            <div class="flexContent"> <b matTooltip="Sort by risk" [matTooltipPosition]="position" (click)="sortByProperty('locationPercentage')"> Zone Risk </b> </div>
         </div><br>
         <div class="flexContainer element" *ngFor="let zone of statistics.locationsRiskList">
             <div class="flexContent"> {{zone.location}} </div>
             <div class="flexContent"> {{zone.accidents}} </div>
-            <div class="flexContent"> {{zone.percentage}} </div>
+            <div class="flexContent"> {{zone.percentage}}% </div>
             <div class="flexContent" *ngIf="zone.percentage <= 10"> Low </div>
-            <div class="flexContent" *ngIf="zone.percentage > 10 && zone.percentage <= 25"> Medium </div>
-            <div class="flexContent" *ngIf="zone.percentage > 25 && zone.percentage <= 50"> High </div>
-            <div class="flexContent" *ngIf="zone.percentage > 50"> Dangerous </div>
+            <div class="flexContent" *ngIf="zone.percentage > 10 && zone.percentage < 25"> Medium </div>
+            <div class="flexContent" *ngIf="zone.percentage >= 25 && zone.percentage < 50"> High </div>
+            <div class="flexContent" *ngIf="zone.percentage >= 50"> Dangerous </div>
+        </div><br>
+
+        <h6> <b matTooltip="Low under 10%; Medium 10% - 25%; High 25% - 50%; Dangerous over 50%"> Time risks </b></h6>
+        <div class="flexContainer">
+            <div class="flexContent"> <b matTooltip="Sort by hour" [matTooltipPosition]="position" (click)="sortByProperty('hour')"> Hour </b> </div>
+            <div class="flexContent"> <b matTooltip="Sort by number of accidents" [matTooltipPosition]="position" (click)="sortByProperty('accidents')"> Number of Accidents </b> </div>
+            <div class="flexContent"> <b matTooltip="Sort by percentage" [matTooltipPosition]="position" (click)="sortByProperty('percentage')"> Percentage </b> </div>
+            <div class="flexContent"> <b matTooltip="Sort by risk" [matTooltipPosition]="position" (click)="sortByProperty('percentage')"> Hour Risk </b> </div>
+        </div><br>
+        <div class="flexContainer element" *ngFor="let time of statistics.timeRiskList">
+            <div class="flexContent"> {{time.hour}} </div>
+            <div class="flexContent"> {{time.accidents}} </div>
+            <div class="flexContent"> {{time.percentage}}% </div>
+            <div class="flexContent" *ngIf="time.percentage <= 10"> Low </div>
+            <div class="flexContent" *ngIf="time.percentage > 10 && time.percentage < 25"> Medium </div>
+            <div class="flexContent" *ngIf="time.percentage >= 25 && time.percentage < 50"> High </div>
+            <div class="flexContent" *ngIf="time.percentage >= 50"> Dangerous </div>
         </div><br>
     </mat-card><br>
 </div>
