@@ -1,0 +1,18 @@
+<h2 mat-dialog-title class="title">Login</h2>
+<mat-dialog-content>
+    <form [formGroup]="loginForm" autocomplete="off" class="col-md-8 offset-2">
+        <mat-form-field>
+            <input type="text" matInput formControlName="UserName" placeholder="Username">
+            <label class="text-danger" *ngIf="loginForm.get('UserName').touched && loginForm.get('UserName').errors?.required">Mandatory</label>
+        </mat-form-field>
+        <mat-form-field>
+            <input type="text" matInput formControlName="Password" placeholder="Password">
+            <label class="text-danger" *ngIf="loginForm.get('Password').touched && loginForm.get('Password').errors?.required">Mandatory</label>
+            <label class="text-danger2" *ngIf="loginForm.get('Password').touched && loginForm.get('Password').errors?.minlenght">Minimum 4 characters</label>
+        </mat-form-field>
+    </form><br>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button (click)="login()"  mat-dialog-close mat-dialog-close="true" [disabled]="!loginForm.valid"> Login </button><br><br>
+</mat-dialog-actions>
+        

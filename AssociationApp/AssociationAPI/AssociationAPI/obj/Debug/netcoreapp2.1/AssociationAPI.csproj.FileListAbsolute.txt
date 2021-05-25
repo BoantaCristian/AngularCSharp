@@ -1,0 +1,16 @@
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\bin\Debug\netcoreapp2.1\appsettings.Development.json
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\bin\Debug\netcoreapp2.1\appsettings.json
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\bin\Debug\netcoreapp2.1\Properties\launchSettings.json
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\bin\Debug\netcoreapp2.1\AssociationAPI.deps.json
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\bin\Debug\netcoreapp2.1\AssociationAPI.runtimeconfig.json
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\bin\Debug\netcoreapp2.1\AssociationAPI.runtimeconfig.dev.json
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\bin\Debug\netcoreapp2.1\AssociationAPI.dll
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\obj\Debug\netcoreapp2.1\AssociationAPI.csprojAssemblyReference.cache
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\obj\Debug\netcoreapp2.1\AssociationAPI.RazorAssemblyInfo.cache
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\obj\Debug\netcoreapp2.1\AssociationAPI.RazorAssemblyInfo.cs
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\obj\Debug\netcoreapp2.1\AssociationAPI.AssemblyInfoInputs.cache
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\obj\Debug\netcoreapp2.1\AssociationAPI.AssemblyInfo.cs
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\obj\Debug\netcoreapp2.1\AssociationAPI.RazorTargetAssemblyInfo.cache
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\bin\Debug\netcoreapp2.1\AssociationAPI.pdb
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\obj\Debug\netcoreapp2.1\AssociationAPI.dll
+D:\AngularCSharp\AssociationApp\AssociationAPI\AssociationAPI\obj\Debug\netcoreapp2.1\AssociationAPI.pdb

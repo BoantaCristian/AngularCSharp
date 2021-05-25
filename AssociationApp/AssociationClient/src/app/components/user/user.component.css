@@ -1,0 +1,19 @@
+mat-card{
+    margin: 0 auto;
+    position: relative;
+    top: 350px;
+    box-shadow: none !important;
+}
+.flexContainer{
+    display: flex
+}
+.flexContent{
+    flex: 1;
+}
+.dialogLink{
+    font-size: 50px;
+    text-align: center;
+}
+.dialogLink:hover{
+    cursor: pointer;
+}

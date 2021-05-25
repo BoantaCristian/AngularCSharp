@@ -1,0 +1,81 @@
+<h2 mat-dialog-title *ngIf="role == 'Client'" class="title">Register</h2>
+<h2 mat-dialog-title *ngIf="role == 'Admin'" class="title">Add user</h2>
+<h2 mat-dialog-title *ngIf="role != 'Admin' && role != 'Client'" class="title">Add Client</h2>
+<mat-dialog-content>
+    <form [formGroup]="registerForm" autocomplete="off" class="col-md-10 offset-1">
+        <div class="flexContainer">
+            <mat-form-field>
+                <input type="text" matInput formControlName="UserName" placeholder="Username">
+                <label class="text-danger" *ngIf="registerForm.get('UserName').touched && registerForm.get('UserName').errors?.required">Mandatory</label>
+            </mat-form-field>
+            <mat-form-field>
+                <input type="text" matInput formControlName="Email" placeholder="Email">
+                <label class="text-danger" *ngIf="registerForm.get('Email').touched && registerForm.get('Email').errors?.email">Incorrect email</label>
+            </mat-form-field><br>
+        </div>
+        <div class="flexContainer">
+            <mat-form-field>
+                <input type="text" matInput formControlName="CNP" placeholder="CNP">
+                <label class="text-danger" *ngIf="registerForm.get('CNP').touched && registerForm.get('CNP').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('CNP').touched && registerForm.get('CNP').errors?.minlength">Minimum 10 chars</label>
+            </mat-form-field>
+            <mat-form-field>
+                <input type="text" matInput formControlName="Telephone" placeholder="Telephone">
+            </mat-form-field><br>
+        </div>
+        <mat-form-field style="max-width: 96%;">
+            <input type="text" matInput formControlName="Address" placeholder="Address">
+        </mat-form-field><br>
+        <div class="flexContainer">
+            <mat-form-field *ngIf="role == 'Admin'">
+                <mat-label>Select Role</mat-label>
+                <mat-select formControlName="Role">
+                  <mat-option *ngFor="let role of roles" [value]="role" (click)="selectRole(role)">
+                    {{role}}
+                  </mat-option>
+                </mat-select>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+            </mat-form-field>
+            <mat-form-field *ngIf="roleSelectedByAdmin == 'Representative'">
+                <mat-label>Select Association</mat-label>
+                <mat-select formControlName="AssociationId">
+                  <mat-option *ngFor="let association of associations" [value]="association.id">
+                    {{association.description}}
+                  </mat-option>
+                </mat-select>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+            </mat-form-field>
+            <mat-form-field *ngIf="role == 'Client' || roleSelectedByAdmin == 'Client'">
+                <mat-label>Select Representant</mat-label>
+                <mat-select formControlName="RepresentativeId">
+                  <mat-option *ngFor="let representative of representatives" [value]="representative.id">
+                    {{representative.userName}}
+                  </mat-option>
+                </mat-select>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+            </mat-form-field>
+        </div>
+        <div class="flexContainer">
+            <mat-form-field>
+                <input type="text" matInput formControlName="Password" placeholder="Password" (input)="matchPasswords()">
+                <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.minlength">Minimum 4 chars</label>
+            </mat-form-field>
+            <mat-form-field>
+                <input type="text" matInput formControlName="ConfirmPassword" placeholder="Confirm password" (input)="matchPasswords()">
+                <label class="text-danger" *ngIf="registerForm.get('ConfirmPassword').touched && registerForm.get('ConfirmPassword').errors?.required">Mandatory</label>
+                <label class="text-danger2" *ngIf="registerForm.get('ConfirmPassword').touched && mismatch">Passwords mismatch</label>
+            </mat-form-field><br><br><br><br>
+        </div><br>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button (click)="register()"  mat-dialog-close mat-dialog-close="true" [disabled]="!registerForm.valid || mismatch || 
+                                                                                                        (role == 'Admin' && roleSelectedByAdmin == '') || 
+                                                                                                        (role == 'Admin' && roleSelectedByAdmin == 'Representative' && registerForm.value.AssociationId == '') ||
+                                                                                                        (role == 'Admin' && roleSelectedByAdmin == 'Client' && registerForm.value.RepresentativeId == '') ||
+                                                                                                        (role == 'Client' && registerForm.value.RepresentativeId == '') || 
+                                                                                                        (role != 'Admin' && role != 'Client' && registerForm.value.RepresentativeId == '')"> 
+        Register 
+    </button>
+</mat-dialog-actions><br>
