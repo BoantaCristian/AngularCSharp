@@ -16,7 +16,7 @@ import { UserGuard } from './guards/user.guard';
 const routes: Routes = [
   {path: '', component: UserComponent, canActivate: [AuthenticationGuard]},
   {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
-  {path: 'user', component: HomeComponent, canActivate: [UserGuard], children: [
+  {path: 'user', component: HomeComponent, canActivate: [], children: [
     {path: 'representative', component: RepresentativeComponent, canActivate: [RepresentativeGuard]},
     {path: 'client', component: ClientComponent, canActivate: [ClientGuard]},
   ]},

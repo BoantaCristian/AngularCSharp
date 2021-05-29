@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
+import { AssociationService } from 'src/app/services/association.service';
 import { RegisterDialogComponent } from '../dialogs/register-dialog/register-dialog.component';
 
 @Component({
@@ -8,16 +10,38 @@ import { RegisterDialogComponent } from '../dialogs/register-dialog/register-dia
   styleUrls: ['./representative.component.css']
 })
 export class RepresentativeComponent implements OnInit {
-  userDetails: (any) = {
+  representativeDetails: (any) = {
     id: ''
   };
 
-  constructor(public dialog:MatDialog) { }
+  constructor(private router: Router, public dialog: MatDialog, private service: AssociationService) { }
 
   ngOnInit() {
+    this.getUser()
+  }
+
+  getUser(){
+    if(localStorage.getItem('token') != null){
+      this.service.getUser().subscribe(
+        (res: any) => {
+          this.representativeDetails = res
+        },
+        err => {
+          localStorage.removeItem('token')
+          localStorage.removeItem('role')
+          this.router.navigateByUrl('')
+        }
+      )
+    }
+  }
+
+  logout(){
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    this.router.navigateByUrl('')
   }
   openRegisterDialog(){
-    var registerDialog = this.dialog.open(RegisterDialogComponent, {data: this.userDetails.id})
+    var registerDialog = this.dialog.open(RegisterDialogComponent, {data: this.representativeDetails.id})
     registerDialog.afterClosed().subscribe( () =>{
       setTimeout(() => { }, 300);
     })

@@ -16,6 +16,8 @@ export class LoginDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  hide = true;
+  
   loginForm = this.fb.group({
     UserName: ['', Validators.required],
     Password: ['', [Validators.required, Validators.minLength(4)]]

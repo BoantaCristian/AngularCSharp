@@ -17,7 +17,7 @@
             <mat-form-field>
                 <input type="text" matInput formControlName="CNP" placeholder="CNP">
                 <label class="text-danger" *ngIf="registerForm.get('CNP').touched && registerForm.get('CNP').errors?.required">Mandatory</label>
-                <label class="text-danger" *ngIf="registerForm.get('CNP').touched && registerForm.get('CNP').errors?.minlength">Minimum 10 chars</label>
+                <label class="text-danger" *ngIf="registerForm.get('CNP').touched && registerForm.get('CNP').errors?.minlength">Minimum 13 chars</label>
             </mat-form-field>
             <mat-form-field>
                 <input type="text" matInput formControlName="Telephone" placeholder="Telephone">
@@ -55,14 +55,52 @@
                 <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
             </mat-form-field>
         </div>
+        <div *ngIf="role == 'Client' || roleSelectedByAdmin == 'Client' || (role != 'Admin' && role != 'Client')">
+            <h6 class="title" style="margin-top: 5px;"> Select providers </h6>
+        </div>
+        <div class="flexContainer" *ngIf="role == 'Client' || roleSelectedByAdmin == 'Client' || (role != 'Admin' && role != 'Client')">
+            <mat-form-field style="max-width: 29%;">
+                <mat-label>Water</mat-label>
+                <mat-select formControlName="WaterProvider">
+                  <mat-option *ngFor="let provider of providers" [value]="provider.id" [disabled]="provider.coldWaterLiterPrice == 0">
+                          {{provider.name}}
+                  </mat-option>
+                </mat-select>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+            </mat-form-field>
+            <mat-form-field style="max-width: 29%;">
+                <mat-label>Electricity</mat-label>
+                <mat-select formControlName="ElectricityProvider">
+                  <mat-option *ngFor="let provider of providers" [value]="provider.id" [disabled]="provider.electricityPrice == 0">
+                    {{provider.name}}
+                  </mat-option>
+                </mat-select>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+            </mat-form-field>
+            <mat-form-field style="max-width: 29%;">
+                <mat-label>Gas</mat-label>
+                <mat-select formControlName="GasProvider">
+                  <mat-option *ngFor="let provider of providers" [value]="provider.id" [disabled]="provider.gasPrice == 0">
+                    {{provider.name}}
+                  </mat-option>
+                </mat-select>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+            </mat-form-field>
+        </div>
         <div class="flexContainer">
             <mat-form-field>
-                <input type="text" matInput formControlName="Password" placeholder="Password" (input)="matchPasswords()">
+                <input [type]="hide ? 'password' : 'text'" matInput formControlName="Password" placeholder="Password" (input)="matchPasswords()">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
                 <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.required">Mandatory</label>
                 <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.minlength">Minimum 4 chars</label>
             </mat-form-field>
             <mat-form-field>
-                <input type="text" matInput formControlName="ConfirmPassword" placeholder="Confirm password" (input)="matchPasswords()">
+                <input [type]="hide ? 'password' : 'text'" matInput formControlName="ConfirmPassword" placeholder="Confirm password" (input)="matchPasswords()">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
                 <label class="text-danger" *ngIf="registerForm.get('ConfirmPassword').touched && registerForm.get('ConfirmPassword').errors?.required">Mandatory</label>
                 <label class="text-danger2" *ngIf="registerForm.get('ConfirmPassword').touched && mismatch">Passwords mismatch</label>
             </mat-form-field><br><br><br><br>
@@ -74,7 +112,7 @@
                                                                                                         (role == 'Admin' && roleSelectedByAdmin == '') || 
                                                                                                         (role == 'Admin' && roleSelectedByAdmin == 'Representative' && registerForm.value.AssociationId == '') ||
                                                                                                         (role == 'Admin' && roleSelectedByAdmin == 'Client' && registerForm.value.RepresentativeId == '') ||
-                                                                                                        (role == 'Client' && registerForm.value.RepresentativeId == '') || 
+                                                                                                        (role == 'Client' && registerForm.value.RepresentativeId == '' && registerForm.value.WaterProvider == 0 && registerForm.value.GasProvider == 0 && registerForm.value.ElectricityProvider == 0) || 
                                                                                                         (role != 'Admin' && role != 'Client' && registerForm.value.RepresentativeId == '')"> 
         Register 
     </button>

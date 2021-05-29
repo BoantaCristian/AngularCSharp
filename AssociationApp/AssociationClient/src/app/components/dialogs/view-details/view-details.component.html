@@ -1,0 +1,281 @@
+<h2 mat-dialog-title *ngIf="data == 'users'" class="title">Users</h2>
+<h2 mat-dialog-title *ngIf="data == 'associations'" class="title">Associations</h2>
+<h2 mat-dialog-title *ngIf="data == 'providers'" class="title">Providers</h2>
+
+<mat-dialog-content>
+    <!-- view users -->
+    <div *ngIf="data == 'users'">
+        <mat-horizontal-stepper [linear]="isLinear">
+            <!-- admins -->
+            <mat-step label="Admins">
+                <mat-table [dataSource]="admins" matSort>
+                    <ng-container matColumnDef="userName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>UserName</mat-header-cell>
+                        <mat-cell *matCellDef="let admin"> {{admin.userName}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="email">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+                        <mat-cell *matCellDef="let admin"> 
+                            <div *ngIf="admin.email != ''"> {{admin.email}} </div>  
+                            <div *ngIf="admin.email == ''"> Not Provided </div>  
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="address">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Address</mat-header-cell>
+                        <mat-cell *matCellDef="let admin"> 
+                            <div *ngIf="admin.address != ''"> {{admin.address}} </div>  
+                            <div *ngIf="admin.address == ''"> Not Provided </div>  
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="telephone">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Contact</mat-header-cell>
+                        <mat-cell *matCellDef="let admin"> 
+                            <div *ngIf="admin.telephone != ''"> {{admin.telephone}} </div>  
+                            <div *ngIf="admin.telephone == ''"> Not Provided </div>  
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let actions"> 
+                            <button mat-raised-button color="warn" (click)="deleteUser(actions.userName)"> Delete </button>    
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayAdminColumns"></mat-header-row>
+                    <mat-row *matRowDef="let admin; columns: displayAdminColumns"></mat-row>
+                </mat-table>
+                <mat-form-field class="search">
+                    <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('admin')">
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+                </mat-paginator>
+            </mat-step>
+            <!-- representative -->
+            <mat-step label="Representatives">
+                <mat-table [dataSource]="representatives" matSort>
+                    <ng-container matColumnDef="userName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>UserName</mat-header-cell>
+                        <mat-cell *matCellDef="let representative"> {{representative.userName}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="email">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+                        <mat-cell *matCellDef="let representative"> 
+                            <div *ngIf="representative.email != ''"> {{representative.email}} </div>  
+                            <div *ngIf="representative.email == ''"> Not Provided </div>  
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="address">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Address</mat-header-cell>
+                        <mat-cell *matCellDef="let representative"> 
+                            <div *ngIf="representative.address != ''"> {{representative.address}} </div>  
+                            <div *ngIf="representative.address == ''"> Not Provided </div>  
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="telephone">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Contact</mat-header-cell>
+                        <mat-cell *matCellDef="let representative"> 
+                            <div *ngIf="representative.telephone != ''"> {{representative.telephone}} </div>  
+                            <div *ngIf="representative.telephone == ''"> Not Provided </div>  
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="association">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Association</mat-header-cell>
+                        <mat-cell *matCellDef="let representative"> {{representative.association}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="clients">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Clients</mat-header-cell>
+                        <mat-cell *matCellDef="let representative"> 
+                            <mat-form-field>
+                                <mat-label>Clients List</mat-label>
+                                <mat-select>
+                                <mat-option *ngFor="let client of representative.clients" [value]="client.userName">
+                                    {{client.userName}} 
+                                </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let actions"> 
+                            <button mat-raised-button color="warn" (click)="deleteUser(actions.userName)"> Delete </button>    
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayRepresentativeColumns"></mat-header-row>
+                    <mat-row *matRowDef="let representative; columns: displayRepresentativeColumns"></mat-row>
+                </mat-table>
+                <mat-form-field class="search">
+                    <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('representative')">
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+                </mat-paginator>
+            </mat-step>
+            <!-- clients -->
+            <mat-step label="Clients">
+                <mat-table [dataSource]="clients" matSort>
+                    <ng-container matColumnDef="userName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>UserName</mat-header-cell>
+                        <mat-cell *matCellDef="let client"> {{client.userName}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="email">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+                        <mat-cell *matCellDef="let client"> 
+                            <div *ngIf="client.email != ''"> {{client.email}} </div>  
+                            <div *ngIf="client.email == ''"> Not Provided </div>  
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="address">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Address</mat-header-cell>
+                        <mat-cell *matCellDef="let client"> 
+                            <div *ngIf="client.address != ''"> {{client.address}} </div>  
+                            <div *ngIf="client.address == ''"> Not Provided </div>  
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="telephone">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Contact</mat-header-cell>
+                        <mat-cell *matCellDef="let client"> 
+                            <div *ngIf="client.telephone != ''"> {{client.telephone}} </div>  
+                            <div *ngIf="client.telephone == ''"> Not Provided </div>  
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="representative">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Representative</mat-header-cell>
+                        <mat-cell *matCellDef="let client"> {{client.representative}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let actions"> 
+                            <button mat-raised-button color="warn" (click)="deleteUser(actions.userName)"> Delete </button>    
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayClientColumns"></mat-header-row>
+                    <mat-row *matRowDef="let client; columns: displayClientColumns"></mat-row>
+                </mat-table>
+                <mat-form-field class="search">
+                    <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('client')">
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+                </mat-paginator>
+            </mat-step>
+          </mat-horizontal-stepper>
+    </div>
+    <!-- view providers -->
+    <div *ngIf="data == 'providers'">
+        <mat-table [dataSource]="providers" matSort>
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell *matCellDef="let provider"> {{provider.name}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="location">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Location</mat-header-cell>
+                <mat-cell *matCellDef="let provider"> {{provider.location}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="program">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Program</mat-header-cell>
+                <mat-cell *matCellDef="let provider"> {{provider.program}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="coldWaterLiterPrice">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Cold Water (RON)</mat-header-cell>
+                <mat-cell *matCellDef="let provider"> 
+                    <div *ngIf="provider.coldWaterLiterPrice != 0">{{provider.coldWaterLiterPrice}}</div>  
+                    <div *ngIf="provider.coldWaterLiterPrice == 0"> Not Provided </div>  
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="hotWaterLiterPrice">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Hot Water (RON)</mat-header-cell>
+                <mat-cell *matCellDef="let provider"> 
+                    <div *ngIf="provider.hotWaterLiterPrice != 0">{{provider.hotWaterLiterPrice}}</div>  
+                    <div *ngIf="provider.hotWaterLiterPrice == 0"> Not Provided </div>  
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="electricityPrice">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Electricity (RON)</mat-header-cell>
+                <mat-cell *matCellDef="let provider"> 
+                    <div *ngIf="provider.electricityPrice != 0">{{provider.electricityPrice}}</div>  
+                    <div *ngIf="provider.electricityPrice == 0"> Not Provided </div>  
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="gasPrice">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Gas (RON)</mat-header-cell>
+                <mat-cell *matCellDef="let provider"> 
+                    <div *ngIf="provider.gasPrice != 0">{{provider.gasPrice}}</div>  
+                    <div *ngIf="provider.gasPrice == 0"> Not Provided </div>  
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let actions"> 
+                    <button mat-raised-button color="warn" (click)="deleteProvider(actions.id)"> Delete </button>    
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayProviderColumns"></mat-header-row>
+            <mat-row *matRowDef="let provider; columns: displayProviderColumns"></mat-row>
+        </mat-table>
+        <mat-form-field class="search">
+            <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('provider')">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+
+    <!-- view associations -->
+    <div *ngIf="data == 'associations'">
+        <mat-table [dataSource]="associations" matSort>
+            <ng-container matColumnDef="description">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell *matCellDef="let association"> {{association.description}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="location">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Location</mat-header-cell>
+                <mat-cell *matCellDef="let association"> {{association.location}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="program">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Program</mat-header-cell>
+                <mat-cell *matCellDef="let association"> {{association.program}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="workingCapital">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Working Capital (RON)</mat-header-cell>
+                <mat-cell *matCellDef="let association"> {{association.workingCapital}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="sanitation">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Sanitation (RON)</mat-header-cell>
+                <mat-cell *matCellDef="let association"> {{association.sanitation}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="dayPenalty">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Day Penalty</mat-header-cell>
+                <mat-cell *matCellDef="let association"> {{association.dayPenalty}}% </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let actions"> 
+                    <button mat-raised-button color="warn" (click)="deleteAssociaton(actions.id)"> Delete </button>    
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayAssociationColumns"></mat-header-row>
+            <mat-row *matRowDef="let association; columns: displayAssociationColumns"></mat-row>
+        </mat-table>
+        <mat-form-field class="search">
+            <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('association')">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button mat-dialog-close mat-dialog-close="true" class="buttonCenter"> Close </button><br><br>
+</mat-dialog-actions>

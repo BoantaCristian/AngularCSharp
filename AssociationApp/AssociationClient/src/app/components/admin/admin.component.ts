@@ -7,6 +7,7 @@ import { AssociationService } from 'src/app/services/association.service';
 import { AddAssociationComponent } from '../dialogs/add-association/add-association.component';
 import { AddProviderComponent } from '../dialogs/add-provider/add-provider.component';
 import { RegisterDialogComponent } from '../dialogs/register-dialog/register-dialog.component';
+import { ViewDetailsComponent } from '../dialogs/view-details/view-details.component';
 
 @Component({
   selector: 'app-admin',
@@ -17,10 +18,10 @@ export class AdminComponent implements OnInit {
   
   constructor(public dialog: MatDialog, private fb: FormBuilder, private router: Router, private service: AssociationService, private toastr: ToastrService) { }
   
-  adminDetails: any;
-  associations: any;
-  providers: any;
-  users: any;
+  adminDetails: any = { };
+  associations: any = { }
+  providers: any = { }
+  users: any = { }
 
   ngOnInit() {
     // localStorage.removeItem('token')
@@ -79,6 +80,11 @@ export class AdminComponent implements OnInit {
         this.providers = res
       }
     )
+  }
+
+  openViewDetailsDialog(option){
+    var registerDialog = this.dialog.open(ViewDetailsComponent, {width: '1300px', minWidth: '700px', data: option})
+    registerDialog.afterClosed().subscribe( () =>{ })
   }
 
   openRegisterDialog(){

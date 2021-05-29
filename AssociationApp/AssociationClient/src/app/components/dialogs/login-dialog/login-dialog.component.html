@@ -6,7 +6,10 @@
             <label class="text-danger" *ngIf="loginForm.get('UserName').touched && loginForm.get('UserName').errors?.required">Mandatory</label>
         </mat-form-field>
         <mat-form-field>
-            <input type="text" matInput formControlName="Password" placeholder="Password">
+            <input [type]="hide ? 'password' : 'text'" matInput formControlName="Password" placeholder="Password">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
             <label class="text-danger" *ngIf="loginForm.get('Password').touched && loginForm.get('Password').errors?.required">Mandatory</label>
             <label class="text-danger2" *ngIf="loginForm.get('Password').touched && loginForm.get('Password').errors?.minlenght">Minimum 4 characters</label>
         </mat-form-field>

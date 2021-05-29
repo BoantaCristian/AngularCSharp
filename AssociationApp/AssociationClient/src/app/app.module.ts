@@ -21,8 +21,9 @@ import { RegisterDialogComponent } from './components/dialogs/register-dialog/re
 import { LoginDialogComponent } from './components/dialogs/login-dialog/login-dialog.component';
 import { AddAssociationComponent } from './components/dialogs/add-association/add-association.component';
 
-import { MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatButtonModule, MatSelectModule, MatStepperModule } from "@angular/material";
+import { MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatButtonModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule } from "@angular/material";
 import { AddProviderComponent } from './components/dialogs/add-provider/add-provider.component';
+import { ViewDetailsComponent } from './components/dialogs/view-details/view-details.component';
 
 @NgModule({
   declarations: [
@@ -35,9 +36,10 @@ import { AddProviderComponent } from './components/dialogs/add-provider/add-prov
     RegisterDialogComponent,
     LoginDialogComponent,
     AddAssociationComponent,
-    AddProviderComponent
+    AddProviderComponent,
+    ViewDetailsComponent
   ],
-  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent],
+  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent, ViewDetailsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -45,8 +47,9 @@ import { AddProviderComponent } from './components/dialogs/add-provider/add-prov
     ToastrModule.forRoot(),
     HttpClientModule,
     FormsModule, ReactiveFormsModule,
-    MatButtonModule, MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatSelectModule, MatStepperModule
+    MatButtonModule, MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule
   ],
+  exports: [MatPaginatorModule, MatTableModule, MatSortModule],
   providers: [AssociationService],
   bootstrap: [AppComponent]
 })

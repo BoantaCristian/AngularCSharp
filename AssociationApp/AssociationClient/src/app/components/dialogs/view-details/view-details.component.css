@@ -1,0 +1,26 @@
+.buttonCenter{
+    margin: 0px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.title{
+    text-align: center;
+}
+.cell{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+mat-header-cell, mat-cell{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.search{
+    position: absolute;
+    margin-left: 25px;
+}
+::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding: 0.4em 0px !important;}
+
+::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    transform: translateY(-1.1em) scale(.5);
+}

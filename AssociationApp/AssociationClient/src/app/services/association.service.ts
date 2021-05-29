@@ -26,6 +26,10 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.get(`${this.URL}/User/GetUsers`, {headers: token})
   }
+  deleteUser(userName){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.delete(`${this.URL}/User/DeleteUser/${userName}`, {headers: token})
+  }
   //providers
   getProviders(){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
@@ -35,6 +39,10 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.post(`${this.URL}/Association/AddProvider`, body, {headers: token})
   }
+  deleteProvider(idProvider){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.delete(`${this.URL}/Association/DeleteProvider/${idProvider}`, {headers: token})
+  }
   //association
   getAssociations(){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
@@ -43,5 +51,9 @@ export class AssociationService {
   addAssociation(body){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.post(`${this.URL}/Association/AddAssociation`, body, {headers: token})
+  }
+  deleteAssociation(idAssociation){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.delete(`${this.URL}/Association/DeleteAssociation/${idAssociation}`, {headers: token})
   }
 }
