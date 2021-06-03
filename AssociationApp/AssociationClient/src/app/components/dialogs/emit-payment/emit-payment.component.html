@@ -1,0 +1,63 @@
+<h2 mat-dialog-title class="title">Emit payment</h2>
+<mat-dialog-content>
+    <mat-horizontal-stepper [linear]="isLinear" #stepper>
+        
+        <mat-step [stepControl]="paymentDetailsForm">
+            <form [formGroup]="paymentDetailsForm">
+                <ng-template matStepLabel>Payment details</ng-template><br><br><br><br><br><br>
+                <div class="col-md-4 offset-4">
+                    <img [src]="imagePath" style="width: 300px; height: 300px;" class="photo"><br><br><br><br><br><br><br><br>
+                    <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)" formControlName="UtilitiesPaper" placeholder="Add Utilities Paper"><br><br>
+                </div>
+                <mat-form-field class="col-md-6 offset-3">
+                    <mat-label>Choose a date</mat-label>
+                    <input matInput formControlName="Date" [value]="paymentDetailsForm.value.Date" [matDatepicker]="picker" placeholder="New date" (dateChange)="checkDate()">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <label class="text-danger" *ngIf="paymentDetailsForm.get('Date').touched && incorrectDate">Incorrect date</label>
+                </mat-form-field>
+                <div>
+                  <button mat-button matStepperNext class="centerButton" [disabled]="!paymentDetailsForm.valid ||    incorrectDate">Next</button><br>
+                </div>
+              </form>
+        </mat-step>
+        <mat-step [stepControl]="utilitiesValuesForm">
+            <form [formGroup]="utilitiesValuesForm">
+                <ng-template matStepLabel>Utilities values</ng-template>
+                <div style="width: 90%; margin: auto;">
+                    <mat-form-field class="col-md-5">
+                        <input type="number" matInput formControlName="HotWaterKitchenQuantity" placeholder="Hot Water Kitchen">
+                        <label class="text-danger" *ngIf="utilitiesValuesForm.get('HotWaterKitchenQuantity').touched && utilitiesValuesForm.get('HotWaterKitchenQuantity').errors?.required">Required</label>
+                    </mat-form-field>
+                    <mat-form-field class="col-md-5 offset-2">
+                        <input type="number" matInput formControlName="ColdWaterKitchenQuantity" placeholder="Cold Water Kitchen">
+                        <label class="text-danger" *ngIf="utilitiesValuesForm.get('ColdWaterKitchenQuantity').touched && utilitiesValuesForm.get('ColdWaterKitchenQuantity').errors?.required">Required</label>
+                    </mat-form-field>
+                    <mat-form-field class="col-md-5">
+                        <input type="number" matInput formControlName="HotWaterBathroomQuantity" placeholder="Hot Water Bathroom">
+                        <label class="text-danger" *ngIf="utilitiesValuesForm.get('HotWaterBathroomQuantity').touched && utilitiesValuesForm.get('HotWaterBathroomQuantity').errors?.required">Required</label>
+                    </mat-form-field>
+                    <mat-form-field class="col-md-5 offset-2">
+                        <input type="number" matInput formControlName="ColdWaterBathroomQuantity" placeholder="Cold Water Bathroom">
+                        <label class="text-danger" *ngIf="utilitiesValuesForm.get('ColdWaterBathroomQuantity').touched && utilitiesValuesForm.get('ColdWaterBathroomQuantity').errors?.required">Required</label>
+                    </mat-form-field>
+                    <mat-form-field class="col-md-5">
+                        <input type="number" matInput formControlName="ElectricityQuantity" placeholder="Electricity">
+                        <label class="text-danger" *ngIf="utilitiesValuesForm.get('ElectricityQuantity').touched && utilitiesValuesForm.get('ElectricityQuantity').errors?.required">Required</label>
+                    </mat-form-field>
+                    <mat-form-field class="col-md-5 offset-2">
+                        <input type="number" matInput formControlName="GasQuantity" placeholder="Gas">
+                        <label class="text-danger" *ngIf="utilitiesValuesForm.get('GasQuantity').touched && utilitiesValuesForm.get('GasQuantity').errors?.required">Required</label>
+                    </mat-form-field><br><br>
+                </div>
+                <div class="centerZone">
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button (click)="stepper.reset()">Reset</button>
+                    <button mat-button (click)="emitPayment()" mat-dialog-close mat-dialog-close="true" [disabled]="!paymentDetailsForm.valid || !utilitiesValuesForm.valid || incorrectDate">Finish</button>
+                </div><br>
+              </form>
+        </mat-step>
+    </mat-horizontal-stepper>
+    
+</mat-dialog-content>
+    

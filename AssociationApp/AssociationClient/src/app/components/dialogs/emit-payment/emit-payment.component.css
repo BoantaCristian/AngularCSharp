@@ -1,0 +1,46 @@
+mat-dialog-content{
+    width: 600px !important;
+}
+.text-danger{
+    position: absolute;
+    left: 0;
+    top: 40px;
+}
+.text-danger2{
+    color: rgb(212, 49, 49);
+    position: absolute;
+    left: 0;
+    top: 60px;
+}
+button{
+    margin: 5px;
+}
+.centerButton{
+    margin: 0px;
+    position: absolute;
+    left: 50%;
+    margin-top: 30px;
+    transform: translate(-50%, -50%);
+}
+.centerZone{
+    margin: 0px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 330px;
+  }
+.title{
+    text-align: center;
+}
+.flexContainer{
+    display: flex;
+}
+.flexContent{
+    flex: 1;
+}
+.photo{
+    margin: 0px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }

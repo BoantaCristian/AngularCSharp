@@ -6,7 +6,7 @@
         <div class="flexContainer">
             <mat-form-field>
                 <input type="text" matInput formControlName="UserName" placeholder="Username">
-                <label class="text-danger" *ngIf="registerForm.get('UserName').touched && registerForm.get('UserName').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('UserName').touched && registerForm.get('UserName').errors?.required">Required</label>
             </mat-form-field>
             <mat-form-field>
                 <input type="text" matInput formControlName="Email" placeholder="Email">
@@ -16,7 +16,7 @@
         <div class="flexContainer">
             <mat-form-field>
                 <input type="text" matInput formControlName="CNP" placeholder="CNP">
-                <label class="text-danger" *ngIf="registerForm.get('CNP').touched && registerForm.get('CNP').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('CNP').touched && registerForm.get('CNP').errors?.required">Required</label>
                 <label class="text-danger" *ngIf="registerForm.get('CNP').touched && registerForm.get('CNP').errors?.minlength">Minimum 13 chars</label>
             </mat-form-field>
             <mat-form-field>
@@ -34,7 +34,7 @@
                     {{role}}
                   </mat-option>
                 </mat-select>
-                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Required</label>
             </mat-form-field>
             <mat-form-field *ngIf="roleSelectedByAdmin == 'Representative'">
                 <mat-label>Select Association</mat-label>
@@ -43,7 +43,7 @@
                     {{association.description}}
                   </mat-option>
                 </mat-select>
-                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Required</label>
             </mat-form-field>
             <mat-form-field *ngIf="role == 'Client' || roleSelectedByAdmin == 'Client'">
                 <mat-label>Select Representant</mat-label>
@@ -52,7 +52,7 @@
                     {{representative.userName}}
                   </mat-option>
                 </mat-select>
-                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Required</label>
             </mat-form-field>
         </div>
         <div *ngIf="role == 'Client' || roleSelectedByAdmin == 'Client' || (role != 'Admin' && role != 'Client')">
@@ -66,7 +66,7 @@
                           {{provider.name}}
                   </mat-option>
                 </mat-select>
-                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Required</label>
             </mat-form-field>
             <mat-form-field style="max-width: 29%;">
                 <mat-label>Electricity</mat-label>
@@ -75,7 +75,7 @@
                     {{provider.name}}
                   </mat-option>
                 </mat-select>
-                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Required</label>
             </mat-form-field>
             <mat-form-field style="max-width: 29%;">
                 <mat-label>Gas</mat-label>
@@ -84,7 +84,7 @@
                     {{provider.name}}
                   </mat-option>
                 </mat-select>
-                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('Role').touched && registerForm.get('Role').errors?.required">Required</label>
             </mat-form-field>
         </div>
         <div class="flexContainer">
@@ -93,7 +93,7 @@
                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
-                <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.required">Required</label>
                 <label class="text-danger" *ngIf="registerForm.get('Password').touched && registerForm.get('Password').errors?.minlength">Minimum 4 chars</label>
             </mat-form-field>
             <mat-form-field>
@@ -101,7 +101,7 @@
                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
-                <label class="text-danger" *ngIf="registerForm.get('ConfirmPassword').touched && registerForm.get('ConfirmPassword').errors?.required">Mandatory</label>
+                <label class="text-danger" *ngIf="registerForm.get('ConfirmPassword').touched && registerForm.get('ConfirmPassword').errors?.required">Required</label>
                 <label class="text-danger2" *ngIf="registerForm.get('ConfirmPassword').touched && mismatch">Passwords mismatch</label>
             </mat-form-field><br><br><br><br>
         </div><br>

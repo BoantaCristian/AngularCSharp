@@ -14,23 +14,43 @@ export class ViewDetailsComponent implements OnInit {
   clients: any = [];
   providers: any = [];
   associations: any = [];
+  payments: any = []
+  archives: any = []
+  receipts: any = []
   displayProviderColumns: string[] = ["name", "location", "program", "coldWaterLiterPrice", "hotWaterLiterPrice", "electricityPrice", "gasPrice", "actions"]
   displayAssociationColumns: string[] = ["description", "location", "program", "workingCapital", "sanitation", "dayPenalty", "actions"]
   displayAdminColumns: string[] = ["userName", "email", "address", "telephone", "actions"]
   displayRepresentativeColumns: string[] = ["userName", "email", "address", "telephone", "association", "clients", "actions"]
   displayClientColumns: string[] = ["userName", "email", "address", "telephone", "representative", "actions"]
+  displayPaymentColumns: string[] = ["userName", "totalDueWithPenalties", "penalties", "daysDelay", "workingCapitalStatus", "sanitationStatus", "paymentStatus", "actions"]
+  displayArchiveColumns: string[] = ["userName", "association", "date", "bathroom", "kitchen", "electricity", "gas", "totalPayment", "actions"]
+  
+  displayReceiptColumns: string[] = ["userName", "email", "address", "telephone", "representative", "actions"]
+  
   isLinear: boolean = false
   searchKey: string
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private service: AssociationService, private toastr: ToastrService) { }
   
   @ViewChild(MatSort, {static: false}) sort: MatSort //error solved stack overflow++
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator //error solved stack overflow++
-  
+
+  @ViewChild('providersPaginator', {read: MatPaginator, static: false}) providersPaginator: MatPaginator;  
+  @ViewChild('associationsPaginator', {read: MatPaginator, static: false}) associationsPaginator: MatPaginator;  
+  @ViewChild('adminsPaginator', {read: MatPaginator, static: false}) adminsPaginator: MatPaginator;  
+  @ViewChild('representativesPaginator', {read: MatPaginator, static: false}) representativesPaginator: MatPaginator;  
+  @ViewChild('clientsPaginator', {read: MatPaginator, static: false}) clientsPaginator: MatPaginator;  
+  @ViewChild('paymentsPaginator', {read: MatPaginator, static: false}) paymentsPaginator: MatPaginator;  
+  @ViewChild('archivesPaginator', {read: MatPaginator, static: false}) archivesPaginator: MatPaginator;  
+  @ViewChild('receiptsPaginator', {read: MatPaginator, static: false}) receiptsPaginator: MatPaginator;  
+
+
   ngOnInit() {
     this.getUsers()
     this.getAssociations()
     this.getProviders()
+    this.getPayments()
+    this.getArchives()
+    //this.getReceipts()
     setTimeout(()=> this.sortArrays(), 200)
     
   }
@@ -41,10 +61,6 @@ export class ViewDetailsComponent implements OnInit {
         this.admins = new MatTableDataSource(res.admins)
         this.representatives = new MatTableDataSource(res.representatives)
         this.clients = new MatTableDataSource(res.clients)
-
-        console.log("admins", res.admins)
-        console.log("rep", res.representatives)
-        console.log("clients", res.clients)
       }
     )
   }
@@ -60,6 +76,31 @@ export class ViewDetailsComponent implements OnInit {
     this.service.getAssociations().subscribe(
       (res: any) => {
         this.associations = new MatTableDataSource(res)
+      }
+    )
+  }
+  
+  getPayments(){
+    this.service.getPayment().subscribe(
+      (res: any) => {
+        this.payments = new MatTableDataSource(res)
+      }
+    )
+  }
+  
+  getArchives(){
+    this.service.getArchive().subscribe(
+      (res: any) => {
+        this.archives = new MatTableDataSource(res)
+      }
+    )
+  }
+  
+  getReceipts(){
+    this.service.getReceipts().subscribe(
+      (res: any) => {
+        this.receipts = new MatTableDataSource(res)
+        console.log("receipts: ", res)
       }
     )
   }
@@ -111,12 +152,18 @@ export class ViewDetailsComponent implements OnInit {
     this.admins.sort = this.sort
     this.representatives.sort = this.sort
     this.clients.sort = this.sort
+    this.payments.sort = this.sort
+    this.archives.sort = this.sort
+    this.receipts.sort = this.sort
 
-    this.providers.paginator = this.paginator
-    this.associations.paginator = this.paginator
-    this.admins.paginator = this.paginator
-    this.representatives.paginator = this.paginator
-    this.clients.paginator = this.paginator
+    this.providers.paginator = this.providersPaginator
+    this.associations.paginator = this.associationsPaginator
+    this.admins.paginator = this.adminsPaginator
+    this.representatives.paginator = this.representativesPaginator
+    this.clients.paginator = this.clientsPaginator
+    this.payments.paginator = this.paymentsPaginator
+    this.archives.paginator = this.archivesPaginator
+    this.receipts.paginator = this.receiptsPaginator
   }
 
   onSearchClear(){
@@ -141,12 +188,20 @@ export class ViewDetailsComponent implements OnInit {
       case 'provider':
         this.providers.filter = this.searchKey.trim().toLocaleLowerCase()
         break
+      case 'payment':
+        this.payments.filter = this.searchKey.trim().toLocaleLowerCase()
+        break
+      case 'archive':
+        this.archives.filter = this.searchKey.trim().toLocaleLowerCase()
+        break
       case '':
         this.admins.filter = this.searchKey.trim().toLocaleLowerCase()
         this.representatives.filter = this.searchKey.trim().toLocaleLowerCase()
         this.clients.filter = this.searchKey.trim().toLocaleLowerCase()
         this.associations.filter = this.searchKey.trim().toLocaleLowerCase()
         this.providers.filter = this.searchKey.trim().toLocaleLowerCase()
+        this.payments.filter = this.searchKey.trim().toLocaleLowerCase()
+        this.archives.filter = this.searchKey.trim().toLocaleLowerCase()
         break
       default:
         break

@@ -56,4 +56,23 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.delete(`${this.URL}/Association/DeleteAssociation/${idAssociation}`, {headers: token})
   }
+  //payments
+  getPayment(){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.get(`${this.URL}/Association/GetPayments`, {headers: token})
+  }
+  emitPayment(body){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.post(`${this.URL}/Association/EmitPayment`, body, {headers: token})
+  }
+  //archives
+  getArchive(){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.get(`${this.URL}/Association/GetArchives`, {headers: token})
+  }
+  //receipts
+  getReceipts(){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.get(`${this.URL}/Association/GetReceipts`, {headers: token})
+  }
 }

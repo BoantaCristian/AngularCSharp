@@ -4,14 +4,16 @@ using AssociationAPI.Models.ApplicationContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AssociationAPI.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210529160117_6")]
+    partial class _6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +37,6 @@ namespace AssociationAPI.Migrations
 
                     b.Property<double>("ColdWaterKitchenQuantity");
 
-                    b.Property<DateTime>("Date");
-
                     b.Property<double>("ElectricityDue");
 
                     b.Property<double>("ElectricityQuantity");
@@ -52,6 +52,8 @@ namespace AssociationAPI.Migrations
                     b.Property<double>("HotWaterKitchenDue");
 
                     b.Property<double>("HotWaterKitchenQuantity");
+
+                    b.Property<int>("Month");
 
                     b.Property<double>("TotalPayment");
 
@@ -120,9 +122,9 @@ namespace AssociationAPI.Migrations
 
                     b.Property<string>("ClientId");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<int>("Month");
 
-                    b.Property<double>("DaysDelay");
+                    b.Property<double>("MonthsDelay");
 
                     b.Property<bool>("PaymentStatus");
 

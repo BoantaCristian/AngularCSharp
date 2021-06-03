@@ -11,7 +11,7 @@ namespace AssociationAPI.Models.DbModels
         [Key]
         public int Id { get; set; }
         public virtual User Client { get; set; }
-        public int Month { get; set; } //1-12
+        public DateTime Date { get; set; } //1-12
         public double HotWaterKitchenQuantity { get; set; }
         public double ColdWaterKitchenQuantity { get; set; }
         public double HotWaterBathroomQuantity { get; set; }

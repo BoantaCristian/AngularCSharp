@@ -14,6 +14,9 @@ namespace AssociationAPI.Models.DataTransferObjects
         public string Telephone { get; set; }
         public int AssociationId { get; set; }
         public string RepresentativeId { get; set; }
+        public int WaterProvider { get; set; }
+        public int GasProvider { get; set; }
+        public int ElectricityProvider { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
     }

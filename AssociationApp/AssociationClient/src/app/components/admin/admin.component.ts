@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AssociationService } from 'src/app/services/association.service';
 import { AddAssociationComponent } from '../dialogs/add-association/add-association.component';
 import { AddProviderComponent } from '../dialogs/add-provider/add-provider.component';
+import { EmitPaymentComponent } from '../dialogs/emit-payment/emit-payment.component';
 import { RegisterDialogComponent } from '../dialogs/register-dialog/register-dialog.component';
 import { ViewDetailsComponent } from '../dialogs/view-details/view-details.component';
 
@@ -83,7 +84,7 @@ export class AdminComponent implements OnInit {
   }
 
   openViewDetailsDialog(option){
-    var registerDialog = this.dialog.open(ViewDetailsComponent, {width: '1300px', minWidth: '700px', data: option})
+    var registerDialog = this.dialog.open(ViewDetailsComponent, {width: '1400px', minWidth: '700px', data: option})
     registerDialog.afterClosed().subscribe( () =>{ })
   }
 
@@ -110,6 +111,11 @@ export class AdminComponent implements OnInit {
         this.toastr.success('Provider added successfully', 'Success!')
       }
       setTimeout(() => this.getProviders(), 300)
+    })
+  }
+  openEmitPaymentDialog(){
+    var paymentDialog = this.dialog.open(EmitPaymentComponent, {data: 'Admin'})
+    paymentDialog.afterClosed().subscribe( (result: any) => {
     })
   }
 }

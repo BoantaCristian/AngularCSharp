@@ -11,8 +11,8 @@ namespace AssociationAPI.Models.DbModels
         [Key]
         public int Id { get; set; }
         public virtual User Client { get; set; }
-        public int Month { get; set; } //1-12
-        public string MonthsDelay { get; set; }
+        public DateTime Date { get; set; } //1-12
+        public double DaysDelay { get; set; }
         public double Penalties { get; set; }
         public double TotalDueWithPenalties { get; set; }
         public bool WorkingCapitalStatus { get; set; }

@@ -19,8 +19,21 @@ mat-header-cell, mat-cell{
     position: absolute;
     margin-left: 25px;
 }
+button{
+    margin-right: 8px;
+}
 ::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding: 0.4em 0px !important;}
 
 ::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
     transform: translateY(-1.1em) scale(.5);
+}
+.flexContainer{
+    display: flex;
+}
+button{
+    margin: 0px auto;
+}
+mat-row:hover{
+    background-color: rgb(235, 235, 235);
+    transition: 400ms;
 }

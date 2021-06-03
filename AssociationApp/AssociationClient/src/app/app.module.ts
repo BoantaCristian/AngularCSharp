@@ -21,9 +21,10 @@ import { RegisterDialogComponent } from './components/dialogs/register-dialog/re
 import { LoginDialogComponent } from './components/dialogs/login-dialog/login-dialog.component';
 import { AddAssociationComponent } from './components/dialogs/add-association/add-association.component';
 
-import { MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatButtonModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule } from "@angular/material";
+import { MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatButtonModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule } from "@angular/material";
 import { AddProviderComponent } from './components/dialogs/add-provider/add-provider.component';
 import { ViewDetailsComponent } from './components/dialogs/view-details/view-details.component';
+import { EmitPaymentComponent } from './components/dialogs/emit-payment/emit-payment.component';
 
 @NgModule({
   declarations: [
@@ -37,9 +38,10 @@ import { ViewDetailsComponent } from './components/dialogs/view-details/view-det
     LoginDialogComponent,
     AddAssociationComponent,
     AddProviderComponent,
-    ViewDetailsComponent
+    ViewDetailsComponent,
+    EmitPaymentComponent
   ],
-  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent, ViewDetailsComponent],
+  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent, ViewDetailsComponent, EmitPaymentComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -47,7 +49,7 @@ import { ViewDetailsComponent } from './components/dialogs/view-details/view-det
     ToastrModule.forRoot(),
     HttpClientModule,
     FormsModule, ReactiveFormsModule,
-    MatButtonModule, MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule
+    MatButtonModule, MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule
   ],
   exports: [MatPaginatorModule, MatTableModule, MatSortModule],
   providers: [AssociationService],

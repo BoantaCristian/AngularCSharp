@@ -8,6 +8,7 @@
   <button mat-menu-item [matMenuTriggerFor]="email"> Email </button>
   <button mat-menu-item [matMenuTriggerFor]="contact"> Contact </button>
   <button mat-menu-item [matMenuTriggerFor]="address"> Address </button>
+  <button mat-menu-item [matMenuTriggerFor]="role"> Role </button>
 </mat-menu>
 
 <mat-menu #email="matMenu">
@@ -21,6 +22,9 @@
   <button mat-menu-item *ngIf="adminDetails.address != null"> {{adminDetails.address}} </button>
   <button mat-menu-item *ngIf="adminDetails.address == null"> Not provided </button>
 </mat-menu>
+<mat-menu #role="matMenu">
+  <button mat-menu-item> Admin </button>
+</mat-menu>
 
 
 <div class="col-md-10 offset-1">
@@ -31,9 +35,18 @@
             <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('providers')"> <b> VIEW PROVIDERS </b> </div>
         </div>
         <div class="flexContainer">
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('payments')"> <b> VIEW PAYMENT</b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('archives')"> <b> VIEW ARCHIVES </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('receipts')"> <b> VIEW RECEIPTS </b> </div>
+        </div>
+        <div class="flexContainer">
             <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openRegisterDialog()"> <b> ADD USER</b> </div>
             <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openAddAssociationDialog()"> <b> ADD ASSOCIATION </b> </div>
             <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openAddProviderDialog()"> <b> ADD PROVIDER </b> </div>
+        </div>
+        <div class="flexContainer">
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openEmitPaymentDialog()"> <b> EMIT PAYMENT</b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openAddAssociationDialog()"> <b> UPDATE PAYMENTS </b> </div>
         </div>
     </mat-card>
 </div>
