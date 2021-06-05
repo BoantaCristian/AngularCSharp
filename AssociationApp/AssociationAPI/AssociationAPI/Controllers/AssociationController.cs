@@ -302,33 +302,57 @@ namespace AssociationAPI.Controllers
         {
             try
             {
-                foreach (Payment payment in _context.Payments)
+                foreach (Payment payment in _context.Payments.Include(i => i.Client))
                 {
                     var associationDailyPenalty = await _context.Users.Include(i => i.Association).Where(w => w.UserName == payment.Client.UserName).Select(s => s.Association.DayPenalty).FirstAsync();
                     var currentDate = DateTime.UtcNow;
                     var differenceFromEmitToPay = currentDate.DayOfYear - payment.Date.DayOfYear;                    //difference days of a year
                     var differenceFromEmitToPayDifferentYear = 365 - payment.Date.DayOfYear + currentDate.DayOfYear; //difference days until end of year + days passed
+                    var monthsDifferenceFromEmitToPay = 0;
+                    var totalWithoutPenalties = await _context.Archives.Where(w => w.Date.Month == payment.Date.Month).Select(s => s.TotalPayment).FirstAsync();
+
+                    if(currentDate.Month > payment.Date.Month)
+                    {
+                        monthsDifferenceFromEmitToPay = currentDate.Month - payment.Date.Month;                      //difference months of a year
+                    }
+                    if (currentDate.Month < payment.Date.Month)
+                    {
+                        monthsDifferenceFromEmitToPay = 12 - currentDate.Month + payment.Date.Month;    //difference months of a year
+                    }
+
+
+
+                    if (!payment.SanitationStatus || !payment.WorkingCapitalStatus)
+                    {
+                        for (int i = 0; i < monthsDifferenceFromEmitToPay; i++)
+                        {
+                            totalWithoutPenalties += 15;  
+                        }
+                    }
+
+                    if (associationDailyPenalty == null)
+                        return BadRequest(new { message = "Association not found" });
 
                     if (currentDate.Year == payment.Date.Year && differenceFromEmitToPay >= 30) //same year
                     {
                         payment.Penalties = (payment.TotalDueWithPenalties * associationDailyPenalty) / 100 * (differenceFromEmitToPay - 30);
                         payment.DaysDelay = differenceFromEmitToPay - 30;
-                        payment.TotalDueWithPenalties += payment.Penalties;
+                        payment.TotalDueWithPenalties = totalWithoutPenalties + payment.Penalties;
 
                         _context.Entry(payment).State = EntityState.Modified;
-                        await _context.SaveChangesAsync();
                     }
 
                     if (currentDate.Year > payment.Date.Year && differenceFromEmitToPayDifferentYear >= 30) //year of check > year of emit
                     {
                         payment.Penalties = (payment.TotalDueWithPenalties * associationDailyPenalty) / 100 * (differenceFromEmitToPayDifferentYear - 30);
                         payment.DaysDelay = differenceFromEmitToPayDifferentYear - 30;
-                        payment.TotalDueWithPenalties += payment.Penalties;
+                        payment.TotalDueWithPenalties = totalWithoutPenalties + payment.Penalties;
 
                         _context.Entry(payment).State = EntityState.Modified;
-                        await _context.SaveChangesAsync();
                     }
                 }
+
+                await _context.SaveChangesAsync();
 
                 return Ok();
             }

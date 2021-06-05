@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { Sort, MatSort, MatTableDataSource, MAT_DIALOG_DATA, MatPaginator } from '@angular/material';
+import { Sort, MatSort, MatTableDataSource, MAT_DIALOG_DATA, MatPaginator, MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { AssociationService } from 'src/app/services/association.service';
+import { DisplayPaperComponent } from '../display-paper/display-paper.component';
 
 @Component({
   selector: 'app-view-details',
@@ -24,13 +25,12 @@ export class ViewDetailsComponent implements OnInit {
   displayClientColumns: string[] = ["userName", "email", "address", "telephone", "representative", "actions"]
   displayPaymentColumns: string[] = ["userName", "totalDueWithPenalties", "penalties", "daysDelay", "workingCapitalStatus", "sanitationStatus", "paymentStatus", "actions"]
   displayArchiveColumns: string[] = ["userName", "association", "date", "bathroom", "kitchen", "electricity", "gas", "totalPayment", "actions"]
-  
-  displayReceiptColumns: string[] = ["userName", "email", "address", "telephone", "representative", "actions"]
+  displayReceiptColumns: string[] = ["userName", "payDate", "amountPayed"]
   
   isLinear: boolean = false
   searchKey: string
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private service: AssociationService, private toastr: ToastrService) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialog: MatDialog, private service: AssociationService, private toastr: ToastrService) { }
   
   @ViewChild(MatSort, {static: false}) sort: MatSort //error solved stack overflow++
 
@@ -50,7 +50,7 @@ export class ViewDetailsComponent implements OnInit {
     this.getProviders()
     this.getPayments()
     this.getArchives()
-    //this.getReceipts()
+    this.getReceipts()
     setTimeout(()=> this.sortArrays(), 200)
     
   }
@@ -64,6 +64,7 @@ export class ViewDetailsComponent implements OnInit {
       }
     )
   }
+
   getProviders(){
     this.service.getProviders().subscribe(
       (res: any) => {
@@ -101,6 +102,15 @@ export class ViewDetailsComponent implements OnInit {
       (res: any) => {
         this.receipts = new MatTableDataSource(res)
         console.log("receipts: ", res)
+      }
+    )
+  }
+
+  
+  updatePayment(idPayment){
+    this.service.updatePayment(idPayment).subscribe(
+      res => {
+        this.toastr.success('Payment and its penalties updated!', 'Success!')
       }
     )
   }
@@ -143,6 +153,12 @@ export class ViewDetailsComponent implements OnInit {
         this.toastr.error(`${err.error.message}`,'Failed!')
       }
     )
+  }
+
+  openDisplayPaperDialog(paper){
+    var displayPaperDialog = this.dialog.open(DisplayPaperComponent, {data: paper})
+    displayPaperDialog.afterClosed().subscribe( (result: any) => {
+    })
   }
 
   sortArrays(){
@@ -194,6 +210,9 @@ export class ViewDetailsComponent implements OnInit {
       case 'archive':
         this.archives.filter = this.searchKey.trim().toLocaleLowerCase()
         break
+      case 'receipt':
+        this.receipts.filter = this.searchKey.trim().toLocaleLowerCase()
+        break
       case '':
         this.admins.filter = this.searchKey.trim().toLocaleLowerCase()
         this.representatives.filter = this.searchKey.trim().toLocaleLowerCase()
@@ -202,6 +221,7 @@ export class ViewDetailsComponent implements OnInit {
         this.providers.filter = this.searchKey.trim().toLocaleLowerCase()
         this.payments.filter = this.searchKey.trim().toLocaleLowerCase()
         this.archives.filter = this.searchKey.trim().toLocaleLowerCase()
+        this.receipts.filter = this.searchKey.trim().toLocaleLowerCase()
         break
       default:
         break

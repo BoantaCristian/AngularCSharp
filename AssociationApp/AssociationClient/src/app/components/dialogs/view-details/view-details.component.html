@@ -284,12 +284,12 @@
                 <mat-cell *matCellDef="let payment"> {{payment.userName}} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="totalDueWithPenalties">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>totalDueWithPenalties</mat-header-cell>
-                <mat-cell *matCellDef="let payment"> {{payment.totalDueWithPenalties}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Total With Penalties</mat-header-cell>
+                <mat-cell *matCellDef="let payment"> {{payment.totalDueWithPenalties | number : '1.2-2'}} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="penalties">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Penalties</mat-header-cell>
-                <mat-cell *matCellDef="let payment"> {{payment.penalties}} </mat-cell>
+                <mat-cell *matCellDef="let payment"> {{payment.penalties | number : '1.2-2'}} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="daysDelay">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Days delay</mat-header-cell>
@@ -310,8 +310,8 @@
             <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
                 <mat-cell *matCellDef="let actions"> 
-                    <button mat-raised-button color="primary"> Paper </button>    
-                    <button mat-raised-button color="warn"> Delete </button>    
+                    <button mat-raised-button color="primary" (click)="openDisplayPaperDialog(actions.utilitiesPaper)"> Paper </button>    
+                    <button mat-raised-button color="warn"> Delete </button>
                 </mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayPaymentColumns"></mat-header-row>
@@ -344,28 +344,28 @@
             <ng-container matColumnDef="bathroom">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Bathroom water quantity(l)➜price(ron)</mat-header-cell>
                 <mat-cell *matCellDef="let archive" style="margin: 5px;"> 
-                    Cold: {{archive.coldWaterBathroomQuantity}} ➜ {{archive.coldWaterBathroomDue}}<br>
-                    Hot : {{archive.hotWaterBathroomQuantity}} ➜ {{archive.hotWaterBathroomDue}}
+                    Cold: {{archive.coldWaterBathroomQuantity}} ➜ {{archive.coldWaterBathroomDue | number : '1.2-2'}}<br>
+                    Hot : {{archive.hotWaterBathroomQuantity}} ➜ {{archive.hotWaterBathroomDue | number : '1.2-2'}}
                 </mat-cell>
             </ng-container>
             <ng-container matColumnDef="kitchen">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Kitchen water quantity(l)➜price(ron) </mat-header-cell>
                 <mat-cell *matCellDef="let archive" style="margin: 5px;"> 
-                    Cold: {{archive.coldWaterKitchenQuantity}} ➜ {{archive.coldWaterKitchenDue}} <br>
-                    Hot : {{archive.hotWaterKitchenQuantity}} ➜ {{archive.hotWaterKitchenDue}}
+                    Cold: {{archive.coldWaterKitchenQuantity}} ➜ {{archive.coldWaterKitchenDue | number : '1.2-2'}} <br>
+                    Hot : {{archive.hotWaterKitchenQuantity}} ➜ {{archive.hotWaterKitchenDue | number : '1.2-2'}}
                 </mat-cell>         
             </ng-container>
             <ng-container matColumnDef="electricity">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Electricity quantity(kWh)➜price(ron)</mat-header-cell>
-                <mat-cell *matCellDef="let archive"> {{archive.electricityQuantity}} ➜ {{archive.electricityDue}} </mat-cell>         
+                <mat-cell *matCellDef="let archive"> {{archive.electricityQuantity}} ➜ {{archive.electricityDue | number : '1.2-2'}} </mat-cell>         
             </ng-container>
             <ng-container matColumnDef="gas">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Gas quantity(kwh/mc)➜price(ron)</mat-header-cell>
-                <mat-cell *matCellDef="let archive"> {{archive.gasQuantity}} ➜ {{archive.gasDue}}</mat-cell>         
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Gas quantity(MWh/mc)➜price(ron)</mat-header-cell>
+                <mat-cell *matCellDef="let archive"> {{archive.gasQuantity}} ➜ {{archive.gasDue | number : '1.2-2'}}</mat-cell>         
             </ng-container>
             <ng-container matColumnDef="totalPayment">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
-                <mat-cell *matCellDef="let archive"> {{archive.totalPayment}} RON </mat-cell>
+                <mat-cell *matCellDef="let archive"> {{archive.totalPayment | number : '1.2-2'}} RON </mat-cell>
             </ng-container>
             <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -385,8 +385,32 @@
         <mat-paginator #archivesPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
+    <!-- view receipts -->
     <div *ngIf="data == 'receipts'">
-
+        <mat-table [dataSource]="receipts" matSort>
+            <ng-container matColumnDef="userName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Client </mat-header-cell>
+                <mat-cell *matCellDef="let receipt"> {{receipt.userName}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="payDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Pay Date </mat-header-cell>
+                <mat-cell *matCellDef="let receipt"> {{receipt.payDate}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="amountPayed">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Amount Payed </mat-header-cell>
+                <mat-cell *matCellDef="let receipt"> {{receipt.amountPayed}} </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayReceiptColumns"></mat-header-row>
+            <mat-row *matRowDef="let receipt; columns: displayReceiptColumns"></mat-row>
+        </mat-table>
+        <mat-form-field class="search">
+            <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('receipt')">
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-paginator #receiptsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        </mat-paginator>
     </div>
 </mat-dialog-content>
 

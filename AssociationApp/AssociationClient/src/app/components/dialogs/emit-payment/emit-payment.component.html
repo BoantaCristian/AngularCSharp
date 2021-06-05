@@ -9,15 +9,25 @@
                     <img [src]="imagePath" style="width: 300px; height: 300px;" class="photo"><br><br><br><br><br><br><br><br>
                     <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)" formControlName="UtilitiesPaper" placeholder="Add Utilities Paper"><br><br>
                 </div>
-                <mat-form-field class="col-md-6 offset-3">
-                    <mat-label>Choose a date</mat-label>
-                    <input matInput formControlName="Date" [value]="paymentDetailsForm.value.Date" [matDatepicker]="picker" placeholder="New date" (dateChange)="checkDate()">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                    <label class="text-danger" *ngIf="paymentDetailsForm.get('Date').touched && incorrectDate">Incorrect date</label>
-                </mat-form-field>
+                <div class="flexContainer">
+                    <mat-form-field class="dateClientFields">
+                        <mat-label>Choose a date</mat-label>
+                        <input matInput formControlName="Date" [value]="paymentDetailsForm.value.Date" [matDatepicker]="picker" placeholder="New date" (dateChange)="checkDate()">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <label class="text-danger" *ngIf="paymentDetailsForm.get('Date').touched && incorrectDate">Incorrect date</label>
+                    </mat-form-field>
+                    <mat-form-field *ngIf="data != 'Client'">
+                        <mat-label>Select client</mat-label>
+                        <mat-select formControlName="ClientId">
+                            <mat-option *ngFor="let client of clients" [value]="client.id" (click)="selectClient()">
+                            {{client.userName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
                 <div>
-                  <button mat-button matStepperNext class="centerButton" [disabled]="!paymentDetailsForm.valid ||    incorrectDate">Next</button><br>
+                  <button mat-button matStepperNext class="centerButton" [disabled]="!paymentDetailsForm.valid || incorrectDate || (data == 'Admin' && !userIdSelected)">Next</button><br>
                 </div>
               </form>
         </mat-step>

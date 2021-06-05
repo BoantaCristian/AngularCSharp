@@ -1,0 +1,20 @@
+mat-form-field{
+    margin: 10px;
+}
+.descriptionField{
+    width: 30%;
+}
+.priceField{
+    width: 20%;
+}
+.text-danger{
+    position: absolute;
+    left: 0;
+    top: 40px;
+}
+.title{
+    text-align: center;
+}
+.flexContainer{
+    display: flex;
+}

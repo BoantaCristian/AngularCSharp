@@ -25,6 +25,8 @@ import { MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatBu
 import { AddProviderComponent } from './components/dialogs/add-provider/add-provider.component';
 import { ViewDetailsComponent } from './components/dialogs/view-details/view-details.component';
 import { EmitPaymentComponent } from './components/dialogs/emit-payment/emit-payment.component';
+import { DisplayPaperComponent } from './components/dialogs/display-paper/display-paper.component';
+import { PayComponent } from './components/dialogs/pay/pay.component';
 
 @NgModule({
   declarations: [
@@ -39,9 +41,11 @@ import { EmitPaymentComponent } from './components/dialogs/emit-payment/emit-pay
     AddAssociationComponent,
     AddProviderComponent,
     ViewDetailsComponent,
-    EmitPaymentComponent
+    EmitPaymentComponent,
+    DisplayPaperComponent,
+    PayComponent
   ],
-  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent, ViewDetailsComponent, EmitPaymentComponent],
+  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent, ViewDetailsComponent, EmitPaymentComponent, DisplayPaperComponent, PayComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

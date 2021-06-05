@@ -1,0 +1,32 @@
+mat-card{
+    margin: 0 auto;
+    position: relative;
+    top: 200px;
+    box-shadow: none !important;
+}
+.flexContainer{
+    display: flex;
+    margin: 50px;
+}
+.flexContent{
+    flex: 1;
+    text-align: center;
+}
+.dialogLink{
+    font-size: 40px;
+    text-align: center;
+}
+.dialogLink:hover{
+    cursor: pointer;
+}
+.logout{
+    position: absolute;
+    top: 13px;
+    right: 20px;
+}
+.userInfo{
+    position: absolute;
+    top: 13px;
+    right: 10%;
+    font-size:x-large;
+}

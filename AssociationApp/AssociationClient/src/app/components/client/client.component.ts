@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { AssociationService } from 'src/app/services/association.service';
+import { EmitPaymentComponent } from '../dialogs/emit-payment/emit-payment.component';
 import { RegisterDialogComponent } from '../dialogs/register-dialog/register-dialog.component';
 
 @Component({
@@ -37,6 +38,12 @@ export class ClientComponent implements OnInit {
     localStorage.removeItem('token')
     localStorage.removeItem('role')
     this.router.navigateByUrl('')
+  }
+
+  openEmitPaymentDialog(){
+    var paymentDialog = this.dialog.open(EmitPaymentComponent, {data: 'Client'})
+    paymentDialog.afterClosed().subscribe( (result: any) => {
+    })
   }
 
 }

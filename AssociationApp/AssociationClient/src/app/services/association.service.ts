@@ -65,6 +65,14 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.post(`${this.URL}/Association/EmitPayment`, body, {headers: token})
   }
+  updatePayments(){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.get(`${this.URL}/Association/UpdatePenalties`, {headers: token})
+  }
+  updatePayment(idPayment){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.get(`${this.URL}/Association/UpdatePenalty/${idPayment}`, {headers: token})
+  }
   //archives
   getArchive(){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})

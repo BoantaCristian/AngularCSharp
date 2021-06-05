@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { AssociationService } from 'src/app/services/association.service';
 
@@ -15,10 +16,13 @@ export class EmitPaymentComponent implements OnInit {
   imageLink: any;
   userDetails: any = {};
   incorrectDate: boolean;
+  clients: any;
+  userIdSelected: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private toastr: ToastrService, private service: AssociationService) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private toastr: ToastrService, private service: AssociationService) { }
 
   paymentDetailsForm = this.formBuilder.group({
+    ClientId: '',
     Date: ['', Validators.required],
     UtilitiesPaper: ['', Validators.required]
   })
@@ -33,6 +37,7 @@ export class EmitPaymentComponent implements OnInit {
 
   ngOnInit() {
     this.getUser()
+    this.getClients()
   }
 
   handleFileInput(file: FileList){
@@ -51,7 +56,19 @@ export class EmitPaymentComponent implements OnInit {
     this.service.getUser().subscribe(
       (res: any) => {
         this.userDetails = res
-        console.log(res.id)
+        this.paymentDetailsForm.setValue({
+          ClientId: res.id,
+          Date: '',
+          UtilitiesPaper: ''
+        })
+      }
+    )
+  }
+
+  getClients(){
+    this.service.getUsers().subscribe(
+      (res: any) => {
+        this.clients = res.clients
       }
     )
   }
@@ -66,14 +83,24 @@ export class EmitPaymentComponent implements OnInit {
     }
   }
 
+  selectClient(){
+    this.userIdSelected = true
+  }
+
   emitPayment(){
     this.paymentDetailsForm.value.UtilitiesPaper = this.imageLink
-    var payment = {
-      ClientId: this.userDetails.id,
-      ...this.paymentDetailsForm.value,
-      ...this.utilitiesValuesForm.value
+    if(this.data == 'Client'){
+      var payment = {
+        ...this.paymentDetailsForm.value,
+        ...this.utilitiesValuesForm.value
+      }
     }
-    console.log(payment)
+    else{
+      var payment = {
+        ...this.paymentDetailsForm.value,
+        ...this.utilitiesValuesForm.value
+      }
+    }
     this.service.emitPayment(payment).subscribe(
       (res: any) => {
         console.log(res)
