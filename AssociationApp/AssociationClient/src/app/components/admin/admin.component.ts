@@ -93,7 +93,7 @@ export class AdminComponent implements OnInit {
   }
 
   openViewDetailsDialog(option){
-    var registerDialog = this.dialog.open(ViewDetailsComponent, {width: '1400px', minWidth: '700px', data: option})
+    var registerDialog = this.dialog.open(ViewDetailsComponent, {width: '1500px', minWidth: '1500px', data: option})
     registerDialog.afterClosed().subscribe( () =>{ })
   }
 

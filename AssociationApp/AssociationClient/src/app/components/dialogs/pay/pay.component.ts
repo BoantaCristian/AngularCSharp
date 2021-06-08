@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material';
+import { ToastrService } from 'ngx-toastr';
+import { AssociationService } from 'src/app/services/association.service';
 
 @Component({
   selector: 'app-pay',
@@ -6,10 +10,33 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pay.component.css']
 })
 export class PayComponent implements OnInit {
+  maxValueField: any;
 
-  constructor() { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private service: AssociationService, private toastr: ToastrService) { }
+
+  payForm = this.formBuilder.group({
+    PaymentId: [this.data.actions.id, Validators.required],
+    ClientUserName: [this.data.actions.userName, Validators.required],
+    AmountPaid: [(Math.round(this.data.actions.totalDueWithPenalties * 100) / 100).toFixed(2), Validators.required],
+    WorkingCapital: [this.data.actions.workingCapitalStatus],
+    Sanitation: [this.data.actions.sanitationStatus],
+  })
 
   ngOnInit() {
+    this.maxValueField = this.data.actions.totalDueWithPenalties
+  }
+
+  pay(){
+    this.service.pay(this.payForm.value).subscribe(
+      res => {
+        this.toastr.success('Paid successfully!', 'Success!')
+        this.service.updatePayments().subscribe(
+          res => {
+            this.toastr.success('Payments and penalties updated!', 'Success!')
+          }
+        )
+      }
+    )
   }
 
 }

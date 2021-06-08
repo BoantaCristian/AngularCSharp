@@ -21,7 +21,7 @@ import { RegisterDialogComponent } from './components/dialogs/register-dialog/re
 import { LoginDialogComponent } from './components/dialogs/login-dialog/login-dialog.component';
 import { AddAssociationComponent } from './components/dialogs/add-association/add-association.component';
 
-import { MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatButtonModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule } from "@angular/material";
+import { MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatButtonModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule } from "@angular/material";
 import { AddProviderComponent } from './components/dialogs/add-provider/add-provider.component';
 import { ViewDetailsComponent } from './components/dialogs/view-details/view-details.component';
 import { EmitPaymentComponent } from './components/dialogs/emit-payment/emit-payment.component';
@@ -53,7 +53,7 @@ import { PayComponent } from './components/dialogs/pay/pay.component';
     ToastrModule.forRoot(),
     HttpClientModule,
     FormsModule, ReactiveFormsModule,
-    MatButtonModule, MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule
+    MatButtonModule, MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule
   ],
   exports: [MatPaginatorModule, MatTableModule, MatSortModule],
   providers: [AssociationService],

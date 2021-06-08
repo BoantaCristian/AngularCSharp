@@ -1,3 +1,21 @@
 <h2 mat-dialog-title class="title"> Pay </h2>
+<mat-dialog-content>
+    <h6 class="col-md-6"> Client: {{data.actions.userName}} </h6>
+    <h6 class="col-md-6"> Total: {{data.actions.totalDueWithPenalties | number : '1.2-2'}} RON </h6>
+</mat-dialog-content>
 <mat-dialog-actions>
+    <form [formGroup]="payForm">
+        <mat-form-field class="col-md-12">
+            <input type="number" min="0" max="data.actions.totalDueWithPenalties" step="0.01" matInput formControlName="AmountPaid" placeholder="Amount Payed">
+        </mat-form-field>
+        <div class="flexContainer">
+            <section class="example-section">
+                <mat-checkbox class="example-margin" color="primary" formControlName="WorkingCapital" [disabled]="data.actions.workingCapitalStatus">Working Capital</mat-checkbox>
+            </section>
+            <section class="example-section">
+                <mat-checkbox class="example-margin" color="primary" formControlName="Sanitation" [disabled]="data.actions.sanitationStatus">Sanitation</mat-checkbox>
+            </section>
+        </div><br>
+        <button mat-button class="button" (click)="pay()" [mat-dialog-close]="addedSuccessful" mat-dialog-close="true" [disabled]="!payForm.valid || payForm.value.AmountPaid > data.actions.totalDueWithPenalties"> Pay </button><br>
+    </form>
 </mat-dialog-actions>

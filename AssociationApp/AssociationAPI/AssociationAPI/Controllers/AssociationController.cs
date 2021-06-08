@@ -164,6 +164,99 @@ namespace AssociationAPI.Controllers
                 return BadRequest(new { message = "Provider not found!" });
         }
 
+        [HttpDelete("{idArchive}")]
+        [Authorize(Roles = "Admin")]
+        [Route("DeleteArchive/{idArchive}")]
+        public async Task<IActionResult> DeleteArchive(int idArchive)
+        {
+            var archive = await _context.FindAsync<Archive>(idArchive);
+
+            if (archive != null)
+            {
+                try
+                {
+                    _context.Archives.Remove(archive);
+                    await _context.SaveChangesAsync();
+
+                    return Ok(archive);
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+            else
+                return BadRequest(new { message = "Archive not found!" });
+        }
+
+        [HttpDelete("{idReceipt}")]
+        [Authorize(Roles = "Admin")]
+        [Route("DeleteReceipt/{idReceipt}")]
+        public async Task<IActionResult> DeleteReceipt(int idReceipt)
+        {
+            var receipt = await _context.FindAsync<Receipt>(idReceipt);
+
+            if (receipt != null)
+            {
+                try
+                {
+                    _context.Receipts.Remove(receipt);
+                    await _context.SaveChangesAsync();
+
+                    return Ok(receipt);
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+            else
+                return BadRequest(new { message = "Receipt not found!" });
+        }
+
+        [HttpDelete("{idPayment}")]
+        [Authorize(Roles = "Admin")]
+        [Route("deletePayment/{idPayment}")]
+        public async Task<IActionResult> deletePayment(int idPayment)
+        {
+            var payment = await _context.FindAsync<Payment>(idPayment);
+
+            if (payment != null)
+            {
+                var paymentHasReceipts= false;
+                foreach (Receipt receipt in _context.Receipts.Include(i => i.Payment))
+                {
+                    if (receipt.Payment.Id == payment.Id)
+                    {
+                        paymentHasReceipts = true;
+                        break;
+                    }
+                }
+                if (paymentHasReceipts)
+                    return BadRequest(new { message = "Payment has receipts!" });
+                else
+                {
+
+                    try
+                    {
+                        _context.Payments.Remove(payment);
+                        await _context.SaveChangesAsync();
+
+                        return Ok(payment);
+                    }
+                    catch (Exception e)
+                    {
+
+                        throw e;
+                    }
+                }
+            }
+            else
+                return BadRequest(new { message = "Payment not found!" });
+        }
+
         [HttpGet]
         [Authorize]
         [Route("GetArchives")]
@@ -171,8 +264,56 @@ namespace AssociationAPI.Controllers
         {
             try
             {
-                var result = _context.Archives.Include(w => w.Client).ThenInclude(ti => ti.Representative).Select(s => new { s.Client.UserName, Association = s.Client.Representative.Association.Description, s.HotWaterKitchenQuantity, s.HotWaterBathroomQuantity, s.HotWaterKitchenDue, s.HotWaterBathroomDue, s.ColdWaterBathroomDue, s.ColdWaterBathroomQuantity, s.ColdWaterKitchenDue, s.ColdWaterKitchenQuantity, s.GasQuantity, s.GasDue, s.ElectricityQuantity, s.ElectricityDue, s.Date, s.TotalPayment });
-                return Ok(result);
+                //With Method Without posibility To Include Payments
+                var result = _context.Archives.Include(w => w.Client).ThenInclude(ti => ti.Representative).Select(s => new { s.Id, s.Client.UserName, Association = s.Client.Representative.Association.Description, s.HotWaterKitchenQuantity, s.HotWaterBathroomQuantity, s.HotWaterKitchenDue, s.HotWaterBathroomDue, s.ColdWaterBathroomDue, s.ColdWaterBathroomQuantity, s.ColdWaterKitchenDue, s.ColdWaterKitchenQuantity, s.GasQuantity, s.GasDue, s.ElectricityQuantity, s.ElectricityDue, s.Date, s.TotalPayment });
+                //with method: archives with users and their representatives
+                var result1 = _context.Archives.Include(w => w.Client).ThenInclude(ti => ti.Representative);
+                //linq with inner join of all tables and select desired columns
+                var linq = (from archive in _context.Archives
+                           join user in _context.Users on archive.Client.Id equals user.Id
+                           join rep in _context.Users on user.Representative.Id equals rep.Id
+                           join association in _context.Associations on rep.Association.Id equals association.Id
+                           join payment in _context.Payments on user.Id equals payment.Client.Id
+                           select new { user.UserName, 
+                                        payment.UtilitiesPaper, 
+                                        Association = association.Description, 
+                                        archive.Id,
+                                        archive.HotWaterBathroomQuantity, 
+                                        archive.HotWaterKitchenQuantity, 
+                                        archive.HotWaterBathroomDue, 
+                                        archive.HotWaterKitchenDue, 
+                                        archive.ColdWaterBathroomDue, 
+                                        archive.ColdWaterBathroomQuantity,
+                                        archive.ColdWaterKitchenDue, 
+                                        archive.ColdWaterKitchenQuantity, 
+                                        archive.ElectricityDue, 
+                                        archive.ElectricityQuantity,
+                                        archive.GasDue, 
+                                        archive.GasQuantity,
+                                        archive.Date,
+                                        archive.TotalPayment }).Distinct();
+                //with linq from mehtod that selects users with reps and associations
+                var linq2 = (from res in result1
+                            join payment in _context.Payments on res.Client.Id equals payment.Client.Id
+                            select new { res.Id,
+                                        res.Client.UserName,
+                                        res.HotWaterBathroomQuantity,
+                                        res.HotWaterKitchenQuantity,
+                                        res.HotWaterBathroomDue,
+                                        res.HotWaterKitchenDue,
+                                        res.ColdWaterBathroomDue,
+                                        res.ColdWaterBathroomQuantity,
+                                        res.ColdWaterKitchenDue,
+                                        res.ColdWaterKitchenQuantity,
+                                        res.ElectricityDue,
+                                        res.ElectricityQuantity,
+                                        res.GasDue,
+                                        res.GasQuantity,
+                                        res.Date,
+                                        res.TotalPayment,
+                                        Association = res.Client.Representative.Association.Description, 
+                                        payment.UtilitiesPaper }).Distinct();
+                return Ok(linq2);
             }
             catch (Exception e)
             {
@@ -188,7 +329,7 @@ namespace AssociationAPI.Controllers
         {
             try
             {
-                var result = _context.Receipts.Include(w => w.Client).Select(s => new { s.Client.UserName, s.PayDate, s.AmountPayed });
+                var result = _context.Receipts.Include(w => w.Client).Select(s => new { s.Id, s.Client.UserName, s.PayDate, s.AmountPayed });
                 return Ok(result);
             }
             catch (Exception e)
@@ -205,7 +346,7 @@ namespace AssociationAPI.Controllers
         {
             try
             {
-                var result = _context.Payments.Include(w => w.Client).Select(s => new { s.Client.UserName, s.DaysDelay, s.Penalties, s.TotalDueWithPenalties, s.WorkingCapitalStatus, s.SanitationStatus, s.UtilitiesPaper, s.PaymentStatus });
+                var result = _context.Payments.Include(w => w.Client).Select(s => new { s.Id, s.Date, s.Client.UserName, Remaining = Math.Round(s.RemainingToPay, 2), s.DaysDelay, s.Penalties, s.TotalDueWithPenalties, s.TotalPaid, s.WorkingCapitalStatus, s.SanitationStatus, s.UtilitiesPaper, s.PaymentStatus });
                 return Ok(result);
             }
             catch (Exception e)
@@ -273,6 +414,8 @@ namespace AssociationAPI.Controllers
                     DaysDelay = 0,
                     Penalties = 0,
                     TotalDueWithPenalties = archive.TotalPayment,
+                    RemainingToPay = archive.TotalPayment,
+                    TotalPaid = 0,
                     WorkingCapitalStatus = false,
                     SanitationStatus = false,
                     PaymentStatus = false,
@@ -295,6 +438,87 @@ namespace AssociationAPI.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Authorize]
+        [Route("Pay")]
+        public async Task<IActionResult> Pay(PayDTO model)
+        {
+            var payment = await _context.Payments.FindAsync(model.PaymentId);
+            var client = await _userManager.FindByNameAsync(model.ClientUserName);
+
+            var receipt = new Receipt
+            {
+                Payment = payment,
+                Client = client,
+                AmountPayed = model.AmountPaid,
+                PayDate = DateTime.UtcNow
+            };
+
+            try
+            {
+                await _context.Receipts.AddAsync(receipt);
+                await _context.SaveChangesAsync();
+
+                await UpdatePaymentAsync(model);
+
+                return Ok();
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            
+        }
+
+        public async Task UpdatePaymentAsync(PayDTO model)
+        {
+            var payment = await _context.Payments.FindAsync(model.PaymentId);
+
+            payment.SanitationStatus = model.Sanitation;
+            payment.WorkingCapitalStatus = model.WorkingCapital;
+
+            payment.TotalPaid += model.AmountPaid;
+
+            if ((payment.RemainingToPay - model.AmountPaid) >= 0)
+            {
+                payment.RemainingToPay = Math.Round((payment.RemainingToPay - model.AmountPaid), 2);
+            }
+            else
+            {
+                var difference = payment.RemainingToPay - model.AmountPaid;
+                payment.TotalDueWithPenalties = payment.TotalDueWithPenalties + difference - payment.RemainingToPay;
+                payment.TotalDueWithPenalties = Math.Round(payment.TotalDueWithPenalties, 2);
+                payment.RemainingToPay = 0;
+            }
+
+            if(payment.TotalDueWithPenalties == 0)
+            {
+                payment.SanitationStatus = true;
+                payment.WorkingCapitalStatus = true;
+            }
+
+            if (model.Sanitation && model.WorkingCapital && payment.TotalDueWithPenalties <= 0 && payment.RemainingToPay == 0)
+            {
+                payment.PaymentStatus = true;
+            }
+
+            try
+            {
+                _context.Entry(payment).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
         [HttpGet]
         [Authorize]
         [Route("UpdatePenalties")]
@@ -302,53 +526,51 @@ namespace AssociationAPI.Controllers
         {
             try
             {
-                foreach (Payment payment in _context.Payments.Include(i => i.Client))
+                foreach (Payment payment in _context.Payments.Include(i => i.Client).ThenInclude(i => i.Representative).ThenInclude(ti => ti.Association))
                 {
-                    var associationDailyPenalty = await _context.Users.Include(i => i.Association).Where(w => w.UserName == payment.Client.UserName).Select(s => s.Association.DayPenalty).FirstAsync();
+                    var associationDailyPenalty = payment.Client.Representative.Association.DayPenalty;
                     var currentDate = DateTime.UtcNow;
                     var differenceFromEmitToPay = currentDate.DayOfYear - payment.Date.DayOfYear;                    //difference days of a year
                     var differenceFromEmitToPayDifferentYear = 365 - payment.Date.DayOfYear + currentDate.DayOfYear; //difference days until end of year + days passed
                     var monthsDifferenceFromEmitToPay = 0;
                     var totalWithoutPenalties = await _context.Archives.Where(w => w.Date.Month == payment.Date.Month).Select(s => s.TotalPayment).FirstAsync();
+                    var remainingToPay = payment.RemainingToPay;
+                    var sanitationAndWorkingCapitalTaxes = 0;
 
-                    if(currentDate.Month > payment.Date.Month)
-                    {
+                    if (currentDate.Month > payment.Date.Month)
                         monthsDifferenceFromEmitToPay = currentDate.Month - payment.Date.Month;                      //difference months of a year
-                    }
                     if (currentDate.Month < payment.Date.Month)
-                    {
                         monthsDifferenceFromEmitToPay = 12 - currentDate.Month + payment.Date.Month;    //difference months of a year
-                    }
-
-
 
                     if (!payment.SanitationStatus || !payment.WorkingCapitalStatus)
-                    {
-                        for (int i = 0; i < monthsDifferenceFromEmitToPay; i++)
-                        {
-                            totalWithoutPenalties += 15;  
-                        }
-                    }
+                        for (int i = 0; i < monthsDifferenceFromEmitToPay-1; i++)
+                            sanitationAndWorkingCapitalTaxes += 15;
 
                     if (associationDailyPenalty == null)
                         return BadRequest(new { message = "Association not found" });
 
-                    if (currentDate.Year == payment.Date.Year && differenceFromEmitToPay >= 30) //same year
+                    if (!payment.PaymentStatus)
                     {
-                        payment.Penalties = (payment.TotalDueWithPenalties * associationDailyPenalty) / 100 * (differenceFromEmitToPay - 30);
-                        payment.DaysDelay = differenceFromEmitToPay - 30;
-                        payment.TotalDueWithPenalties = totalWithoutPenalties + payment.Penalties;
+                        if (currentDate.Year == payment.Date.Year && differenceFromEmitToPay >= 30) //same year
+                        {
+                            if(remainingToPay > 0)
+                                payment.Penalties = sanitationAndWorkingCapitalTaxes + (remainingToPay * associationDailyPenalty) / 100 * (differenceFromEmitToPay - 30);
 
-                        _context.Entry(payment).State = EntityState.Modified;
-                    }
+                            payment.DaysDelay = differenceFromEmitToPay - 30;
+                            payment.TotalDueWithPenalties = remainingToPay + payment.Penalties;
 
-                    if (currentDate.Year > payment.Date.Year && differenceFromEmitToPayDifferentYear >= 30) //year of check > year of emit
-                    {
-                        payment.Penalties = (payment.TotalDueWithPenalties * associationDailyPenalty) / 100 * (differenceFromEmitToPayDifferentYear - 30);
-                        payment.DaysDelay = differenceFromEmitToPayDifferentYear - 30;
-                        payment.TotalDueWithPenalties = totalWithoutPenalties + payment.Penalties;
+                            _context.Entry(payment).State = EntityState.Modified;
+                        }
+                        if (currentDate.Year > payment.Date.Year && differenceFromEmitToPayDifferentYear >= 30) //year of check > year of emit
+                        {
+                            if(remainingToPay > 0)
+                                payment.Penalties = sanitationAndWorkingCapitalTaxes + (remainingToPay * associationDailyPenalty) / 100 * (differenceFromEmitToPayDifferentYear - 30);
 
-                        _context.Entry(payment).State = EntityState.Modified;
+                            payment.DaysDelay = differenceFromEmitToPayDifferentYear - 30;
+                            payment.TotalDueWithPenalties = remainingToPay + payment.Penalties;
+
+                            _context.Entry(payment).State = EntityState.Modified;
+                        }
                     }
                 }
 

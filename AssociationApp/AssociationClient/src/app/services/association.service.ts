@@ -73,14 +73,31 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.get(`${this.URL}/Association/UpdatePenalty/${idPayment}`, {headers: token})
   }
+  deletePayment(idPayment){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.delete(`${this.URL}/Association/DeletePayment/${idPayment}`, {headers: token})
+  }
+  pay(body){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.post(`${this.URL}/Association/Pay`, body, {headers: token})
+  }
   //archives
   getArchive(){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.get(`${this.URL}/Association/GetArchives`, {headers: token})
+  }
+  deleteArchive(idArchive){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.delete(`${this.URL}/Association/DeleteArchive/${idArchive}`, {headers: token})
   }
   //receipts
   getReceipts(){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.get(`${this.URL}/Association/GetReceipts`, {headers: token})
   }
+  deleteReceipt(idReceipt){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.delete(`${this.URL}/Association/DeleteReceipt/${idReceipt}`, {headers: token})
+  }
+  
 }

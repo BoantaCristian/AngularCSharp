@@ -18,3 +18,19 @@ mat-form-field{
 .flexContainer{
     display: flex;
 }
+.example-section {
+    margin: 12px 0;
+  }
+  
+  .example-margin {
+    margin: 0 12px;
+  }
+.flexContainer{
+    display: flex;
+}  
+.button{
+    margin: 0px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }

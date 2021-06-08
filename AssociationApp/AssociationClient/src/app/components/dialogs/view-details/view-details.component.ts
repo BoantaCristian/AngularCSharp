@@ -3,6 +3,7 @@ import { Sort, MatSort, MatTableDataSource, MAT_DIALOG_DATA, MatPaginator, MatDi
 import { ToastrService } from 'ngx-toastr';
 import { AssociationService } from 'src/app/services/association.service';
 import { DisplayPaperComponent } from '../display-paper/display-paper.component';
+import { PayComponent } from '../pay/pay.component';
 
 @Component({
   selector: 'app-view-details',
@@ -23,9 +24,9 @@ export class ViewDetailsComponent implements OnInit {
   displayAdminColumns: string[] = ["userName", "email", "address", "telephone", "actions"]
   displayRepresentativeColumns: string[] = ["userName", "email", "address", "telephone", "association", "clients", "actions"]
   displayClientColumns: string[] = ["userName", "email", "address", "telephone", "representative", "actions"]
-  displayPaymentColumns: string[] = ["userName", "totalDueWithPenalties", "penalties", "daysDelay", "workingCapitalStatus", "sanitationStatus", "paymentStatus", "actions"]
+  displayPaymentColumns: string[] = ["userName", "date", "totalDueWithPenalties", "remaining", "penalties", "daysDelay", "totalPaid", "workingCapitalStatus", "sanitationStatus", "paymentStatus", "actions"]
   displayArchiveColumns: string[] = ["userName", "association", "date", "bathroom", "kitchen", "electricity", "gas", "totalPayment", "actions"]
-  displayReceiptColumns: string[] = ["userName", "payDate", "amountPayed"]
+  displayReceiptColumns: string[] = ["ReceiptClient", "payDate", "amountPayed", "actions"]
   
   isLinear: boolean = false
   searchKey: string
@@ -101,7 +102,6 @@ export class ViewDetailsComponent implements OnInit {
     this.service.getReceipts().subscribe(
       (res: any) => {
         this.receipts = new MatTableDataSource(res)
-        console.log("receipts: ", res)
       }
     )
   }
@@ -120,6 +120,7 @@ export class ViewDetailsComponent implements OnInit {
       (res: any) => {
         this.toastr.success(`User ${res.userName} deleted successfully`, 'Success!')
         this.getUsers()
+        setTimeout(()=> this.sortArrays(), 100)
       },
       err => {
         console.log(err)
@@ -133,6 +134,7 @@ export class ViewDetailsComponent implements OnInit {
       (res: any) => {
         this.toastr.success(`Provider ${res.name} deleted successfully`, 'Success!')
         this.getProviders()
+        setTimeout(()=> this.sortArrays(), 100)
       },
       err => {
         console.log(err)
@@ -142,11 +144,11 @@ export class ViewDetailsComponent implements OnInit {
   }
 
   deleteAssociaton(idAssociation){
-    console.log(idAssociation)
     this.service.deleteAssociation(idAssociation).subscribe(
       (res: any) => {
         this.toastr.success(`Association ${res.description} deleted successfully`, 'Success!')
         this.getAssociations()
+        setTimeout(()=> this.sortArrays(), 100)
       },
       err => {
         console.log(err)
@@ -155,9 +157,56 @@ export class ViewDetailsComponent implements OnInit {
     )
   }
 
+  deleteReceipt(idReceipt){
+    this.service.deleteReceipt(idReceipt).subscribe(
+      res => {
+        this.toastr.success('Receipt deleted successfully', 'Success!')
+        this.getReceipts()
+        setTimeout(()=> this.sortArrays(), 100)
+      },
+      err => {
+        this.toastr.error(`${err.error.message}`, 'Failed!')
+      }
+    )
+  }
+
+  deletePayment(idPayment){
+    this.service.deletePayment(idPayment).subscribe(
+      res => {
+        this.toastr.success('Payment deleted successfully', 'Success!')
+        this.getPayments()
+        setTimeout(()=> this.sortArrays(), 100)
+      },
+      err => {
+        this.toastr.error(`${err.error.message}`, 'Failed!')
+      }
+    )
+  }
+
+  deleteArchive(idArchive){
+    this.service.deleteArchive(idArchive).subscribe(
+      res => {
+        this.toastr.success('Archive deleted successfully', 'Success!')
+        this.getArchives()
+        setTimeout(()=> this.sortArrays(), 100)
+      },
+      err => {
+        this.toastr.error(`${err.error.message}`, 'Failed!')
+      }
+    )
+  }
+
   openDisplayPaperDialog(paper){
     var displayPaperDialog = this.dialog.open(DisplayPaperComponent, {data: paper})
     displayPaperDialog.afterClosed().subscribe( (result: any) => {
+    })
+  }
+  
+  openPayDialog(actions){
+    var displayPaperDialog = this.dialog.open(PayComponent, {minWidth: "350px", data: {actions, Role: 'Admin'}})
+    displayPaperDialog.afterClosed().subscribe( (result: any) => {
+      this.getPayments()
+      setTimeout(()=> this.sortArrays(), 200)
     })
   }
 
