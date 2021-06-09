@@ -46,7 +46,7 @@ namespace AssociationAPI.Controllers
                 Address = model.Address,
                 Telephone = model.Telephone
             };
-            if(model.Role == "Representative")
+            if (model.Role == "Representative")
             {
                 var association = await _context.Associations.FindAsync(model.AssociationId);
                 user.Association = association;
@@ -56,7 +56,7 @@ namespace AssociationAPI.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 await _userManager.AddToRoleAsync(user, model.Role);
 
-                if(model.Role == "Client")
+                if (model.Role == "Client")
                 {
                     var representative = await _userManager.FindByIdAsync(model.RepresentativeId);
                     var waterProvider = await _context.Providers.FindAsync(model.WaterProvider);
@@ -131,13 +131,19 @@ namespace AssociationAPI.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             var roleObj = await _userManager.GetRolesAsync(user);
             var role = roleObj.First();
+            var association = "";
+
+            if (role == "Representative")
+                association = await _context.Users.Include(i => i.Association).Where(w => w == user).Select(s => s.Association.Description).FirstAsync();
+
             return new
             {
                 user.UserName,
                 user.Email,
-                user.PhoneNumber,
+                user.Telephone,
                 user.Id,
-                role
+                role,
+                association
             };
         }
 
@@ -153,6 +159,16 @@ namespace AssociationAPI.Controllers
             var clients = _userManager.Users.Include(i => i.Representative).Where(w => w.Representative != null).Select(s => new { s.Id, s.UserName, s.Email, s.Address, s.Telephone, Representative = s.Representative.UserName });
 
             return new { admins, representatives, clients };
+        }
+
+        [HttpGet("{idRepresentative}")]
+        [Authorize(Roles ="Representative")]
+        [Route("GetClientsOfRepresentative/{idRepresentative}")]
+        public Object GetClientsOfRepresentative(string idRepresentative)
+        {
+            var clients = _context.Users.Include(i => i.Representative).Where(w => w.Representative.Id == idRepresentative);
+
+            return clients;
         }
 
         [HttpDelete("{userName}")]

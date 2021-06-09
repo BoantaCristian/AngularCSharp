@@ -12,5 +12,6 @@ namespace AssociationAPI.Models.DataTransferObjects
         public double AmountPaid { get; set; }
         public bool WorkingCapital { get; set; }
         public bool Sanitation { get; set; }
+        public string ReceiptPaper { get; set; }
     }
 }

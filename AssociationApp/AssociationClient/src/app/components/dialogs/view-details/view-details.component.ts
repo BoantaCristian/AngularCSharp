@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Sort, MatSort, MatTableDataSource, MAT_DIALOG_DATA, MatPaginator, MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { AssociationService } from 'src/app/services/association.service';
+import { AddReceiptPaperComponent } from '../add-receipt-paper/add-receipt-paper.component';
 import { DisplayPaperComponent } from '../display-paper/display-paper.component';
 import { PayComponent } from '../pay/pay.component';
 
@@ -53,7 +54,6 @@ export class ViewDetailsComponent implements OnInit {
     this.getArchives()
     this.getReceipts()
     setTimeout(()=> this.sortArrays(), 200)
-    
   }
 
   getUsers(){
@@ -102,15 +102,6 @@ export class ViewDetailsComponent implements OnInit {
     this.service.getReceipts().subscribe(
       (res: any) => {
         this.receipts = new MatTableDataSource(res)
-      }
-    )
-  }
-
-  
-  updatePayment(idPayment){
-    this.service.updatePayment(idPayment).subscribe(
-      res => {
-        this.toastr.success('Payment and its penalties updated!', 'Success!')
       }
     )
   }
@@ -201,11 +192,19 @@ export class ViewDetailsComponent implements OnInit {
     displayPaperDialog.afterClosed().subscribe( (result: any) => {
     })
   }
+
+  openAddReceiptPaperDialog(paper){
+    var displayPaperDialog = this.dialog.open(AddReceiptPaperComponent, {data: paper})
+    displayPaperDialog.afterClosed().subscribe( (result: any) => {
+      setTimeout(()=> this.getReceipts(), 100)
+      setTimeout(()=> this.sortArrays(), 200)
+    })
+  }
   
   openPayDialog(actions){
     var displayPaperDialog = this.dialog.open(PayComponent, {minWidth: "350px", data: {actions, Role: 'Admin'}})
     displayPaperDialog.afterClosed().subscribe( (result: any) => {
-      this.getPayments()
+      setTimeout(()=> this.getPayments(), 100)
       setTimeout(()=> this.sortArrays(), 200)
     })
   }

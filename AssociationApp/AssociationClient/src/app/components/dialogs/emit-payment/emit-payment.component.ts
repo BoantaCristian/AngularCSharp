@@ -18,6 +18,7 @@ export class EmitPaymentComponent implements OnInit {
   incorrectDate: boolean;
   clients: any;
   userIdSelected: boolean = false;
+  clientsOfRepresentative: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private toastr: ToastrService, private service: AssociationService) { }
 
@@ -37,7 +38,6 @@ export class EmitPaymentComponent implements OnInit {
 
   ngOnInit() {
     this.getUser()
-    this.getClients()
   }
 
   handleFileInput(file: FileList){
@@ -61,16 +61,26 @@ export class EmitPaymentComponent implements OnInit {
           Date: '',
           UtilitiesPaper: ''
         })
+        this.getClients()
       }
     )
   }
 
   getClients(){
-    this.service.getUsers().subscribe(
-      (res: any) => {
-        this.clients = res.clients
-      }
-    )
+    if(this.data == 'Admin'){
+      this.service.getUsers().subscribe(
+        (res: any) => {
+          this.clients = res.clients
+        }
+      )
+    }
+    if(this.data == 'Representative'){
+      this.service.getClientsOfRepresentative(this.userDetails.id).subscribe(
+        (res: any) => {
+          this.clients = res
+        }
+      )
+    }
   }
 
   checkDate(){
@@ -78,7 +88,7 @@ export class EmitPaymentComponent implements OnInit {
     var currentDate = new Date()
     if(currentDate < this.paymentDetailsForm.value.Date){
       this.incorrectDate = true
-      this.toastr.error(`Cannot pay for the future!`)
+      this.toastr.warning(`Cannot pay for the future!`)
       this.paymentDetailsForm.value.Date = ''
     }
   }
@@ -103,7 +113,6 @@ export class EmitPaymentComponent implements OnInit {
     }
     this.service.emitPayment(payment).subscribe(
       (res: any) => {
-        console.log(res)
           this.toastr.success('Payment added successfully', 'Success!')
       },
       err => {

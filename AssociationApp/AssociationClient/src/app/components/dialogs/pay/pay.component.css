@@ -34,3 +34,8 @@ mat-form-field{
     left: 50%;
     transform: translate(-50%, -50%);
   }
+.filePosition{
+    text-align-last: center;
+    margin: auto;
+    margin-bottom: 10px;
+}

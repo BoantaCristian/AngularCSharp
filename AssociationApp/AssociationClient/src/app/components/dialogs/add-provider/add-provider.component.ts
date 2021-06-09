@@ -36,7 +36,6 @@ export class AddProviderComponent implements OnInit {
       ...this.providerDetailsForm.value,
       ...this.providerPricesForm.value
     }
-    console.log(providerForm)
     this.service.addProvider(providerForm).subscribe(
       res => { },
       err => {

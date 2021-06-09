@@ -14,5 +14,6 @@ namespace AssociationAPI.Models.DbModels
         public virtual Payment Payment { get; set; }
         public DateTime PayDate { get; set; }
         public double AmountPayed { get; set; }
+        public string ReceiptPaper { get; set; }
     }
 }

@@ -26,6 +26,10 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.get(`${this.URL}/User/GetUsers`, {headers: token})
   }
+  getClientsOfRepresentative(idRepresentative){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.get(`${this.URL}/User/GetClientsOfRepresentative/${idRepresentative}`, {headers: token})
+  }
   deleteUser(userName){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.delete(`${this.URL}/User/DeleteUser/${userName}`, {headers: token})
@@ -61,6 +65,10 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.get(`${this.URL}/Association/GetPayments`, {headers: token})
   }
+  getPaymentOfRepresentative(idRepresentative){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.get(`${this.URL}/Association/GetPaymentsOfRepresentative/${idRepresentative}`, {headers: token})
+  }
   emitPayment(body){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.post(`${this.URL}/Association/EmitPayment`, body, {headers: token})
@@ -69,9 +77,9 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.get(`${this.URL}/Association/UpdatePenalties`, {headers: token})
   }
-  updatePayment(idPayment){
+  updatePaymentsOfRepresentative(idRepresentative){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
-    return this.http.get(`${this.URL}/Association/UpdatePenalty/${idPayment}`, {headers: token})
+    return this.http.get(`${this.URL}/Association/UpdatePenaltiesOfRepresentative/${idRepresentative}`, {headers: token})
   }
   deletePayment(idPayment){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
@@ -86,6 +94,10 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.get(`${this.URL}/Association/GetArchives`, {headers: token})
   }
+  getArchiveOfRepresentative(idRepresentative){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.get(`${this.URL}/Association/GetArchivesOfRepresentative/${idRepresentative}`, {headers: token})
+  }
   deleteArchive(idArchive){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.delete(`${this.URL}/Association/DeleteArchive/${idArchive}`, {headers: token})
@@ -95,9 +107,17 @@ export class AssociationService {
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.get(`${this.URL}/Association/GetReceipts`, {headers: token})
   }
+  getReceiptsOfRepresentative(idRepresentative){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.get(`${this.URL}/Association/GetReceiptsOfRepresentative/${idRepresentative}`, {headers: token})
+  }
   deleteReceipt(idReceipt){
     var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
     return this.http.delete(`${this.URL}/Association/DeleteReceipt/${idReceipt}`, {headers: token})
+  }
+  addReceiptPaper(idReceipt, body){
+    var token = new HttpHeaders({'Authorization': 'Bearer '+ localStorage.getItem('token')})
+    return this.http.post(`${this.URL}/Association/AddReceiptPaper/${idReceipt}`, body, {headers: token})
   }
   
 }

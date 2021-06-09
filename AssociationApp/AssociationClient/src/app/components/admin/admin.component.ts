@@ -125,6 +125,7 @@ export class AdminComponent implements OnInit {
   openEmitPaymentDialog(){
     var paymentDialog = this.dialog.open(EmitPaymentComponent, {data: 'Admin'})
     paymentDialog.afterClosed().subscribe( (result: any) => {
+      this.updatePayments()
     })
   }
 

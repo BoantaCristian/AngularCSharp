@@ -27,6 +27,8 @@ import { ViewDetailsComponent } from './components/dialogs/view-details/view-det
 import { EmitPaymentComponent } from './components/dialogs/emit-payment/emit-payment.component';
 import { DisplayPaperComponent } from './components/dialogs/display-paper/display-paper.component';
 import { PayComponent } from './components/dialogs/pay/pay.component';
+import { AddReceiptPaperComponent } from './components/dialogs/add-receipt-paper/add-receipt-paper.component';
+import { ViewDetailsRepresentativeComponent } from './components/dialogs/view-details-representative/view-details-representative.component';
 
 @NgModule({
   declarations: [
@@ -43,9 +45,11 @@ import { PayComponent } from './components/dialogs/pay/pay.component';
     ViewDetailsComponent,
     EmitPaymentComponent,
     DisplayPaperComponent,
-    PayComponent
+    PayComponent,
+    AddReceiptPaperComponent,
+    ViewDetailsRepresentativeComponent
   ],
-  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent, ViewDetailsComponent, EmitPaymentComponent, DisplayPaperComponent, PayComponent],
+  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent, ViewDetailsComponent, EmitPaymentComponent, DisplayPaperComponent, PayComponent, AddReceiptPaperComponent, ViewDetailsRepresentativeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

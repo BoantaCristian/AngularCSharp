@@ -122,7 +122,7 @@ namespace AssociationAPI.Controllers
             else
                 return BadRequest(new { message = "Association not found!" });
         }
-        
+
         [HttpDelete("{idProvider}")]
         [Authorize(Roles = "Admin")]
         [Route("DeleteProvider/{idProvider}")]
@@ -144,8 +144,8 @@ namespace AssociationAPI.Controllers
                 if (providerHasClient)
                     return BadRequest(new { message = "Provider supplies clients!" });
                 else
-                { 
-                
+                {
+
                     try
                     {
                         _context.Providers.Remove(provider);
@@ -225,7 +225,7 @@ namespace AssociationAPI.Controllers
 
             if (payment != null)
             {
-                var paymentHasReceipts= false;
+                var paymentHasReceipts = false;
                 foreach (Receipt receipt in _context.Receipts.Include(i => i.Payment))
                 {
                     if (receipt.Payment.Id == payment.Id)
@@ -270,49 +270,91 @@ namespace AssociationAPI.Controllers
                 var result1 = _context.Archives.Include(w => w.Client).ThenInclude(ti => ti.Representative);
                 //linq with inner join of all tables and select desired columns
                 var linq = (from archive in _context.Archives
-                           join user in _context.Users on archive.Client.Id equals user.Id
-                           join rep in _context.Users on user.Representative.Id equals rep.Id
-                           join association in _context.Associations on rep.Association.Id equals association.Id
-                           join payment in _context.Payments on user.Id equals payment.Client.Id
-                           select new { user.UserName, 
-                                        payment.UtilitiesPaper, 
-                                        Association = association.Description, 
-                                        archive.Id,
-                                        archive.HotWaterBathroomQuantity, 
-                                        archive.HotWaterKitchenQuantity, 
-                                        archive.HotWaterBathroomDue, 
-                                        archive.HotWaterKitchenDue, 
-                                        archive.ColdWaterBathroomDue, 
-                                        archive.ColdWaterBathroomQuantity,
-                                        archive.ColdWaterKitchenDue, 
-                                        archive.ColdWaterKitchenQuantity, 
-                                        archive.ElectricityDue, 
-                                        archive.ElectricityQuantity,
-                                        archive.GasDue, 
-                                        archive.GasQuantity,
-                                        archive.Date,
-                                        archive.TotalPayment }).Distinct();
+                            join user in _context.Users on archive.Client.Id equals user.Id
+                            join rep in _context.Users on user.Representative.Id equals rep.Id
+                            join association in _context.Associations on rep.Association.Id equals association.Id
+                            join payment in _context.Payments on user.Id equals payment.Client.Id
+                            select new { user.UserName,
+                                payment.UtilitiesPaper,
+                                Association = association.Description,
+                                archive.Id,
+                                archive.HotWaterBathroomQuantity,
+                                archive.HotWaterKitchenQuantity,
+                                archive.HotWaterBathroomDue,
+                                archive.HotWaterKitchenDue,
+                                archive.ColdWaterBathroomDue,
+                                archive.ColdWaterBathroomQuantity,
+                                archive.ColdWaterKitchenDue,
+                                archive.ColdWaterKitchenQuantity,
+                                archive.ElectricityDue,
+                                archive.ElectricityQuantity,
+                                archive.GasDue,
+                                archive.GasQuantity,
+                                archive.Date,
+                                archive.TotalPayment }).Distinct();
                 //with linq from mehtod that selects users with reps and associations
                 var linq2 = (from res in result1
-                            join payment in _context.Payments on res.Client.Id equals payment.Client.Id
-                            select new { res.Id,
-                                        res.Client.UserName,
-                                        res.HotWaterBathroomQuantity,
-                                        res.HotWaterKitchenQuantity,
-                                        res.HotWaterBathroomDue,
-                                        res.HotWaterKitchenDue,
-                                        res.ColdWaterBathroomDue,
-                                        res.ColdWaterBathroomQuantity,
-                                        res.ColdWaterKitchenDue,
-                                        res.ColdWaterKitchenQuantity,
-                                        res.ElectricityDue,
-                                        res.ElectricityQuantity,
-                                        res.GasDue,
-                                        res.GasQuantity,
-                                        res.Date,
-                                        res.TotalPayment,
-                                        Association = res.Client.Representative.Association.Description, 
-                                        payment.UtilitiesPaper }).Distinct();
+                             join payment in _context.Payments on res.Client.Id equals payment.Client.Id
+                             select new { res.Id,
+                                 res.Client.UserName,
+                                 res.HotWaterBathroomQuantity,
+                                 res.HotWaterKitchenQuantity,
+                                 res.HotWaterBathroomDue,
+                                 res.HotWaterKitchenDue,
+                                 res.ColdWaterBathroomDue,
+                                 res.ColdWaterBathroomQuantity,
+                                 res.ColdWaterKitchenDue,
+                                 res.ColdWaterKitchenQuantity,
+                                 res.ElectricityDue,
+                                 res.ElectricityQuantity,
+                                 res.GasDue,
+                                 res.GasQuantity,
+                                 res.Date,
+                                 res.TotalPayment,
+                                 Association = res.Client.Representative.Association.Description,
+                                 payment.UtilitiesPaper }).Distinct();
+                return Ok(linq2);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        [HttpGet("{idRepresentative}")]
+        [Authorize(Roles =  "Representative")]
+        [Route("GetArchivesOfRepresentative/{idRepresentative}")]
+        public IActionResult GetArchivesOfRepresentative(string idRepresentative)
+        {
+            try
+            {
+                //with method: archives with users and their representatives
+                var result1 = _context.Archives.Include(w => w.Client).ThenInclude(ti => ti.Representative).Where(w => w.Client.Representative.Id == idRepresentative);
+                //with linq from mehtod that selects users with reps and associations
+                var linq2 = (from res in result1
+                             join payment in _context.Payments on res.Client.Id equals payment.Client.Id
+                             select new
+                             {
+                                 res.Id,
+                                 res.Client.UserName,
+                                 res.HotWaterBathroomQuantity,
+                                 res.HotWaterKitchenQuantity,
+                                 res.HotWaterBathroomDue,
+                                 res.HotWaterKitchenDue,
+                                 res.ColdWaterBathroomDue,
+                                 res.ColdWaterBathroomQuantity,
+                                 res.ColdWaterKitchenDue,
+                                 res.ColdWaterKitchenQuantity,
+                                 res.ElectricityDue,
+                                 res.ElectricityQuantity,
+                                 res.GasDue,
+                                 res.GasQuantity,
+                                 res.Date,
+                                 res.TotalPayment,
+                                 Association = res.Client.Representative.Association.Description,
+                                 payment.UtilitiesPaper
+                             }).Distinct();
                 return Ok(linq2);
             }
             catch (Exception e)
@@ -329,12 +371,27 @@ namespace AssociationAPI.Controllers
         {
             try
             {
-                var result = _context.Receipts.Include(w => w.Client).Select(s => new { s.Id, s.Client.UserName, s.PayDate, s.AmountPayed });
+                var result = _context.Receipts.Include(w => w.Client).Select(s => new { s.Id, ReceiptClient = s.Client.UserName, s.PayDate, s.AmountPayed, s.ReceiptPaper });
                 return Ok(result);
             }
             catch (Exception e)
             {
+                throw e;
+            }
+        }
 
+        [HttpGet("{idRepresentative}")]
+        [Authorize(Roles = "Representative")]
+        [Route("GetReceiptsOfRepresentative/{idRepresentative}")]
+        public IActionResult GetReceiptsOfRepresentative(string idRepresentative)
+        {
+            try
+            {
+                var result = _context.Receipts.Include(w => w.Client).ThenInclude(ti => ti.Representative).Where(w => w.Client.Representative.Id == idRepresentative).Select(s => new { s.Id, ReceiptClient = s.Client.UserName, s.PayDate, s.AmountPayed, s.ReceiptPaper });
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
                 throw e;
             }
         }
@@ -351,13 +408,28 @@ namespace AssociationAPI.Controllers
             }
             catch (Exception e)
             {
+                throw e;
+            }
+        }
 
+        [HttpGet("{idRepresentative}")]
+        [Authorize(Roles ="Representative")]
+        [Route("GetPaymentsOfRepresentative/{idRepresentative}")]
+        public IActionResult GetPaymentsOfRepresentative(string idRepresentative)
+        {
+            try
+            {
+                var result = _context.Payments.Include(w => w.Client).ThenInclude(ti => ti.Representative).Where(w => w.Client.Representative.Id == idRepresentative).Select(s => new { s.Id, s.Date, s.Client.UserName, Remaining = Math.Round(s.RemainingToPay, 2), s.DaysDelay, s.Penalties, s.TotalDueWithPenalties, s.TotalPaid, s.WorkingCapitalStatus, s.SanitationStatus, s.UtilitiesPaper, s.PaymentStatus });
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
                 throw e;
             }
         }
 
         [HttpPost]
-        [Authorize(Roles ="Admin, Representative, Client")]
+        [Authorize(Roles = "Admin, Representative, Client")]
         [Route("EmitPayment")]
         public async Task<IActionResult> EmitPayment(EmitPaymentDTO model)
         {
@@ -368,9 +440,9 @@ namespace AssociationAPI.Controllers
             var gasProvider = await _context.ClientProviders.Include(i => i.Client).Include(i => i.GasProvider).Select(s => s.GasProvider.GasPrice).FirstOrDefaultAsync();
 
             var paymentAlreadyExists = false;
-            foreach (Payment pay in _context.Payments) //edit ulterior in cazul in care admin face update cu entry gol
+            foreach (Payment pay in _context.Payments.Include(i => i.Client))
             {
-                if(pay.Date.Month == model.Date.Month)
+                if (pay.Date.Month == model.Date.Month && client.UserName == pay.Client.UserName)
                 {
                     paymentAlreadyExists = true;
                     break;
@@ -452,7 +524,8 @@ namespace AssociationAPI.Controllers
                 Payment = payment,
                 Client = client,
                 AmountPayed = model.AmountPaid,
-                PayDate = DateTime.UtcNow
+                PayDate = DateTime.UtcNow,
+                ReceiptPaper = model.ReceiptPaper
             };
 
             try
@@ -471,7 +544,7 @@ namespace AssociationAPI.Controllers
                 throw e;
             }
 
-            
+
         }
 
         public async Task UpdatePaymentAsync(PayDTO model)
@@ -495,7 +568,7 @@ namespace AssociationAPI.Controllers
                 payment.RemainingToPay = 0;
             }
 
-            if(payment.TotalDueWithPenalties == 0)
+            if (payment.TotalDueWithPenalties == 0)
             {
                 payment.SanitationStatus = true;
                 payment.WorkingCapitalStatus = true;
@@ -543,7 +616,7 @@ namespace AssociationAPI.Controllers
                         monthsDifferenceFromEmitToPay = 12 - currentDate.Month + payment.Date.Month;    //difference months of a year
 
                     if (!payment.SanitationStatus || !payment.WorkingCapitalStatus)
-                        for (int i = 0; i < monthsDifferenceFromEmitToPay-1; i++)
+                        for (int i = 0; i < monthsDifferenceFromEmitToPay - 1; i++)
                             sanitationAndWorkingCapitalTaxes += 15;
 
                     if (associationDailyPenalty == null)
@@ -553,7 +626,7 @@ namespace AssociationAPI.Controllers
                     {
                         if (currentDate.Year == payment.Date.Year && differenceFromEmitToPay >= 30) //same year
                         {
-                            if(remainingToPay > 0)
+                            if (remainingToPay > 0)
                                 payment.Penalties = sanitationAndWorkingCapitalTaxes + (remainingToPay * associationDailyPenalty) / 100 * (differenceFromEmitToPay - 30);
 
                             payment.DaysDelay = differenceFromEmitToPay - 30;
@@ -563,7 +636,7 @@ namespace AssociationAPI.Controllers
                         }
                         if (currentDate.Year > payment.Date.Year && differenceFromEmitToPayDifferentYear >= 30) //year of check > year of emit
                         {
-                            if(remainingToPay > 0)
+                            if (remainingToPay > 0)
                                 payment.Penalties = sanitationAndWorkingCapitalTaxes + (remainingToPay * associationDailyPenalty) / 100 * (differenceFromEmitToPayDifferentYear - 30);
 
                             payment.DaysDelay = differenceFromEmitToPayDifferentYear - 30;
@@ -585,45 +658,89 @@ namespace AssociationAPI.Controllers
             }
         }
 
-        [HttpGet("{idPayment}")]
-        [Authorize]
-        [Route("UpdatePenalty/{idPayment}")]
-        public async Task<IActionResult> UpdatePenalty(int idPayment)
+        [HttpGet("{idRepresentative}")]
+        [Authorize(Roles ="Representative")]
+        [Route("UpdatePenaltiesOfRepresentative/{idRepresentative}")]
+        public async Task<IActionResult> UpdatePenaltiesOfRepresentative(string idRepresentative)
         {
-            var payment = await _context.Payments.FindAsync(idPayment);
-
             try
             {
-                var associationDailyPenalty = await _context.Users.Include(i => i.Association).Where(w => w.UserName == payment.Client.UserName).Select(s => s.Association.DayPenalty).FirstAsync();
-                var currentDate = DateTime.UtcNow;
-                var differenceFromEmitToPay = currentDate.DayOfYear - payment.Date.DayOfYear;                    //difference days of a year
-                var differenceFromEmitToPayDifferentYear = 365 - payment.Date.DayOfYear + currentDate.DayOfYear; //difference days until end of year + days passed
-
-                if (currentDate.Year == payment.Date.Year && differenceFromEmitToPay >= 30) //same year
+                foreach (Payment payment in _context.Payments.Include(i => i.Client).ThenInclude(i => i.Representative).ThenInclude(ti => ti.Association).Where(w => w.Client.Representative.Id == idRepresentative))
                 {
-                    payment.Penalties = (payment.TotalDueWithPenalties * associationDailyPenalty) / 100 * (differenceFromEmitToPay - 30);
-                    payment.DaysDelay = differenceFromEmitToPay - 30;
-                    payment.TotalDueWithPenalties += payment.Penalties;
+                    var associationDailyPenalty = payment.Client.Representative.Association.DayPenalty;
+                    var currentDate = DateTime.UtcNow;
+                    var differenceFromEmitToPay = currentDate.DayOfYear - payment.Date.DayOfYear;                    //difference days of a year
+                    var differenceFromEmitToPayDifferentYear = 365 - payment.Date.DayOfYear + currentDate.DayOfYear; //difference days until end of year + days passed
+                    var monthsDifferenceFromEmitToPay = 0;
+                    var totalWithoutPenalties = await _context.Archives.Where(w => w.Date.Month == payment.Date.Month).Select(s => s.TotalPayment).FirstAsync();
+                    var remainingToPay = payment.RemainingToPay;
+                    var sanitationAndWorkingCapitalTaxes = 0;
 
-                    _context.Entry(payment).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
+                    if (currentDate.Month > payment.Date.Month)
+                        monthsDifferenceFromEmitToPay = currentDate.Month - payment.Date.Month;                      //difference months of a year
+                    if (currentDate.Month < payment.Date.Month)
+                        monthsDifferenceFromEmitToPay = 12 - currentDate.Month + payment.Date.Month;    //difference months of a year
+
+                    if (!payment.SanitationStatus || !payment.WorkingCapitalStatus)
+                        for (int i = 0; i < monthsDifferenceFromEmitToPay - 1; i++)
+                            sanitationAndWorkingCapitalTaxes += 15;
+
+                    if (associationDailyPenalty == null)
+                        return BadRequest(new { message = "Association not found" });
+
+                    if (!payment.PaymentStatus)
+                    {
+                        if (currentDate.Year == payment.Date.Year && differenceFromEmitToPay >= 30) //same year
+                        {
+                            if (remainingToPay > 0)
+                                payment.Penalties = sanitationAndWorkingCapitalTaxes + (remainingToPay * associationDailyPenalty) / 100 * (differenceFromEmitToPay - 30);
+
+                            payment.DaysDelay = differenceFromEmitToPay - 30;
+                            payment.TotalDueWithPenalties = remainingToPay + payment.Penalties;
+
+                            _context.Entry(payment).State = EntityState.Modified;
+                        }
+                        if (currentDate.Year > payment.Date.Year && differenceFromEmitToPayDifferentYear >= 30) //year of check > year of emit
+                        {
+                            if (remainingToPay > 0)
+                                payment.Penalties = sanitationAndWorkingCapitalTaxes + (remainingToPay * associationDailyPenalty) / 100 * (differenceFromEmitToPayDifferentYear - 30);
+
+                            payment.DaysDelay = differenceFromEmitToPayDifferentYear - 30;
+                            payment.TotalDueWithPenalties = remainingToPay + payment.Penalties;
+
+                            _context.Entry(payment).State = EntityState.Modified;
+                        }
+                    }
                 }
 
-                if (currentDate.Year > payment.Date.Year && differenceFromEmitToPayDifferentYear >= 30) //year of check > year of emit
-                {
-                    payment.Penalties = (payment.TotalDueWithPenalties * associationDailyPenalty) / 100 * (differenceFromEmitToPayDifferentYear - 30);
-                    payment.DaysDelay = differenceFromEmitToPayDifferentYear - 30;
-                    payment.TotalDueWithPenalties += payment.Penalties;
-
-                    _context.Entry(payment).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                }
+                await _context.SaveChangesAsync();
 
                 return Ok();
             }
             catch (Exception e)
             {
 
+                throw e;
+            }
+        }
+
+        [HttpPost("{idReceipt}")]
+        [Authorize(Roles ="Admin, Representative")]
+        [Route("AddReceiptPaper/{idReceipt}")]
+        public async Task<IActionResult> AddReceiptPaper(int idReceipt, AddReceiptPaper model)
+        {
+            var receipt = await _context.Receipts.FindAsync(idReceipt);
+
+            try
+            {
+                receipt.ReceiptPaper = model.ReceiptPaper;
+                _context.Entry(receipt).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
                 throw e;
             }
         }

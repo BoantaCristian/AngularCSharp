@@ -1,0 +1,18 @@
+<h2 mat-dialog-title class="title"> Add receipt paper </h2>
+
+<mat-dialog-content>
+    <h6 class="col-md-6"> Client: {{data.userName}} </h6>
+    <h6 class="col-md-6"> Date: {{data.payDate | date:'fullDate'}} </h6>
+    <h6 class="col-md-6"> Amount Payed: {{data.amountPayed | number : '1.2-2'}} RON </h6>
+</mat-dialog-content><br><br><br><br><br><br><br>
+<mat-dialog-actions>
+    <form [formGroup]="receiptPaperForm">
+        <div class="col-md-4 offset-4">
+            <img [src]="imagePath" style="width: 300px; height: 300px;" class="photo"><br><br><br><br><br><br><br><br>
+            <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)" formControlName="ReceiptPaper" placeholder="Add Receipt Paper"><br><br>
+        </div>
+        <div>
+          <button mat-button class="centerButton" mat-dialog-close mat-dialog-close="true" (click)="addPaper()" [disabled]="!receiptPaperForm.valid"> Finish </button><br><br><br>
+        </div>
+      </form>
+</mat-dialog-actions>

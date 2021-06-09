@@ -11,6 +11,9 @@ import { AssociationService } from 'src/app/services/association.service';
 })
 export class PayComponent implements OnInit {
   maxValueField: any;
+  fileToUpload: File;
+  imagePath: any;
+  imageLink: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private service: AssociationService, private toastr: ToastrService) { }
 
@@ -20,13 +23,15 @@ export class PayComponent implements OnInit {
     AmountPaid: [(Math.round(this.data.actions.totalDueWithPenalties * 100) / 100).toFixed(2), Validators.required],
     WorkingCapital: [this.data.actions.workingCapitalStatus],
     Sanitation: [this.data.actions.sanitationStatus],
+    ReceiptPaper: ''
   })
 
   ngOnInit() {
-    this.maxValueField = this.data.actions.totalDueWithPenalties
+    console.log(this.data)
   }
 
   pay(){
+    console.log(this.payForm.value)
     this.service.pay(this.payForm.value).subscribe(
       res => {
         this.toastr.success('Paid successfully!', 'Success!')
@@ -37,6 +42,18 @@ export class PayComponent implements OnInit {
         )
       }
     )
+  }
+
+  handleFileInput(file: FileList){
+    this.fileToUpload = file.item(0)
+
+    var reader = new FileReader()
+    reader.onload = (event:any) => {
+      this.imagePath = event.target.result
+    }
+    reader.readAsDataURL(this.fileToUpload)
+    this.payForm.value.ReceiptPaper = "../../../assets/" + this.fileToUpload.name
+    this.imageLink = this.payForm.value.ReceiptPaper
   }
 
 }

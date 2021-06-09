@@ -1,0 +1,106 @@
+.buttonCenter{
+    margin: 0px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.title{
+    text-align: center;
+}
+.cell{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+mat-header-cell, mat-cell{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.search{
+    position: absolute;
+    margin-left: 25px;
+}
+button{
+    margin-right: 8px;
+}
+::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding: 0.4em 0px !important;}
+
+::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    transform: translateY(-1.1em) scale(.5);
+}
+.flexContainer{
+    display: flex;
+}
+button{
+    font-size: 12px;
+    margin: 0px auto;
+    margin-right: 5px;
+}
+mat-row:hover{
+    background-color: rgb(235, 235, 235);
+    transition: 400ms;
+}
+
+.mat-column-userName {
+    flex: 0 0 14% !important;
+    width: 14% !important;
+}
+.mat-column-actions {
+    flex: 0 0 14% !important;
+    width: 14% !important;
+}
+.mat-column-daysDelay {
+    flex: 0 0 6% !important;
+    width: 6% !important;
+}
+.mat-column-penalties {
+    flex: 0 0 6% !important;
+    width: 6% !important;
+}
+.mat-column-totalDueWithPenalties {
+    flex: 0 0 9% !important;
+    width: 9% !important;
+}
+.mat-column-date {
+    flex: 0 0 6% !important;
+    width: 6% !important;
+}
+.mat-column-paymentStatus {
+    flex: 0 0 8% !important;
+    width: 8% !important;
+}
+.mat-column-sanitationStatus {
+    flex: 0 0 8% !important;
+    width: 8% !important;
+}
+.mat-column-workingCapitalStatus {
+    flex: 0 0 8% !important;
+    width: 8% !important;
+}
+.mat-column-totalPaid {
+    flex: 0 0 6% !important;
+    width: 6% !important;
+}
+.mat-column-remaining {
+    flex: 0 0 8% !important;
+    width: 8% !important;
+}
+.mat-column-totalPayment {
+    flex: 0 0 8% !important;
+    width: 8% !important;
+}
+.mat-column-bathroom {
+    flex: 0 0 12% !important;
+    width: 12% !important;
+}
+.mat-column-kitchen {
+    flex: 0 0 12% !important;
+    width: 12% !important;
+}
+.mat-column-electricity {
+    flex: 0 0 12% !important;
+    width: 12% !important;
+}
+.mat-column-gas {
+    flex: 0 0 13% !important;
+    width: 13% !important;
+}

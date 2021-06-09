@@ -47,8 +47,3 @@ button{
   .dateClientFields{
       margin: 0 auto;
   }
-
-  ::ng-deep #toast-container > div {
-    position: relative;
-    top: 70px;
-  }

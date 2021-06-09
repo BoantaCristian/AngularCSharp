@@ -1,2 +1,52 @@
-<button mat-raised-button (click)="openRegisterDialog()"> Add Client </button>
-<button mat-raised-button (click)="logout()"> Logout </button>
+<mat-toolbar>
+    <span>Association App</span>
+</mat-toolbar>
+
+<button mat-raised-button color="warn" (click)="logout()" class="logout"> Logout </button>
+
+<button mat-button [matMenuTriggerFor]="userDetails" class="userInfo" matTooltip="Click to see representative details"> Welcome {{representativeDetails.userName}}! </button>
+<mat-menu #userDetails="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="email"> Email </button>
+    <button mat-menu-item [matMenuTriggerFor]="contact"> Contact </button>
+    <button mat-menu-item [matMenuTriggerFor]="address"> Address </button>
+    <button mat-menu-item [matMenuTriggerFor]="role"> Role </button>
+    <button mat-menu-item [matMenuTriggerFor]="association"> Association </button>
+</mat-menu>
+<mat-menu #email="matMenu">
+    <button mat-menu-item *ngIf="representativeDetails.email != ''"> {{representativeDetails.email}} </button>
+    <button mat-menu-item *ngIf="representativeDetails.email == ''"> Not provided </button>
+  </mat-menu>
+  <mat-menu #contact="matMenu">
+    <button mat-menu-item *ngIf="representativeDetails.telephone != ''"> {{representativeDetails.telephone}} </button>
+    <button mat-menu-item *ngIf="representativeDetails.telephone == ''"> Not provided </button>
+  </mat-menu>
+  <mat-menu #address="matMenu">
+    <button mat-menu-item *ngIf="representativeDetails.address != null"> {{representativeDetails.address}} </button>
+    <button mat-menu-item *ngIf="representativeDetails.address == null"> Not provided </button>
+  </mat-menu>
+  <mat-menu #role="matMenu">
+    <button mat-menu-item> {{representativeDetails.role}} </button>
+  </mat-menu>
+  <mat-menu #association="matMenu">
+    <button mat-menu-item> {{representativeDetails.association}} </button>
+  </mat-menu>
+
+  <div class="col-md-10 offset-1">
+    <mat-card class="animated fadeInDown">
+        <div class="flexContainer">
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('clients')"> <b> CLIENTS </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('associations')"> <b> ASSOCIATIONS </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('providers')"> <b> PROVIDERS </b> </div>
+        </div>
+        <div class="flexContainer">
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('payments')"> <b> PAYMENTS </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('receipts')"> <b> RECEIPTS </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('archives')"> <b> ARCHIVES </b> </div>
+        </div>
+        <div class="flexContainer">
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openEmitPaymentDialog()"> <b> EMIT PAYMENT </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openRegisterDialog()"> <b> ADD CLIENT </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="updatePayments()"> <b> UPTADE PAYMENTS </b> </div>
+        </div>
+    </mat-card>
+</div>
