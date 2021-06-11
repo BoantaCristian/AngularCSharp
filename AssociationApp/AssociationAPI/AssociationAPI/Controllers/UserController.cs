@@ -132,10 +132,13 @@ namespace AssociationAPI.Controllers
             var roleObj = await _userManager.GetRolesAsync(user);
             var role = roleObj.First();
             var association = "";
+            var representative = new object();
 
             if (role == "Representative")
                 association = await _context.Users.Include(i => i.Association).Where(w => w == user).Select(s => s.Association.Description).FirstAsync();
 
+            if (role == "Client")
+                representative = await _context.Users.Include(i => i.Representative).ThenInclude(i => i.Association).Where(w => w == user).FirstAsync();
             return new
             {
                 user.UserName,
@@ -143,7 +146,8 @@ namespace AssociationAPI.Controllers
                 user.Telephone,
                 user.Id,
                 role,
-                association
+                association,
+                representative
             };
         }
 

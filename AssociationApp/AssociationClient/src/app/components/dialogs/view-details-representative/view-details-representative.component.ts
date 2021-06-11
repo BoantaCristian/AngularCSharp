@@ -151,15 +151,21 @@ export class ViewDetailsRepresentativeComponent implements OnInit {
       case 'clientOfRepresentative':
         this.clientsOfRepresentative.filter = this.searchKey.trim().toLocaleLowerCase()
         break
-      case 'associations':
+      case 'association':
         this.associations.filter = this.searchKey.trim().toLocaleLowerCase()
+        break
+      case 'provider':
+        this.providers.filter = this.searchKey.trim().toLocaleLowerCase()
         break
       case 'payment':
         this.payments.filter = this.searchKey.trim().toLocaleLowerCase()
         break
       case 'archive':
-          this.archives.filter = this.searchKey.trim().toLocaleLowerCase()
-          break
+        this.archives.filter = this.searchKey.trim().toLocaleLowerCase()
+        break
+      case 'receipt':
+        this.receipts.filter = this.searchKey.trim().toLocaleLowerCase()
+        break
       default:
         break
     }

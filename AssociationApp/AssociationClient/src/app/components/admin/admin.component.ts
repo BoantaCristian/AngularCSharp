@@ -128,10 +128,4 @@ export class AdminComponent implements OnInit {
       this.updatePayments()
     })
   }
-
-  openPayDialog(){
-    var paymentDialog = this.dialog.open(PayComponent, {data: 'Admin'})
-    paymentDialog.afterClosed().subscribe( (result: any) => {
-    })
-  }
 }

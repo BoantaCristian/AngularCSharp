@@ -14,6 +14,7 @@ export class PayComponent implements OnInit {
   fileToUpload: File;
   imagePath: any;
   imageLink: any;
+  
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder, private service: AssociationService, private toastr: ToastrService) { }
 
@@ -27,11 +28,10 @@ export class PayComponent implements OnInit {
   })
 
   ngOnInit() {
-    console.log(this.data)
+    console.log(this.data.actions.totalDueWithPenalties)
   }
 
   pay(){
-    console.log(this.payForm.value)
     this.service.pay(this.payForm.value).subscribe(
       res => {
         this.toastr.success('Paid successfully!', 'Success!')

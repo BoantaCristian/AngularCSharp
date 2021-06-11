@@ -6,7 +6,7 @@
 <mat-dialog-actions>
     <form [formGroup]="payForm">
         <mat-form-field class="col-md-12">
-            <input type="number" min="0" max="data.actions.totalDueWithPenalties" step="0.01" matInput formControlName="AmountPaid" placeholder="Amount Payed">
+            <input type="number" min="0" step="0.01" matInput formControlName="AmountPaid" placeholder="Amount Payed">
         </mat-form-field>
         <div class="flexContainer">
             <section class="example-section">
@@ -20,6 +20,6 @@
             <input type="file" id="inp" #Image accept="image/*" class="filePosition" (change)="handleFileInput($event.target.files)" formControlName="ReceiptPaper" placeholder="Add Utilities Paper"><br><br>
         </div>
 
-        <button mat-button class="button" (click)="pay()" [mat-dialog-close]="addedSuccessful" mat-dialog-close="true" [disabled]="!payForm.valid || payForm.value.AmountPaid > data.actions.totalDueWithPenalties"> Pay </button><br>
+        <button mat-button class="button" (click)="pay()" [mat-dialog-close]="addedSuccessful" mat-dialog-close="true" [disabled]="!payForm.valid"> Pay </button><br>
     </form>
 </mat-dialog-actions>

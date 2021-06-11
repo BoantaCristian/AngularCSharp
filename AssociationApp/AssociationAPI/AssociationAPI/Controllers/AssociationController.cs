@@ -33,11 +33,27 @@ namespace AssociationAPI.Controllers
             return _context.Associations;
         }
 
+        [HttpGet("{idClient}")]
+        [Route("GetAssociationOfClient/{idClient}")]
+        public IEnumerable<Association> GetAssociationOfClient(string idClient)
+        {
+            var result = _context.Users.Include(i => i.Representative).ThenInclude(ti => ti.Association).Where(w => w.Id == idClient).Select(s => s.Representative.Association);
+            return result;
+        }
+
         [HttpGet]
         [Route("GetProviders")]
         public IEnumerable<Provider> GetProviders()
         {
             return _context.Providers;
+        }
+
+        [HttpGet("{idClient}")]
+        [Route("GetProvidersOfClient/{idClient}")]
+        public async Task<IActionResult> GetProvidersOfClient(string idClient)
+        {
+            var result = await _context.ClientProviders.Include(i => i.Client).Include(i => i.ElectricityProvider).Include(i => i.GasProvider).Include(i => i.WaterProvider).Where(w => w.Client.Id == idClient).Select(s => new { s.ElectricityProvider, s.GasProvider, s.WaterProvider }).FirstAsync();
+            return Ok(result);
         }
 
         [HttpPost]
@@ -364,6 +380,48 @@ namespace AssociationAPI.Controllers
             }
         }
 
+        [HttpGet("{idClient}")]
+        [Authorize(Roles = "Client")]
+        [Route("GetArchivesOfClient/{idClient}")]
+        public IActionResult GetArchivesOfClient(string idClient)
+        {
+            try
+            {
+                //with method: archives with users and their representatives
+                var result1 = _context.Archives.Include(w => w.Client).ThenInclude(ti => ti.Representative).Where(w => w.Client.Id == idClient);
+                //with linq from mehtod that selects users with reps and associations
+                var linq2 = (from res in result1
+                             join payment in _context.Payments on res.Client.Id equals payment.Client.Id
+                             select new
+                             {
+                                 res.Id,
+                                 res.Client.UserName,
+                                 res.HotWaterBathroomQuantity,
+                                 res.HotWaterKitchenQuantity,
+                                 res.HotWaterBathroomDue,
+                                 res.HotWaterKitchenDue,
+                                 res.ColdWaterBathroomDue,
+                                 res.ColdWaterBathroomQuantity,
+                                 res.ColdWaterKitchenDue,
+                                 res.ColdWaterKitchenQuantity,
+                                 res.ElectricityDue,
+                                 res.ElectricityQuantity,
+                                 res.GasDue,
+                                 res.GasQuantity,
+                                 res.Date,
+                                 res.TotalPayment,
+                                 Association = res.Client.Representative.Association.Description,
+                                 payment.UtilitiesPaper
+                             }).Distinct();
+                return Ok(linq2);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
         [HttpGet]
         [Authorize]
         [Route("GetReceipts")]
@@ -396,6 +454,22 @@ namespace AssociationAPI.Controllers
             }
         }
 
+        [HttpGet("{idClient}")]
+        [Authorize(Roles = "Client")]
+        [Route("GetReceiptsOfClient/{idClient}")]
+        public IActionResult GetReceiptsOfClient(string idClient)
+        {
+            try
+            {
+                var result = _context.Receipts.Include(w => w.Client).Where(w => w.Client.Id == idClient).Select(s => new { s.Id, ReceiptClient = s.Client.UserName, s.PayDate, s.AmountPayed, s.ReceiptPaper });
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
         [HttpGet]
         [Authorize]
         [Route("GetPayments")]
@@ -420,6 +494,22 @@ namespace AssociationAPI.Controllers
             try
             {
                 var result = _context.Payments.Include(w => w.Client).ThenInclude(ti => ti.Representative).Where(w => w.Client.Representative.Id == idRepresentative).Select(s => new { s.Id, s.Date, s.Client.UserName, Remaining = Math.Round(s.RemainingToPay, 2), s.DaysDelay, s.Penalties, s.TotalDueWithPenalties, s.TotalPaid, s.WorkingCapitalStatus, s.SanitationStatus, s.UtilitiesPaper, s.PaymentStatus });
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpGet("{idClient}")]
+        [Authorize(Roles = "Client")]
+        [Route("GetPaymentsOfClient/{idClient}")]
+        public IActionResult GetPaymentsOfClient(string idClient)
+        {
+            try
+            {
+                var result = _context.Payments.Include(w => w.Client).Where(w => w.Client.Id == idClient).Select(s => new { s.Id, s.Date, s.Client.UserName, Remaining = Math.Round(s.RemainingToPay, 2), s.DaysDelay, s.Penalties, s.TotalDueWithPenalties, s.TotalPaid, s.WorkingCapitalStatus, s.SanitationStatus, s.UtilitiesPaper, s.PaymentStatus });
                 return Ok(result);
             }
             catch (Exception e)
@@ -559,6 +649,7 @@ namespace AssociationAPI.Controllers
             if ((payment.RemainingToPay - model.AmountPaid) >= 0)
             {
                 payment.RemainingToPay = Math.Round((payment.RemainingToPay - model.AmountPaid), 2);
+                payment.TotalDueWithPenalties = payment.RemainingToPay;
             }
             else
             {
@@ -615,7 +706,7 @@ namespace AssociationAPI.Controllers
                     if (currentDate.Month < payment.Date.Month)
                         monthsDifferenceFromEmitToPay = 12 - currentDate.Month + payment.Date.Month;    //difference months of a year
 
-                    if (!payment.SanitationStatus || !payment.WorkingCapitalStatus)
+                    if (!payment.SanitationStatus || !payment.WorkingCapitalStatus || (payment.SanitationStatus && payment.WorkingCapitalStatus && remainingToPay >= 0))
                         for (int i = 0; i < monthsDifferenceFromEmitToPay - 1; i++)
                             sanitationAndWorkingCapitalTaxes += 15;
 

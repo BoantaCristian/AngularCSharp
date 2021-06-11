@@ -21,7 +21,7 @@ import { RegisterDialogComponent } from './components/dialogs/register-dialog/re
 import { LoginDialogComponent } from './components/dialogs/login-dialog/login-dialog.component';
 import { AddAssociationComponent } from './components/dialogs/add-association/add-association.component';
 
-import { MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatButtonModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule } from "@angular/material";
+import { MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatButtonModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatDividerModule } from "@angular/material";
 import { AddProviderComponent } from './components/dialogs/add-provider/add-provider.component';
 import { ViewDetailsComponent } from './components/dialogs/view-details/view-details.component';
 import { EmitPaymentComponent } from './components/dialogs/emit-payment/emit-payment.component';
@@ -29,6 +29,7 @@ import { DisplayPaperComponent } from './components/dialogs/display-paper/displa
 import { PayComponent } from './components/dialogs/pay/pay.component';
 import { AddReceiptPaperComponent } from './components/dialogs/add-receipt-paper/add-receipt-paper.component';
 import { ViewDetailsRepresentativeComponent } from './components/dialogs/view-details-representative/view-details-representative.component';
+import { ViewDetailsClientComponent } from './components/dialogs/view-details-client/view-details-client.component';
 
 @NgModule({
   declarations: [
@@ -47,9 +48,10 @@ import { ViewDetailsRepresentativeComponent } from './components/dialogs/view-de
     DisplayPaperComponent,
     PayComponent,
     AddReceiptPaperComponent,
-    ViewDetailsRepresentativeComponent
+    ViewDetailsRepresentativeComponent,
+    ViewDetailsClientComponent
   ],
-  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent, ViewDetailsComponent, EmitPaymentComponent, DisplayPaperComponent, PayComponent, AddReceiptPaperComponent, ViewDetailsRepresentativeComponent],
+  entryComponents: [RegisterDialogComponent, LoginDialogComponent, AddAssociationComponent, AddProviderComponent, ViewDetailsComponent, EmitPaymentComponent, DisplayPaperComponent, PayComponent, AddReceiptPaperComponent, ViewDetailsRepresentativeComponent, ViewDetailsClientComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -57,7 +59,7 @@ import { ViewDetailsRepresentativeComponent } from './components/dialogs/view-de
     ToastrModule.forRoot(),
     HttpClientModule,
     FormsModule, ReactiveFormsModule,
-    MatButtonModule, MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule
+    MatButtonModule, MatDividerModule, MatToolbarModule, MatDialogModule, MatInputModule, MatCardModule, MatSelectModule, MatStepperModule, MatIconModule, MatPaginatorModule, MatTableModule, MatSortModule, MatMenuModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule
   ],
   exports: [MatPaginatorModule, MatTableModule, MatSortModule],
   providers: [AssociationService],
