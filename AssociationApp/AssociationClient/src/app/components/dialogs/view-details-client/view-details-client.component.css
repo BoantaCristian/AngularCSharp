@@ -15,9 +15,13 @@ mat-header-cell, mat-cell{
     margin-left: 5px;
     margin-right: 5px;
 }
+mat-table, mat-paginator, mat-horizontal-stepper{
+    background: none !important;
+}
 .search{
     position: absolute;
     margin-left: 25px;
+    z-index: 1;
 }
 button{
     margin-right: 8px;
@@ -51,11 +55,12 @@ button{
 }
 .spacing{
     margin-left: 24px; 
-    padding-top: 10px; 
-    padding-bottom: 10px;
+    padding-top: 12px; 
+    padding-bottom: 12px;
 }
 mat-row:hover, .spacing:hover{
-    background-color: rgb(235, 235, 235);
+    background-color: rgba(255, 255, 255, 0.301);
+    box-shadow: 1px 2px 8px rgba(56, 56, 56, 0.589);
     transition: 400ms;
 }
 .mat-column-actions {

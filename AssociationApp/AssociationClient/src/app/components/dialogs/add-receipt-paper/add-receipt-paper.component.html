@@ -1,11 +1,11 @@
-<h2 mat-dialog-title class="title"> Add receipt paper </h2>
+<h2 mat-dialog-title class="title animate__animated animate__fadeIn"> Add receipt paper </h2>
 
-<mat-dialog-content>
-    <h6 class="col-md-6"> Client: {{data.userName}} </h6>
+<mat-dialog-content class="animate__animated animate__fadeIn">
+    <h6 class="col-md-6"> Client: {{data.receiptClient}} </h6>
     <h6 class="col-md-6"> Date: {{data.payDate | date:'fullDate'}} </h6>
     <h6 class="col-md-6"> Amount Payed: {{data.amountPayed | number : '1.2-2'}} RON </h6>
 </mat-dialog-content><br><br><br><br><br><br><br>
-<mat-dialog-actions>
+<mat-dialog-actions class="animate__animated animate__fadeIn">
     <form [formGroup]="receiptPaperForm">
         <div class="col-md-4 offset-4">
             <img [src]="imagePath" style="width: 300px; height: 300px;" class="photo"><br><br><br><br><br><br><br><br>

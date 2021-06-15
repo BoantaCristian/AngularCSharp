@@ -1,5 +1,5 @@
-<h2 mat-dialog-title class="title">Login</h2>
-<mat-dialog-content>
+<h2 mat-dialog-title class="title animate__animated animate__fadeIn">Login</h2>
+<mat-dialog-content  class="animate__animated animate__fadeIn">
     <form [formGroup]="loginForm" autocomplete="off" class="col-md-8 offset-2">
         <mat-form-field>
             <input type="text" matInput formControlName="UserName" placeholder="Username">
@@ -15,7 +15,7 @@
         </mat-form-field>
     </form><br>
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-actions class="animate__animated animate__fadeIn">
     <button mat-raised-button (click)="login()"  mat-dialog-close mat-dialog-close="true" [disabled]="!loginForm.valid"> Login </button><br><br>
 </mat-dialog-actions>
         

@@ -93,19 +93,19 @@ export class AdminComponent implements OnInit {
   }
 
   openViewDetailsDialog(option){
-    var registerDialog = this.dialog.open(ViewDetailsComponent, {width: '1500px', minWidth: '1500px', data: option})
+    var registerDialog = this.dialog.open(ViewDetailsComponent, {width: '1500px', minWidth: '1500px', data: option, backdropClass:'bdrop'})
     registerDialog.afterClosed().subscribe( () =>{ })
   }
 
   openRegisterDialog(){
-    var registerDialog = this.dialog.open(RegisterDialogComponent, {data: 'Admin'})
+    var registerDialog = this.dialog.open(RegisterDialogComponent, {data: 'Admin', backdropClass:'bdrop'})
     registerDialog.afterClosed().subscribe( () =>{
       setTimeout(() => { this.getUsers() }, 300);
     })
   }
 
   openAddAssociationDialog(){
-    var associationDialog = this.dialog.open(AddAssociationComponent)
+    var associationDialog = this.dialog.open(AddAssociationComponent, {backdropClass:'bdrop'})
     associationDialog.afterClosed().subscribe( result => {
       if(result != undefined){
         this.toastr.success('Association added successfully', 'Success!')
@@ -114,7 +114,7 @@ export class AdminComponent implements OnInit {
     })
   }
   openAddProviderDialog(){
-    var providerDialog = this.dialog.open(AddProviderComponent)
+    var providerDialog = this.dialog.open(AddProviderComponent, {backdropClass:'bdrop'})
     providerDialog.afterClosed().subscribe( result => {
       if(result != undefined){
         this.toastr.success('Provider added successfully', 'Success!')
@@ -123,7 +123,7 @@ export class AdminComponent implements OnInit {
     })
   }
   openEmitPaymentDialog(){
-    var paymentDialog = this.dialog.open(EmitPaymentComponent, {data: 'Admin'})
+    var paymentDialog = this.dialog.open(EmitPaymentComponent, {data: 'Admin', backdropClass:'bdrop'})
     paymentDialog.afterClosed().subscribe( (result: any) => {
       this.updatePayments()
     })

@@ -28,7 +28,7 @@ export class PayComponent implements OnInit {
   })
 
   ngOnInit() {
-    console.log(this.data.actions.totalDueWithPenalties)
+    
   }
 
   pay(){

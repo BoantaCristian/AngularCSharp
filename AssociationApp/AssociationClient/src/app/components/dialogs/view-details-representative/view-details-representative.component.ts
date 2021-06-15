@@ -30,7 +30,7 @@ export class ViewDetailsRepresentativeComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialog: MatDialog, private service: AssociationService, private toastr: ToastrService) { }
  
   @ViewChild(MatSort, {static: false}) sort: MatSort //error solved stack overflow++
-  @ViewChild('clientsOfRepresentativePagiantor', {read: MatPaginator, static: false}) clientsOfRepresentativePagiantor: MatPaginator;  
+  @ViewChild('clientsPaginator', {read: MatPaginator, static: false}) clientsPaginator: MatPaginator;  
   @ViewChild('providersPaginator', {read: MatPaginator, static: false}) providersPaginator: MatPaginator;  
   @ViewChild('associationsPaginator', {read: MatPaginator, static: false}) associationsPaginator: MatPaginator;  
   @ViewChild('paymentsPaginator', {read: MatPaginator, static: false}) paymentsPaginator: MatPaginator;  
@@ -104,6 +104,19 @@ export class ViewDetailsRepresentativeComponent implements OnInit {
       }
     )
   }
+  deleteUser(userName){
+    this.service.deleteUser(userName).subscribe(
+      (res: any) => {
+        this.toastr.success(`User ${res.userName} deleted successfully`, 'Success!')
+        this.getClientsOfRepresentative()
+        setTimeout(()=> this.sortArrays(), 100)
+      },
+      err => {
+        console.log(err)
+        this.toastr.error(`${err.error.message}`,'Failed!')
+      }
+    )
+  }
   openPayDialog(actions){
     var displayPaperDialog = this.dialog.open(PayComponent, {minWidth: "350px", data: {actions, Role: 'Admin'}})
     displayPaperDialog.afterClosed().subscribe( (result: any) => {
@@ -133,7 +146,7 @@ export class ViewDetailsRepresentativeComponent implements OnInit {
     this.archives.sort = this.sort
     this.receipts.sort = this.sort
 
-    this.clientsOfRepresentative.paginator = this.clientsOfRepresentativePagiantor
+    this.clientsOfRepresentative.paginator = this.clientsPaginator
     this.providers.paginator = this.providersPaginator
     this.associations.paginator = this.associationsPaginator
     this.payments.paginator = this.paymentsPaginator

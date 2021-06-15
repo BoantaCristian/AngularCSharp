@@ -51,19 +51,23 @@ export class RepresentativeComponent implements OnInit {
     )
   }
   openRegisterDialog(){
-    var registerDialog = this.dialog.open(RegisterDialogComponent, {data: this.representativeDetails.id})
+    var registerDialog = this.dialog.open(RegisterDialogComponent, {data: this.representativeDetails.id, backdropClass:'bdrop'})
     registerDialog.afterClosed().subscribe( () =>{
       setTimeout(() => { }, 300);
     })
   }
   openViewDetailsDialog(option){
-    var registerDialog = this.dialog.open(ViewDetailsRepresentativeComponent, {width: '1500px', minWidth: '1500px', data: {option, userId: this.representativeDetails.id}})
+    var registerDialog = this.dialog.open(ViewDetailsRepresentativeComponent, {width: '1500px', minWidth: '1500px', data: {option, userId: this.representativeDetails.id}, backdropClass:'bdrop'})
     registerDialog.afterClosed().subscribe( () =>{ })
   }
   openEmitPaymentDialog(){
-    var paymentDialog = this.dialog.open(EmitPaymentComponent, {data: 'Representative'})
+    var paymentDialog = this.dialog.open(EmitPaymentComponent, {data: 'Representative', backdropClass:'bdrop'})
     paymentDialog.afterClosed().subscribe( (result: any) => {
-      this.updatePayments()
+      this.service.updatePayments().subscribe(
+        res => {
+          this.toastr.success('Payments and penalties updated!', 'Success!')
+        }
+      )
     })
   }
 

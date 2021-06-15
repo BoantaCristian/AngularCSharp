@@ -3,7 +3,7 @@
 </mat-toolbar>
 <button mat-raised-button color="warn" (click)="logout()" class="logout"> Logout </button>
 
-<button mat-button [matMenuTriggerFor]="userDetails" class="userInfo" matTooltip="Click to see client details"> Welcome {{clientDetails.userName}}! </button>
+<button mat-button [matMenuTriggerFor]="userDetails" class="userInfo" matTooltip="Click to see client details" style="color: white"> Welcome {{clientDetails.userName}}! </button>
 <mat-menu #userDetails="matMenu">
     <button mat-menu-item [matMenuTriggerFor]="email"> Email </button>
     <button mat-menu-item [matMenuTriggerFor]="contact"> Contact </button>
@@ -58,16 +58,16 @@
 <div class="col-md-10 offset-1">
     <mat-card class="animated fadeInDown">
         <div class="flexContainer">
-            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('association')"> <b> ASSOCIATION </b> </div>
-            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('providers')"> <b> PROVIDERS </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openViewDetailsDialog('association')"> <b> ASSOCIATION </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openViewDetailsDialog('providers')"> <b> PROVIDERS </b> </div>
         </div>
         <div class="flexContainer">
-            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('receipts')"> <b> RECEIPTS </b> </div>
-            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('archives')"> <b> ARCHIVES </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openViewDetailsDialog('receipts')"> <b> RECEIPTS </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openViewDetailsDialog('archives')"> <b> ARCHIVES </b> </div>
         </div>
         <div class="flexContainer">
-            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openViewDetailsDialog('payments')"> <b> PAYMENTS </b> </div>
-            <div class="flexContent dialogLink animate__animated animate__fadeInDown" (click)="openEmitPaymentDialog()"> <b> EMIT PAYMENT</b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openViewDetailsDialog('payments')"> <b> PAYMENTS </b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openEmitPaymentDialog()"> <b> EMIT PAYMENT</b> </div>
         </div>
     </mat-card>
 </div>

@@ -18,6 +18,7 @@ mat-header-cell, mat-cell{
 .search{
     position: absolute;
     margin-left: 25px;
+    z-index: 1;
 }
 button{
     margin-right: 8px;
@@ -26,6 +27,9 @@ button{
 
 ::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
     transform: translateY(-1.1em) scale(.5);
+}
+mat-table, mat-paginator, mat-horizontal-stepper{
+    background: none;
 }
 .flexContainer{
     display: flex;
@@ -36,7 +40,8 @@ button{
     margin-right: 5px;
 }
 mat-row:hover{
-    background-color: rgb(235, 235, 235);
+    background-color: rgba(255, 255, 255, 0.301);
+    box-shadow: 1px 2px 8px rgba(56, 56, 56, 0.589);
     transition: 400ms;
 }
 

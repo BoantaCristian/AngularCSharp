@@ -1,6 +1,9 @@
 mat-form-field{
     margin: 10px;
 }
+mat-horizontal-stepper{
+    background: none;
+}
 .descriptionField{
     width: 30%;
 }

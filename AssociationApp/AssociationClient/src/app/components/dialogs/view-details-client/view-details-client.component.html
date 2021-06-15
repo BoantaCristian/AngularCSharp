@@ -1,13 +1,13 @@
-<h2 mat-dialog-title *ngIf="data.option == 'association'" class="title">Association</h2>
-<h2 mat-dialog-title *ngIf="data.option == 'providers'" class="title">Providers</h2>
-<h2 mat-dialog-title *ngIf="data.option == 'payments'" class="title">Payments</h2>
-<h2 mat-dialog-title *ngIf="data.option == 'archives'" class="title">Archives</h2>
-<h2 mat-dialog-title *ngIf="data.option == 'receipts'" class="title">Receipts</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'association'" class="title animate__animated animate__fadeIn">Association</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'providers'" class="title animate__animated animate__fadeIn">Providers</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'payments'" class="title animate__animated animate__fadeIn">Payments</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'archives'" class="title animate__animated animate__fadeIn">Archives</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'receipts'" class="title animate__animated animate__fadeIn">Receipts</h2>
 
 <mat-dialog-content>
     <!-- association -->
     <div *ngIf="data.option == 'providers'">
-        <div class="flexContainer" style="margin: 24px;">
+        <div class="flexContainer animate__animated animate__fadeIn" style="margin: 24px;">
             <div class="flexContent column">Type</div>
             <div class="flexContent column">Name</div>
             <div class="flexContent column">Location</div>
@@ -18,7 +18,7 @@
             <div class="flexSmallContent column">Gas (RON)</div>
         </div>
         <mat-divider></mat-divider>
-        <div class="flexContainer spacing">
+        <div class="flexContainer spacing animate__animated animate__fadeInDown">
             <div class="flexContent content"> Water</div>
             <div class="flexContent content">{{waterProvider.name}}</div>
             <div class="flexContent content">{{waterProvider.location}}</div>
@@ -29,7 +29,7 @@
             <div class="flexSmallContent content">{{waterProvider.gasPrice}}</div>
         </div>
         <mat-divider></mat-divider>
-        <div class="flexContainer spacing">
+        <div class="flexContainer spacing animate__animated animate__fadeInDown">
             <div class="flexContent content"> Electricity </div>
             <div class="flexContent content">{{electricityProvider.name}}</div>
             <div class="flexContent content">{{electricityProvider.location}}</div>
@@ -40,7 +40,7 @@
             <div class="flexSmallContent content">{{electricityProvider.gasPrice}}</div>
         </div>
         <mat-divider></mat-divider>
-        <div class="flexContainer spacing">
+        <div class="flexContainer spacing animate__animated animate__fadeInDown">
             <div class="flexContent content"> Gas </div>
             <div class="flexContent content">{{gasProvider.name}}</div>
             <div class="flexContent content">{{gasProvider.location}}</div>
@@ -79,8 +79,8 @@
                 <mat-header-cell *matHeaderCellDef>Day Penalty</mat-header-cell>
                 <mat-cell *matCellDef="let association"> {{association.dayPenalty}}% </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayAssociationColumns"></mat-header-row>
-            <mat-row *matRowDef="let association; columns: displayAssociationColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayAssociationColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let association; columns: displayAssociationColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table><br>
     </div>
     <!-- payments -->
@@ -138,10 +138,10 @@
                     <button mat-raised-button color="primary" (click)="openDisplayPaperDialog(actions.utilitiesPaper)"> Paper </button>    
                 </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayPaymentColumns"></mat-header-row>
-            <mat-row *matRowDef="let payment; columns: displayPaymentColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayPaymentColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let payment; columns: displayPaymentColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table>
-        <mat-paginator #paymentsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        <mat-paginator class="animate__animated animate__fadeInDown" #paymentsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
     <!-- archives -->
@@ -183,10 +183,10 @@
                     <button mat-raised-button color="primary" (click)="openDisplayPaperDialog(actions.utilitiesPaper)"> Paper </button>    
                 </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayArchiveColumns"></mat-header-row>
-            <mat-row *matRowDef="let archive; columns: displayArchiveColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayArchiveColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let archive; columns: displayArchiveColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table>
-        <mat-paginator #archivesPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        <mat-paginator class="animate__animated animate__fadeInDown" #archivesPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
     <!-- view receipts -->
@@ -207,10 +207,10 @@
                     <button mat-raised-button *ngIf="actions.receiptPaper == ''" [disabled]="true" >No receipt paper</button>    
                 </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayReceiptColumns"></mat-header-row>
-            <mat-row *matRowDef="let receipt; columns: displayReceiptColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayReceiptColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let receipt; columns: displayReceiptColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table>
-        <mat-paginator #receiptsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        <mat-paginator class="animate__animated animate__fadeInDown" #receiptsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
 </mat-dialog-content>

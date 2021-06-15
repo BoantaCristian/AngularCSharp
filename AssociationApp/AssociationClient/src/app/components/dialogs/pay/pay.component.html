@@ -1,9 +1,9 @@
-<h2 mat-dialog-title class="title"> Pay </h2>
-<mat-dialog-content>
+<h2 mat-dialog-title class="title animate__animated animate__fadeIn"> Pay </h2>
+<mat-dialog-content class="animate__animated animate__fadeIn">
     <h6 class="col-md-6"> Client: {{data.actions.userName}} </h6>
     <h6 class="col-md-6"> Total: {{data.actions.totalDueWithPenalties | number : '1.2-2'}} RON </h6>
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-actions class="animate__animated animate__fadeIn">
     <form [formGroup]="payForm">
         <mat-form-field class="col-md-12">
             <input type="number" min="0" step="0.01" matInput formControlName="AmountPaid" placeholder="Amount Payed">

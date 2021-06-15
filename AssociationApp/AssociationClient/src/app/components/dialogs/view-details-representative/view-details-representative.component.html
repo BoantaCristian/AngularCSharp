@@ -1,9 +1,9 @@
-<h2 mat-dialog-title *ngIf="data.option == 'clients'" class="title">Clients</h2>
-<h2 mat-dialog-title *ngIf="data.option == 'associations'" class="title">Associations</h2>
-<h2 mat-dialog-title *ngIf="data.option == 'providers'" class="title">Providers</h2>
-<h2 mat-dialog-title *ngIf="data.option == 'payments'" class="title">Payments</h2>
-<h2 mat-dialog-title *ngIf="data.option == 'archives'" class="title">Archives</h2>
-<h2 mat-dialog-title *ngIf="data.option == 'receipts'" class="title">Receipts</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'clients'" class="title animate__animated animate__fadeIn">Clients</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'associations'" class="title animate__animated animate__fadeIn">Associations</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'providers'" class="title animate__animated animate__fadeIn">Providers</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'payments'" class="title animate__animated animate__fadeIn">Payments</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'archives'" class="title animate__animated animate__fadeIn">Archives</h2>
+<h2 mat-dialog-title *ngIf="data.option == 'receipts'" class="title animate__animated animate__fadeIn">Receipts</h2>
 <!-- clients -->
 <mat-dialog-content>
     <div *ngIf="data.option == 'clients'">
@@ -39,16 +39,16 @@
                     <button mat-raised-button color="warn" (click)="deleteUser(actions.userName)"> Delete </button>
                 </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayClientsOfRepresentativeColumns"></mat-header-row>
-            <mat-row *matRowDef="let client; columns: displayClientsOfRepresentativeColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayClientsOfRepresentativeColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let client; columns: displayClientsOfRepresentativeColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table>
-        <mat-form-field class="search">
+        <mat-form-field class="search animate__animated animate__fadeInDown">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('clientOfRepresentative')">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <mat-paginator #clientsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        <mat-paginator class="animate__animated animate__fadeInDown" #clientsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
     <!-- view providers -->
@@ -94,16 +94,16 @@
                     <div *ngIf="provider.gasPrice == 0"> Not Provided </div>  
                 </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayProviderColumns"></mat-header-row>
-            <mat-row *matRowDef="let provider; columns: displayProviderColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayProviderColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let provider; columns: displayProviderColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table>
-        <mat-form-field class="search">
+        <mat-form-field class="search animate__animated animate__fadeInDown">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('provider')">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <mat-paginator #providersPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        <mat-paginator class="animate__animated animate__fadeInDown" #providersPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
     <!-- associations -->
@@ -133,16 +133,16 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Day Penalty</mat-header-cell>
                 <mat-cell *matCellDef="let association"> {{association.dayPenalty}}% </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayAssociationColumns"></mat-header-row>
-            <mat-row *matRowDef="let association; columns: displayAssociationColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayAssociationColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let association; columns: displayAssociationColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table>
-        <mat-form-field class="search">
+        <mat-form-field class="search animate__animated animate__fadeInDown">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('association')">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <mat-paginator #associationsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        <mat-paginator class="animate__animated animate__fadeInDown" #associationsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
     <!-- payments -->
@@ -205,16 +205,16 @@
                     <button mat-raised-button color="warn" (click)="deletePayment(actions.id)"> Delete </button>
                 </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayPaymentColumns"></mat-header-row>
-            <mat-row *matRowDef="let payment; columns: displayPaymentColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayPaymentColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let payment; columns: displayPaymentColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table>
-        <mat-form-field class="search">
+        <mat-form-field class="search animate__animated animate__fadeInDown">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('payment')">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <mat-paginator #paymentsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        <mat-paginator class="animate__animated animate__fadeInDown" #paymentsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
      <!-- archives -->
@@ -260,16 +260,16 @@
                     <button mat-raised-button color="primary" (click)="openDisplayPaperDialog(actions.utilitiesPaper)"> Paper </button>    
                 </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayArchiveColumns"></mat-header-row>
-            <mat-row *matRowDef="let archive; columns: displayArchiveColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayArchiveColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let archive; columns: displayArchiveColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table>
-        <mat-form-field class="search">
+        <mat-form-field class="search animate__animated animate__fadeInDown">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('archive')">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <mat-paginator #archivesPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        <mat-paginator class="animate__animated animate__fadeInDown" #archivesPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
     <!-- view receipts -->
@@ -294,16 +294,16 @@
                     <button mat-raised-button *ngIf="actions.receiptPaper == ''" color="primary" (click)="openAddReceiptPaperDialog(actions)">Add paper</button>    
                 </mat-cell>
             </ng-container>
-            <mat-header-row *matHeaderRowDef="displayReceiptColumns"></mat-header-row>
-            <mat-row *matRowDef="let receipt; columns: displayReceiptColumns"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayReceiptColumns" class="animate__animated animate__fadeIn"></mat-header-row>
+            <mat-row *matRowDef="let receipt; columns: displayReceiptColumns" class="animate__animated animate__fadeInDown"></mat-row>
         </mat-table>
-        <mat-form-field class="search">
+        <mat-form-field class="search animate__animated animate__fadeInDown">
             <input matInput [(ngModel)]="searchKey" placeholder="Search" autocomplete="off" (keyup)="applyFilter('receipt')">
             <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="onSearchClear()">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <mat-paginator #receiptsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
+        <mat-paginator class="animate__animated animate__fadeInDown" #receiptsPaginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
     </div>
 </mat-dialog-content>

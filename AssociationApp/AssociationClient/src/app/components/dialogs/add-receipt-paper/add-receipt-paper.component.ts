@@ -36,7 +36,6 @@ export class AddReceiptPaperComponent implements OnInit {
   }
 
   addPaper(){
-    console.log(this.data.id, this.receiptPaperForm.value.ReceiptPaper)
     this.service.addReceiptPaper(this.data.id, this.receiptPaperForm.value).subscribe(
       res => {
         this.toastr.success('Receipt paper added successfully!', 'Success!')

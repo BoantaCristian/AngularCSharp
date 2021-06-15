@@ -1,6 +1,9 @@
 mat-dialog-content{
     width: 600px !important;
 }
+mat-horizontal-stepper{
+    background: none;
+}
 .text-danger{
     position: absolute;
     left: 0;

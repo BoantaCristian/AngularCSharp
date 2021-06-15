@@ -78,7 +78,6 @@ export class RegisterDialogComponent implements OnInit {
       this.mismatch = true
   }
   selectRole(role){
-    console.log(role)
     this.roleSelectedByAdmin = role
     this.registerForm.reset({
       UserName: this.registerForm.value.UserName,
@@ -118,8 +117,6 @@ export class RegisterDialogComponent implements OnInit {
     }
     else
       body.Role = this.roleSelectedByAdmin
-      
-    console.log(body)
 
     this.service.register(body).subscribe(
       (res:any) => {

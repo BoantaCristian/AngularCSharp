@@ -1,7 +1,7 @@
-<h2 mat-dialog-title *ngIf="role == 'Client'" class="title">Register</h2>
-<h2 mat-dialog-title *ngIf="role == 'Admin'" class="title">Add user</h2>
-<h2 mat-dialog-title *ngIf="role != 'Admin' && role != 'Client'" class="title">Add Client</h2>
-<mat-dialog-content>
+<h2 mat-dialog-title *ngIf="role == 'Client'" class="title animate__animated animate__fadeIn">Register</h2>
+<h2 mat-dialog-title *ngIf="role == 'Admin'" class="title animate__animated animate__fadeIn">Add user</h2>
+<h2 mat-dialog-title *ngIf="role != 'Admin' && role != 'Client'" class="title animate__animated animate__fadeIn">Add Client</h2>
+<mat-dialog-content class="animate__animated animate__fadeIn">
     <form [formGroup]="registerForm" autocomplete="off" class="col-md-10 offset-1">
         <div class="flexContainer">
             <mat-form-field>

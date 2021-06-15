@@ -3,17 +3,26 @@ mat-card{
     position: relative;
     top: 350px;
     box-shadow: none !important;
+    background: none;
 }
 .flexContainer{
     display: flex
 }
 .flexContent{
     flex: 1;
+    margin-left: 100px;
+    margin-right: 100px;
 }
 .dialogLink{
-    font-size: 50px;
+    font-size: 60px;
     text-align: center;
 }
 .dialogLink:hover{
     cursor: pointer;
+}
+
+::ng-deep.mat-dialog-container {
+    background-color: rgba(255, 255, 255, 0.555) !important;
+    backdrop-filter: blur(5px) !important;
+    border-radius: 20px !important;
 }

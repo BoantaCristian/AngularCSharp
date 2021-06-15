@@ -3,6 +3,14 @@ mat-card{
     position: relative;
     top: 200px;
     box-shadow: none !important;
+    background: none;
+}
+mat-table, mat-paginator, mat-horizontal-stepper{
+    background: none !important;
+}
+mat-toolbar{
+    background: rgb(48, 48, 48);
+    color: white;
 }
 .flexContainer{
     display: flex;
@@ -13,7 +21,7 @@ mat-card{
     text-align: center;
 }
 .dialogLink{
-    font-size: 40px;
+    font-size: 45px;
     text-align: center;
 }
 .dialogLink:hover{
@@ -29,4 +37,10 @@ mat-card{
     top: 13px;
     right: 10%;
     font-size:x-large;
+}
+
+::ng-deep.mat-dialog-container {
+    background-color: rgba(255, 255, 255, 0.555) !important;
+    backdrop-filter: blur(5px) !important;
+    border-radius: 20px !important;
 }

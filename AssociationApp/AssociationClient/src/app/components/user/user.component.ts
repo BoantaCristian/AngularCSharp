@@ -16,13 +16,13 @@ export class UserComponent implements OnInit {
   }
 
   openRegisterDialog(){
-    var registerDialog = this.dialog.open(RegisterDialogComponent, { data: 'Client'})
+    var registerDialog = this.dialog.open(RegisterDialogComponent, { data: 'Client', backdropClass: 'bdrop'})
     registerDialog.afterClosed().subscribe( () =>{
       setTimeout(() => { }, 300);
     })
   }
   openLoginDialog(){
-    var registerDialog = this.dialog.open(LoginDialogComponent, {width: '400px'})
+    var registerDialog = this.dialog.open(LoginDialogComponent, {width: '400px', backdropClass:'bdrop'})
     registerDialog.afterClosed().subscribe( () =>{
       setTimeout(() => { }, 300);
     })

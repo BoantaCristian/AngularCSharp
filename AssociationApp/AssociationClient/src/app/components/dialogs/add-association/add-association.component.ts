@@ -32,7 +32,6 @@ export class AddAssociationComponent implements OnInit {
       ...this.associationDetailsForm.value,
       ...this.associationMaintenanceForm.value
     }
-    console.log(associationForm)
     this.service.addAssociation(associationForm).subscribe(
       res => { },
       err => {
