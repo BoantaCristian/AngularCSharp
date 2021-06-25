@@ -186,15 +186,45 @@ namespace AssociationAPI.Controllers
         public async Task<IActionResult> DeleteArchive(int idArchive)
         {
             var archive = await _context.FindAsync<Archive>(idArchive);
+            var archiveWithClient = await _context.Archives.Include(i => i.Client).Where(w => w.Id == idArchive).FirstAsync();
 
-            if (archive != null)
+            if (archiveWithClient != null)
             {
                 try
                 {
-                    _context.Archives.Remove(archive);
+                    //var payment = await _context.Payments.Include(i => i.Client).Where(w => w.Client.Id == archiveWithClient.Client.Id).Where(w => w.Date == archiveWithClient.Date).FirstAsync(); //null refference if user deletes payment first
+                    foreach (Payment payment in _context.Payments.Include(i => i.Client))
+                    {
+                        if(payment.Client.Id == archive.Client.Id && payment.Date == archive.Date)
+                        {
+                            var paymentHasReceipts = false;
+                            foreach (Receipt receipt in _context.Receipts.Include(i => i.Payment))
+                            {
+                                if (receipt.Payment.Id == payment.Id)
+                                {
+                                    paymentHasReceipts = true;
+                                    break;
+                                }
+                            }
+                            if (paymentHasReceipts)
+                            {
+                                foreach (Receipt receipt in _context.Receipts.Include(i => i.Client))
+                                {
+                                    if (receipt.Client.Id == archive.Client.Id)
+                                    {
+                                        _context.Receipts.Remove(receipt);
+                                    }
+                                }
+                            }
+
+                            _context.Payments.Remove(payment);
+                        }
+                    }                    
+
+                    _context.Archives.Remove(archiveWithClient);
                     await _context.SaveChangesAsync();
 
-                    return Ok(archive);
+                    return Ok(archiveWithClient);
                 }
                 catch (Exception e)
                 {
@@ -328,7 +358,9 @@ namespace AssociationAPI.Controllers
                                  res.Date,
                                  res.TotalPayment,
                                  Association = res.Client.Representative.Association.Description,
-                                 payment.UtilitiesPaper }).Distinct();
+                                 payment.UtilitiesPaper }).GroupBy(x => x.Id)
+                                                          .Select(g => g.First())
+                                                          .ToList();
                 return Ok(linq2);
             }
             catch (Exception e)
@@ -429,7 +461,7 @@ namespace AssociationAPI.Controllers
         {
             try
             {
-                var result = _context.Receipts.Include(w => w.Client).Select(s => new { s.Id, ReceiptClient = s.Client.UserName, s.PayDate, s.AmountPayed, s.ReceiptPaper });
+                var result = _context.Receipts.Include(w => w.Client).Select(s => new { s.Id, ReceiptClient = s.Client.UserName, s.PayDate, s.AmountPayed, s.ReceiptPaper, s.Sanitation, s.WorkingCapital });
                 return Ok(result);
             }
             catch (Exception e)
@@ -555,18 +587,18 @@ namespace AssociationAPI.Controllers
                     ColdWaterBathroomQuantity = model.ColdWaterBathroomQuantity,
                     ElectricityQuantity = model.ElectricityQuantity,
                     GasQuantity = model.GasQuantity,
-                    HotWaterKitchenDue = model.HotWaterKitchenQuantity * hotWaterProvider,
-                    HotWaterBathroomDue = model.HotWaterBathroomQuantity * hotWaterProvider,
-                    ColdWaterKitchenDue = model.ColdWaterKitchenQuantity * coldWaterProvider,
-                    ColdWaterBathroomDue = model.ColdWaterBathroomQuantity * coldWaterProvider,
-                    ElectricityDue = model.ElectricityQuantity * electricityProvider,
-                    GasDue = model.GasQuantity * gasProvider,
-                    TotalPayment = model.HotWaterKitchenQuantity * hotWaterProvider +
-                               model.HotWaterBathroomQuantity * hotWaterProvider +
-                               model.ColdWaterKitchenQuantity * coldWaterProvider +
-                               model.ColdWaterBathroomQuantity * coldWaterProvider +
-                               model.ElectricityQuantity * electricityProvider +
-                               model.GasQuantity * gasProvider
+                    HotWaterKitchenDue = Math.Round(model.HotWaterKitchenQuantity * hotWaterProvider, 2),
+                    HotWaterBathroomDue = Math.Round(model.HotWaterBathroomQuantity * hotWaterProvider, 2),
+                    ColdWaterKitchenDue = Math.Round(model.ColdWaterKitchenQuantity * coldWaterProvider, 2),
+                    ColdWaterBathroomDue = Math.Round(model.ColdWaterBathroomQuantity * coldWaterProvider, 2),
+                    ElectricityDue = Math.Round(model.ElectricityQuantity * electricityProvider, 2),
+                    GasDue = Math.Round(model.GasQuantity * gasProvider, 2),
+                    TotalPayment = Math.Round(model.HotWaterKitchenQuantity * hotWaterProvider, 2) +
+                               Math.Round(model.HotWaterBathroomQuantity * hotWaterProvider, 2) +
+                               Math.Round(model.ColdWaterKitchenQuantity * coldWaterProvider, 2) +
+                               Math.Round(model.ColdWaterBathroomQuantity * coldWaterProvider, 2) +
+                               Math.Round(model.ElectricityQuantity * electricityProvider, 2) +
+                               Math.Round(model.GasQuantity * gasProvider, 2)
                 };
 
                 var payment = new Payment
@@ -618,6 +650,16 @@ namespace AssociationAPI.Controllers
                 ReceiptPaper = model.ReceiptPaper
             };
 
+            if (!payment.SanitationStatus && model.Sanitation)
+                receipt.Sanitation = model.Sanitation;
+            else
+                receipt.Sanitation = false;
+
+            if (!payment.WorkingCapitalStatus && model.WorkingCapital)
+                receipt.WorkingCapital = model.WorkingCapital;
+            else
+                receipt.WorkingCapital = false;
+
             try
             {
                 await _context.Receipts.AddAsync(receipt);
@@ -649,20 +691,19 @@ namespace AssociationAPI.Controllers
             if ((payment.RemainingToPay - model.AmountPaid) >= 0)
             {
                 payment.RemainingToPay = Math.Round((payment.RemainingToPay - model.AmountPaid), 2);
+                payment.TotalDueWithPenalties = Math.Round(payment.TotalDueWithPenalties - model.AmountPaid, 2);
             }
             else
             {
-                var difference = payment.RemainingToPay - model.AmountPaid;
-                payment.TotalDueWithPenalties = payment.TotalDueWithPenalties + difference - payment.RemainingToPay;
-                payment.TotalDueWithPenalties = Math.Round(payment.TotalDueWithPenalties, 2);
-                payment.Penalties += difference; 
-                payment.RemainingToPay = 0;
-            }
+                var difference = Math.Round(payment.RemainingToPay - model.AmountPaid, 2);
+                payment.TotalDueWithPenalties = Math.Round(payment.TotalDueWithPenalties - model.AmountPaid, 2);
 
-            if (payment.TotalDueWithPenalties == 0)
-            {
-                payment.SanitationStatus = true;
-                payment.WorkingCapitalStatus = true;
+                if(payment.Penalties > 0)
+                {
+                    payment.Penalties = Math.Round(payment.Penalties + difference, 2); 
+                }
+                
+                payment.RemainingToPay = 0;
             }
 
             if (model.Sanitation && model.WorkingCapital && payment.TotalDueWithPenalties <= 0 && payment.RemainingToPay == 0)
@@ -691,40 +732,46 @@ namespace AssociationAPI.Controllers
             var differenceFromEmitToPayDifferentYear = 365 - payment.Date.DayOfYear + currentDate.DayOfYear; //difference days until end of year + days passed
             var monthsDifferenceFromEmitToPay = 0;
             var totalWithoutPenalties = await _context.Archives.Include(i => i.Client).Where(w => w.Date.Month == payment.Date.Month).Where(w => w.Client.Id == payment.Client.Id).Select(s => s.TotalPayment).FirstAsync();
+            totalWithoutPenalties = Math.Round(totalWithoutPenalties, 2);
             var remainingToPay = payment.RemainingToPay;
             var sanitationAndWorkingCapitalTaxes = 0;
+
 
             if (currentDate.Month > payment.Date.Month)
                 monthsDifferenceFromEmitToPay = currentDate.Month - payment.Date.Month;                      //difference months of a year
             if (currentDate.Month < payment.Date.Month)
                 monthsDifferenceFromEmitToPay = 12 - currentDate.Month + payment.Date.Month;    //difference months of a year
 
-            if (!payment.SanitationStatus || !payment.WorkingCapitalStatus || (payment.SanitationStatus && payment.WorkingCapitalStatus && remainingToPay >= 0))
+            if (!payment.SanitationStatus || !payment.WorkingCapitalStatus)
                 for (int i = 0; i < monthsDifferenceFromEmitToPay - 1; i++)
                     sanitationAndWorkingCapitalTaxes += 15;
 
             if (associationDailyPenalty == null)
                 return BadRequest(new { message = "Association not found" });
 
+            var totalPenalties = Math.Round(sanitationAndWorkingCapitalTaxes + (totalWithoutPenalties * associationDailyPenalty) / 100 * (differenceFromEmitToPay - 30), 2);
+
             if (!payment.PaymentStatus)
             {
                 if (currentDate.Year == payment.Date.Year && differenceFromEmitToPay >= 30) //same year
                 {
                     if (remainingToPay > 0)
-                        payment.Penalties = sanitationAndWorkingCapitalTaxes + (remainingToPay * associationDailyPenalty) / 100 * (differenceFromEmitToPay - 30);
-
+                        payment.Penalties = Math.Round(sanitationAndWorkingCapitalTaxes + (totalWithoutPenalties * associationDailyPenalty) / 100 * (differenceFromEmitToPay - 30), 2);
+                    else if(differenceFromEmitToPay - 30 - payment.DaysDelay > 0)
+                        payment.Penalties += sanitationAndWorkingCapitalTaxes + (differenceFromEmitToPay - 30 - payment.DaysDelay) * totalWithoutPenalties * associationDailyPenalty / 100; //adds a day of penalties to all penalties
                     payment.DaysDelay = differenceFromEmitToPay - 30;
-                    payment.TotalDueWithPenalties = remainingToPay + payment.Penalties;
+                    payment.TotalDueWithPenalties = Math.Round(remainingToPay + payment.Penalties, 2);
 
                     _context.Entry(payment).State = EntityState.Modified;
                 }
                 if (currentDate.Year > payment.Date.Year && differenceFromEmitToPayDifferentYear >= 30) //year of check > year of emit
                 {
                     if (remainingToPay > 0)
-                        payment.Penalties = sanitationAndWorkingCapitalTaxes + (remainingToPay * associationDailyPenalty) / 100 * (differenceFromEmitToPayDifferentYear - 30);
-
+                        payment.Penalties = Math.Round(sanitationAndWorkingCapitalTaxes + (remainingToPay * associationDailyPenalty) / 100 * (differenceFromEmitToPayDifferentYear - 30), 2);
+                    else if (differenceFromEmitToPayDifferentYear - 30 - payment.DaysDelay > 0)
+                        payment.Penalties += sanitationAndWorkingCapitalTaxes + (differenceFromEmitToPayDifferentYear - 30 - payment.DaysDelay) * totalWithoutPenalties * associationDailyPenalty / 100;
                     payment.DaysDelay = differenceFromEmitToPayDifferentYear - 30;
-                    payment.TotalDueWithPenalties = remainingToPay + payment.Penalties;
+                    payment.TotalDueWithPenalties = Math.Round(remainingToPay + payment.Penalties, 2);
 
                     _context.Entry(payment).State = EntityState.Modified;
                 }

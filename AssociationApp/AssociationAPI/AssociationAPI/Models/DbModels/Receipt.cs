@@ -15,5 +15,7 @@ namespace AssociationAPI.Models.DbModels
         public DateTime PayDate { get; set; }
         public double AmountPayed { get; set; }
         public string ReceiptPaper { get; set; }
+        public bool WorkingCapital { get; set; }
+        public bool Sanitation { get; set; }
     }
 }

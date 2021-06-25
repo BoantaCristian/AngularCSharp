@@ -8,7 +8,7 @@
 <mat-dialog-content>
     <!-- ADMIN -->
     <!-- view users -->
-    <div *ngIf="data == 'users'">
+    <div *ngIf="data != 'associations' && data != 'providers' && data != 'payments' && data != 'receipts' && data != 'archives'">
         <mat-horizontal-stepper [linear]="isLinear" class="animate__animated animate__fadeIn">
             <!-- admins -->
             <mat-step label="Admins">
@@ -41,7 +41,8 @@
                     <ng-container matColumnDef="actions">
                         <mat-header-cell *matHeaderCellDef></mat-header-cell>
                         <mat-cell *matCellDef="let actions"> 
-                            <button mat-raised-button color="warn" (click)="deleteUser(actions.userName)"> Delete </button>    
+                            <button mat-raised-button color="warn" *ngIf="actions.userName != data" (click)="deleteUser(actions.userName)"> Delete </button>    
+                            <button mat-raised-button color="warn" *ngIf="actions.userName == data" [disabled]="true"> Delete </button>    
                         </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayAdminColumns" class=" animate__animated animate__fadeIn"></mat-header-row>
@@ -395,7 +396,7 @@
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
                 <mat-cell *matCellDef="let actions"> 
                     <button mat-raised-button color="primary" (click)="openDisplayPaperDialog(actions.utilitiesPaper)"> Paper </button>    
-                    <button mat-raised-button color="warn" (click)="deleteArchive(actions.id)"> Delete </button>    
+                    <button mat-raised-button color="warn" (click)="deleteArchive(actions.id)" matTooltip="Delete with payments and receipts"> Delete </button>    
                 </mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayArchiveColumns" class="animate__animated animate__fadeIn"></mat-header-row>
@@ -420,6 +421,20 @@
             <ng-container matColumnDef="payDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Pay Date </mat-header-cell>
                 <mat-cell *matCellDef="let receipt"> {{receipt.payDate | date:'fullDate'}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Sanitation">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Sanitation </mat-header-cell>
+                <mat-cell *matCellDef="let receipt"> 
+                    <div *ngIf="receipt.sanitation">Paid</div>
+                    <div *ngIf="!receipt.sanitation">Not paid</div>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="WorkingCapital">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Working Capital </mat-header-cell>
+                <mat-cell *matCellDef="let receipt"> 
+                    <div *ngIf="receipt.workingCapital">Paid</div>
+                    <div *ngIf="!receipt.workingCapital">Not paid</div>
+                </mat-cell>
             </ng-container>
             <ng-container matColumnDef="amountPayed">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Amount Payed (RON) </mat-header-cell>

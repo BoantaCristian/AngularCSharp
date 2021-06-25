@@ -27,7 +27,7 @@ export class ViewDetailsComponent implements OnInit {
   displayClientColumns: string[] = ["userName", "email", "address", "telephone", "representative", "actions"]
   displayPaymentColumns: string[] = ["userName", "date", "totalDueWithPenalties", "remaining", "penalties", "daysDelay", "totalPaid", "workingCapitalStatus", "sanitationStatus", "paymentStatus", "actions"]
   displayArchiveColumns: string[] = ["userName", "association", "date", "bathroom", "kitchen", "electricity", "gas", "totalPayment", "actions"]
-  displayReceiptColumns: string[] = ["ReceiptClient", "payDate", "amountPayed", "actions"]
+  displayReceiptColumns: string[] = ["ReceiptClient", "payDate", "amountPayed", "Sanitation", "WorkingCapital", "actions"]
   
   isLinear: boolean = false
   searchKey: string
@@ -54,6 +54,7 @@ export class ViewDetailsComponent implements OnInit {
     this.getArchives()
     this.getReceipts()
     setTimeout(()=> this.sortArrays(), 200)
+    console.log(this.data)
   }
 
   getUsers(){
@@ -89,11 +90,17 @@ export class ViewDetailsComponent implements OnInit {
       }
     )
   }
-  
+  onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
   getArchives(){
     this.service.getArchive().subscribe(
       (res: any) => {
-        this.archives = new MatTableDataSource(res)
+        console.log("archives: ", res)
+        this.archives = new MatTableDataSource(res.filter(this.onlyUnique))
+        setTimeout(() => {
+          console.log(this.archives.filteredData.filter(this.onlyUnique))
+        }, 500);  
       }
     )
   }

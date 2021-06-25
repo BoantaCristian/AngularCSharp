@@ -35,11 +35,13 @@ export class PayComponent implements OnInit {
     this.service.pay(this.payForm.value).subscribe(
       res => {
         this.toastr.success('Paid successfully!', 'Success!')
-        this.service.updatePayments().subscribe(
-          res => {
-            this.toastr.success('Payments and penalties updated!', 'Success!')
-          }
-        )
+        setTimeout(() => {
+          this.service.updatePayments().subscribe(
+            res => {
+              this.toastr.success('Payments and penalties updated!', 'Success!')
+            }
+          )
+        }, 500);
       }
     )
   }

@@ -20,7 +20,7 @@ export class AddAssociationComponent implements OnInit {
   associationMaintenanceForm = this.formBuilder.group({
     WorkingCapital: [null, Validators.required],
     Sanitation: [null, Validators.required],
-    MonthPenalty: [null, Validators.required],
+    DayPenalty: [null, Validators.required],
   })
   isLinear:boolean = true
   

@@ -39,8 +39,8 @@
                 </mat-form-field>
                 <mat-form-field class="descriptionField">
                     <mat-label>Daily Penalty</mat-label>
-                    <input type="number" step="0.01" matInput placeholder="Month Penalty" formControlName="MonthPenalty">
-                    <label class="text-danger" *ngIf="associationMaintenanceForm.get('MonthPenalty').touched && associationMaintenanceForm.get('MonthPenalty').errors?.required">Required</label>
+                    <input type="number" step="0.01" matInput placeholder="Month Penalty" formControlName="DayPenalty">
+                    <label class="text-danger" *ngIf="associationMaintenanceForm.get('DayPenalty').touched && associationMaintenanceForm.get('DayPenalty').errors?.required">Required</label>
                 </mat-form-field>
                 <div>
                     <button mat-button matStepperPrevious>Back</button>

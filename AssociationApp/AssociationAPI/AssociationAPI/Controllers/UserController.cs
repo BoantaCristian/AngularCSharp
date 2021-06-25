@@ -211,33 +211,32 @@ namespace AssociationAPI.Controllers
                     case "Representative":
                     {
                         var representativesHasClients = false;
-                        foreach (User user in _context.Users.Include(i => i.AssociationRepresentative))
+                        foreach (User user in _context.Users.Include(i => i.Representative))
                         {
-                            if(user.Representative.UserName == userName)
+                            if(user.Representative != null)
                             {
-                                representativesHasClients = true;
-                                break;
+                                    if (user.Representative.UserName == userName)
+                                    {
+                                        representativesHasClients = true;
+                                        break;
+                                    }
                             }
-                            if(representativesHasClients)
-                                return BadRequest(new { message = "Representative has clients!" });
-                            else
-                            {
-                                try
-                                {
-                                    await _userManager.RemoveFromRoleAsync(userToDelete, role);
-                                    await _userManager.DeleteAsync(userToDelete);
-
-                                    return Ok(userToDelete);
-                                }
-                                catch (Exception e)
-                                {
-
-                                    throw e;
-                                }
-                            }
-
                         }
-                        break;
+                        if (representativesHasClients)
+                            return BadRequest(new { message = "Representative has clients!" });
+                        try
+                        {
+                            await _userManager.RemoveFromRoleAsync(userToDelete, role);
+                            await _userManager.DeleteAsync(userToDelete);
+
+                            return Ok(userToDelete);
+                        }
+                        catch (Exception e)
+                        {
+
+                            throw e;
+                        }
+                            break;
                     }
                     case "Client":
                     {
@@ -279,14 +278,11 @@ namespace AssociationAPI.Controllers
                                 }
                             }
 
-                            if (clientHasArchive)
+                            if (clientHasArchive || clientHasPayments || clientHasReceipts)
                             {
-                                return BadRequest(new { message = "Client has archive!" });
+                                return BadRequest(new { message = "Client has archive, payments or receipts!" });
                             }
-                            if (clientHasPayments)
-                            {
-                                return BadRequest(new { message = "Client has payments!" });
-                            }
+                           
                             if (clientHasProvider)
                             {
                                 var provider = _context.ClientProviders.Include(i => i.Client).Where(w => w.Client.UserName == userName).First();
@@ -294,11 +290,6 @@ namespace AssociationAPI.Controllers
                                 _context.ClientProviders.Remove(provider);
                                 await _context.SaveChangesAsync();
                             }
-                            if (clientHasReceipts)
-                            {
-                                return BadRequest(new { message = "Client has receipts!" });
-                            }
-
                             try
                             {
                                 await _userManager.RemoveFromRoleAsync(userToDelete, role);

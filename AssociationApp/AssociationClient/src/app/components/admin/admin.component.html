@@ -27,10 +27,10 @@
 </mat-menu>
 
 
-<div class="col-md-10 offset-1">
+<div class="col-md-10 offset-1" style="min-width: 1100px;">
     <mat-card class="animated fadeInDown">
         <div class="flexContainer">
-            <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openViewDetailsDialog('users')"> <b> USERS</b> </div>
+            <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openViewDetailsDialog(adminDetails.userName)"> <b> USERS</b> </div>
             <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openViewDetailsDialog('associations')"> <b> ASSOCIATIONS </b> </div>
             <div class="flexContent dialogLink animate__animated animate__fadeInDown optionButton" (click)="openViewDetailsDialog('providers')"> <b> PROVIDERS </b> </div>
         </div>
