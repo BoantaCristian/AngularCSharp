@@ -54,7 +54,6 @@ export class ViewDetailsComponent implements OnInit {
     this.getArchives()
     this.getReceipts()
     setTimeout(()=> this.sortArrays(), 200)
-    console.log(this.data)
   }
 
   getUsers(){
@@ -90,17 +89,10 @@ export class ViewDetailsComponent implements OnInit {
       }
     )
   }
-  onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-  }
   getArchives(){
     this.service.getArchive().subscribe(
       (res: any) => {
-        console.log("archives: ", res)
-        this.archives = new MatTableDataSource(res.filter(this.onlyUnique))
-        setTimeout(() => {
-          console.log(this.archives.filteredData.filter(this.onlyUnique))
-        }, 500);  
+        this.archives = new MatTableDataSource(res)
       }
     )
   }

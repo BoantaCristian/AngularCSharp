@@ -118,6 +118,10 @@ export class RegisterDialogComponent implements OnInit {
     else
       body.Role = this.roleSelectedByAdmin
 
+    if(this.role == 'Client'){
+      body.Role = 'Client'
+    }
+    console.log(body)
     this.service.register(body).subscribe(
       (res:any) => {
         if(res.succeeded){
@@ -135,6 +139,7 @@ export class RegisterDialogComponent implements OnInit {
       },
       err => {
         console.log(err)
+        this.toastr.error('Username already taken', 'Register Failed!')
       }
     )
   }
